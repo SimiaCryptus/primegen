@@ -1,5 +1,5 @@
-name = "primegen"
-defaultTargets = ["Primegen"]
+name = "no3sieve"
+defaultTargets = ["NoThreeInLine"]
 
 [[require]]
 name = "mathlib"
@@ -7,4 +7,4 @@ scope = "leanprover-community"
 rev = "v4.15.0"
 
 [[lean_lib]]
-name = "Primegen"
+name = "NoThreeInLine"
