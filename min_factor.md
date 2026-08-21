@@ -129,7 +129,6 @@ does not delegate; it tabulates, exactly as Algorithm B does, and the multiplier
 of §4 — _is_ an explicit `W`-coprime sequence, and one that **contains composites**, not a prime list. Coprimality
 is emergent in the normal form and tabulated in the implementation. See Remark M-R.
 
-
 ### 2.3 Phase separation, strict form
 
 > **Claim M3.** If `r ∈ B_p` and `1 < r < (p+1)²` then `r` is prime (and `r > p`).
@@ -146,7 +145,7 @@ relaxation `B̃_p` of §4, which satisfies neither of the first two bullets; see
   below `N` only for `p ≤ N^{1/(e+2)}`. For `e = 1` this is the familiar `p ≤ N^{1/3}`; for `e = 2` it is
   `p ≤ N^{1/4}`; the tower thins fast.
 - The pure-power part of a layer (`r = 1`) is the **spine** `p, p², p³, …`, which is trivially generated. This one
-   does survive the relaxation, since `p ∤ r` keeps every power of `p` out of `B̃_p \ {1}`.
+  does survive the relaxation, since `p ∤ r` keeps every power of `p` out of `B̃_p \ {1}`.
 
 ### 2.4 Causality
 
@@ -229,30 +228,29 @@ with the same `spokes` / `step` / `gte` tables (`paper.md` §4.2).
 
 4. **Advancement** is `r := next_adm(p, r)` — one wheel step plus a skip cursor for the multiples of `p` — then
    `v := pe · r`, where `pe = p^e` is carried in the record. No exponentiation, no division.
-> **Remark M-R (the admissible multipliers are a wheel, not a prime list).** `B̃_p` contains **every** `W`-coprime
-> `r ≥ p` with `p ∤ r`, in particular every _composite_ all of whose prime factors exceed `p_w`, however small its
-> smallest factor is relative to `p`. Least witness at `W = 30`: `r = 49 = 7²` is admissible for `p = 11`
-> (`49 ≥ 11`, `11 ∤ 49`, `gcd(49,30) = 1`), so layer `(11,1)` emits `11·49 = 539 = 7²·11`, whose smallest prime
-> factor is `7`, not `11`. At the reference setting `W = 30030` the least witness is `r = 289 = 17²` for `p = 19`,
-> emitting `19·289 = 5491 = 17²·19`. Three consequences, all easy to misstate and none of them fatal:
->
-> 1. **Claim M3 does not transfer.** Phase separation is a property of the _exact_ cloud `B_p`. Below `p²` the
->    admissible multipliers are the primes in `[p, p²)` **together with** every `W`-coprime composite in that range
->    (`289 < 361 = 19²`). Advancement is therefore the wheel step `next_adm` of §4.1 — never an index increment
->    into the prime array. The reference implementation is right about this; the prose of §2.3 is about C∞.
-> 2. **A composite multiplier does not force the emitted value `≥ p^{e+2}`** (`5491 < 6859 = 19³`). Under the
->    relaxation every layer is in its rough phase from its head onward, and the bound `p ≤ N^{1/(e+2)}` is a
->    statement about C∞ only.
-> 3. **`r ≥ p` no longer implies `spf(r) > p`.** It does in `B_p` — that is Claim M1, and it is why the constraint
->    is stated at all — but in `B̃_p` it merely bounds `r`, so a layer of `p` may claim a value owned by some
->    `p_w < q < p`. This is Algorithm B's over-claiming, inherited layer by layer; it is exactly what Claim M10
->    counts, and it is why the drain of §5 must run over _all_ claimants. What C removes relative to B is the tail
->    `r < p` and nothing else (§7.1).
->
-> What _is_ preserved is precisely what the correctness argument uses: every admissible `r > 1` satisfies `r ≥ p`,
-> so every key `p^e·r` is a product of two integers `> 1` (Claim M7) and every head is `≥ p²` (Claim M8). None of
-> M6–M9 assumes `r` is prime.
-
+   > **Remark M-R (the admissible multipliers are a wheel, not a prime list).** `B̃_p` contains **every** `W`-coprime
+   > `r ≥ p` with `p ∤ r`, in particular every _composite_ all of whose prime factors exceed `p_w`, however small its
+   > smallest factor is relative to `p`. Least witness at `W = 30`: `r = 49 = 7²` is admissible for `p = 11`
+   > (`49 ≥ 11`, `11 ∤ 49`, `gcd(49,30) = 1`), so layer `(11,1)` emits `11·49 = 539 = 7²·11`, whose smallest prime
+   > factor is `7`, not `11`. At the reference setting `W = 30030` the least witness is `r = 289 = 17²` for `p = 19`,
+   > emitting `19·289 = 5491 = 17²·19`. Three consequences, all easy to misstate and none of them fatal:
+   >
+   > 1. **Claim M3 does not transfer.** Phase separation is a property of the _exact_ cloud `B_p`. Below `p²` the
+   >    admissible multipliers are the primes in `[p, p²)` **together with** every `W`-coprime composite in that range
+   >    (`289 < 361 = 19²`). Advancement is therefore the wheel step `next_adm` of §4.1 — never an index increment
+   >    into the prime array. The reference implementation is right about this; the prose of §2.3 is about C∞.
+   > 2. **A composite multiplier does not force the emitted value `≥ p^{e+2}`** (`5491 < 6859 = 19³`). Under the
+   >    relaxation every layer is in its rough phase from its head onward, and the bound `p ≤ N^{1/(e+2)}` is a
+   >    statement about C∞ only.
+   > 3. **`r ≥ p` no longer implies `spf(r) > p`.** It does in `B_p` — that is Claim M1, and it is why the constraint
+   >    is stated at all — but in `B̃_p` it merely bounds `r`, so a layer of `p` may claim a value owned by some
+   >    `p_w < q < p`. This is Algorithm B's over-claiming, inherited layer by layer; it is exactly what Claim M10
+   >    counts, and it is why the drain of §5 must run over _all_ claimants. What C removes relative to B is the tail
+   >    `r < p` and nothing else (§7.1).
+   >
+   > What _is_ preserved is precisely what the correctness argument uses: every admissible `r > 1` satisfies `r ≥ p`,
+   > so every key `p^e·r` is a product of two integers `> 1` (Claim M7) and every head is `≥ p²` (Claim M8). None of
+   > M6–M9 assumes `r` is prime.
 
 ### 4.1 `next_adm`: `O(1)` amortised, one extra word
 
@@ -393,12 +391,12 @@ m = 847 = 7 · 11²  :   B claims twice — (p=7, a=121) and (p=11, a=77)
                        C claims once  — layer (7,1) with r = 121
                        ( for 11: v_11 = 2, cofactor 7 < 11 and m ≠ 11², so no layer of 11 claims )
 ```
+
 The inclusion is also, in the other direction, _only_ that: C does not stop over-claiming. By Remark M-R a layer of
 `p` happily takes a composite multiplier with `spf(r) < p`, and the resulting value is owned by `spf(r)`. Least
 example at `W = 30`: `539 = 7²·11` is claimed by layer `(7,2)` (`r = 11 ≥ 7`) **and** by layer `(11,1)`
 (`r = 49 ≥ 11`) — two claimants, exactly as in B, and `claimants_B(539) = {7, 11}` too. The exponent index
 refines the claim; it does not remove it.
-
 
 **How much does that save?** Per prime `p`, summing over layers,
 
@@ -591,10 +589,10 @@ index costs nothing structurally — it was already there.
 6. **Optimal `w` for C** differs from B's: C pays `Θ(W)` for the table, `1/p` for the skip cursor, and gains on the
    claimant set. Re-derive the trade.
 7. **Price the composite admissible multipliers (Remark M-R).** Layer `(p,e)` spends part of its advances on
-    multipliers `r` with `spf(r) ≤ p`, every one of which is an over-claim. Heuristically the surviving fraction is
-    `∏_{p_w < q ≤ p}(1 − 1/q) ≈ log p_w / log p`, so for `p ≫ p_w` **most** admissible multipliers are of the bad
-    kind. That must be the same `ln ln` ledger as §7.1 seen per layer rather than per composite; check numerically
-    that the two agree, because if they disagree one of the two counts is wrong.
+   multipliers `r` with `spf(r) ≤ p`, every one of which is an over-claim. Heuristically the surviving fraction is
+   `∏_{p_w < q ≤ p}(1 − 1/q) ≈ log p_w / log p`, so for `p ≫ p_w` **most** admissible multipliers are of the bad
+   kind. That must be the same `ln ln` ledger as §7.1 seen per layer rather than per composite; check numerically
+   that the two agree, because if they disagree one of the two counts is wrong.
 
 ---
 

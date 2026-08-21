@@ -465,14 +465,14 @@ Algorithm C is Algorithm B re-indexed by Theorem 2.10. Full specification, proof
 
 ### 4C.1 Design
 
-Same wheel, same candidate scan, same deferred activation. For \(p>p_w\) relax the exact cloud \(B_p\) to
+Same wheel, same candidate scan, same deferred activation. For \(p>p*w\) relax the exact cloud \(B_p\) to
 \[ \tilde B_p \;=\; \{1\} \cup \{\, r \ge p \;:\; \gcd (r,W)=1,\ p \nmid r \,\} \;\supseteq\; B_p , \]
 and let **layer** \((p,e)\) be the stream \(p^{e}\tilde B_p\) minus the single non-composite element \(p\) (the case
 \(e=1, r=1\)). Both retained constraints are load-bearing: \(r \ge p\) stops a layer claiming numbers whose smallest
 factor is \(r\); \(p \nmid r\) keeps the layers of one prime disjoint (drop it and \(p^k\) is claimed \(k\) times — the
 naive reading, and the expensive one).
 **What \(\tilde B_p\) is not.** It is a \(W\)-coprime **wheel**, not a prime list: it contains every \(W\)-coprime
-composite \(\ge p\) all of whose prime factors exceed \(p_w\) — e.g. \(49 = 7^2 \in \tilde B_{11}\) at \(W = 30\), so
+composite \(\ge p\) all of whose prime factors exceed \(p_w\) — e.g. \(49 = 7^2 \in \tilde B*{11}\) at \(W = 30\), so
 layer \((11,1)\) emits \(539 = 7^2\cdot 11\), owned by \(7\). Hence \(r \ge p\) does **not** imply
 \(\mathrm{spf} (r) > p\) under the relaxation, Lemma 2.12 applies to \(B_p\) alone, and advancement is the wheel step
 `next_adm` below — never a prime-index increment. The resulting over-claims are Algorithm B's, inherited layer by
