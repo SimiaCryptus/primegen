@@ -75,27 +75,26 @@
           <b>square</b>: primes ≤ <code>L²</code>, side <code>L = ⌊√N⌋</code> (capped at 8192), laid
           out on the classic Ulam spiral. <b>hexagonal</b>: primes ≤ <code>1+3R(R+1)</code> walked
           around a hex ring spiral (ring <i>k</i> holds 6<i>k</i> cells, consecutive integers are
-          always neighbours), stored in an axial <code>(2R+1)²</code> grid and drawn by
-          nearest-hex sampling.
+          always neighbours), stored in an axial <code>(2R+1)²</code> grid and drawn by nearest-hex
+          sampling.
         </p>
         <p class="note">
           Every cell is coloured, not just the primes: the spiral carries the
-          <b>factorisation field</b> of <code>n</code>.
-          <b>Hue</b> = <code>ω(n)</code>, the number of <i>distinct</i> prime factors —
-          <code>ω = 1</code> (primes and prime powers) is gold, rising ω sweeps green → cyan → blue
-          → magenta. <b>HSL lightness</b> = <code>sopfr(n)/n</code>, the sum of the prime factors
-          <i>with</i> multiplicity divided by <code>n</code>. Since
-          <code>sopfr(n) ≤ n</code> with equality exactly when <code>n</code> is prime (and at
-          <code>n = 4</code>), <b>the primes are the maxima of the field at value 1</b>, while
-          <code>n = 2p</code> sits at <code>≈1/2</code>, <code>n = 3p</code> at <code>≈1/3</code>,
-          … — each composite lands on the ray of its smallest factor, so the spiral shows the
-          arithmetic structure around the primes instead of a bare dot mask.
-          Zoomed in the exact per-cell field is sampled; zoomed out a pre-computed
-          <b>mip pyramid</b> of sums <code>Σ1, Σω, ΣΩ, Σ sopfr/n</code> is used and converted to RGB
-          only at the end, so neither a prime nor a hue is ever dropped by nearest-neighbour
-          downscaling. <code>n₀</code> truncates the spiral at the origin — the centre cell may
-          start counting at 0, 1, 2 or 3. Drag to pan · wheel to zoom · hover for the factorisation
-          · reset to fit.
+          <b>factorisation field</b> of <code>n</code>. <b>Hue</b> = <code>ω(n)</code>, the number
+          of <i>distinct</i> prime factors — <code>ω = 1</code> (primes and prime powers) is gold,
+          rising ω sweeps green → cyan → blue → magenta. <b>HSL lightness</b> =
+          <code>sopfr(n)/n</code>, the sum of the prime factors <i>with</i> multiplicity divided by
+          <code>n</code>. Since <code>sopfr(n) ≤ n</code> with equality exactly when
+          <code>n</code> is prime (and at <code>n = 4</code>),
+          <b>the primes are the maxima of the field at value 1</b>, while <code>n = 2p</code> sits
+          at <code>≈1/2</code>, <code>n = 3p</code> at <code>≈1/3</code>, … — each composite lands
+          on the ray of its smallest factor, so the spiral shows the arithmetic structure around the
+          primes instead of a bare dot mask. Zoomed in the exact per-cell field is sampled; zoomed
+          out a pre-computed <b>mip pyramid</b> of sums <code>Σ1, Σω, ΣΩ, Σ sopfr/n</code> is used
+          and converted to RGB only at the end, so neither a prime nor a hue is ever dropped by
+          nearest-neighbour downscaling. <code>n₀</code> truncates the spiral at the origin — the
+          centre cell may start counting at 0, 1, 2 or 3. Drag to pan · wheel to zoom · hover for
+          the factorisation · reset to fit.
         </p>
         <div class="row">
           <label>grid</label>

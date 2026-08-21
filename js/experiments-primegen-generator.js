@@ -138,7 +138,8 @@ function makeCellToN() {
 }
 
 /* --- palette / legend controls -------------------------------------- */
-const hueSource = () => ($('fieldHueSource') && $('fieldHueSource').value === 'Omega' ? 'Omega' : 'omega');
+const hueSource = () =>
+  $('fieldHueSource') && $('fieldHueSource').value === 'Omega' ? 'Omega' : 'omega';
 function syncPalette() {
   const num = (id, dflt) => {
     const el = $(id),

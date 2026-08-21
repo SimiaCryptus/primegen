@@ -36,8 +36,8 @@ const LITTLE_ENDIAN = (() => {
 
 export function packRGBA(r, g, b, a = 255) {
   return LITTLE_ENDIAN
-    ? (((a << 24) | (b << 16) | (g << 8) | r) >>> 0)
-    : (((r << 24) | (g << 16) | (b << 8) | a) >>> 0);
+    ? ((a << 24) | (b << 16) | (g << 8) | r) >>> 0
+    : ((r << 24) | (g << 16) | (b << 8) | a) >>> 0;
 }
 
 export const TRANSPARENT = 0;
@@ -56,8 +56,7 @@ export const TRANSPARENT = 0;
    ------------------------------------------------------------------ */
 export function computeFactorFields(N, primes = null, opts = {}) {
   const { block = 1 << 20, onProgress = null } = opts;
-  if (!Number.isSafeInteger(N) || N < 1)
-    throw new RangeError(`computeFactorFields: bad N = ${N}`);
+  if (!Number.isSafeInteger(N) || N < 1) throw new RangeError(`computeFactorFields: bad N = ${N}`);
 
   /* all primes ≤ N are needed (large prime factors matter for sopfr) */
   const ps = primes && primes.length && primes[primes.length - 1] >= N ? primes : sieveRef(N);
@@ -132,11 +131,7 @@ function hslToRgb(h, s, l) {
   else if (h < 240) [r, g, b] = [0, x, c];
   else if (h < 300) [r, g, b] = [x, 0, c];
   else [r, g, b] = [c, 0, x];
-  return [
-    Math.round((r + m) * 255),
-    Math.round((g + m) * 255),
-    Math.round((b + m) * 255),
-  ];
+  return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
 }
 
 export class FieldPalette {
