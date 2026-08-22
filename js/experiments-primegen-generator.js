@@ -200,6 +200,149 @@ function makeCellToN() {
     return i >= 1 && i <= cells ? i + first - 1 : -1;
   };
 }
+/* =====================================================================
+linear slice — column statistics
+---------------------------------------------------------------------
+A column of the slice is *not* an arithmetic progression: row k starts
+at Σ_{j<k} ⌊1 + δ·j⌋ and is then shifted by the alignment, so the
+integers sitting in one column x follow a quadratic
+       n(k) = (δ/2)·k² + β·k + γ ,
+       β = 1 − δ/2 (left) · 1 (centre) · 1 + δ/2 (right),
+       γ = n₀ + x  ·  n₀ + x − (W−1)/2  ·  n₀ + x − W + 1 .
+When the floors are harmless (δ integral, parity of W − w_k constant in
+the centred case) the polynomial is *exact*: it is then recovered from
+three consecutive samples and verified against every cell of the
+column.  Otherwise the closed form above is reported as an
+approximation.  Aggregating ω, Ω and sopfr over the column is what
+makes the vertical striping of the field — the residue structure mod
+the row width — readable rather than merely visible.
+===================================================================== */
+let sliceColCache = { key: null, text: '' };
+const trimNum = (v) =>
+  !Number.isFinite(v)
+    ? '—'
+    : Math.abs(v - Math.round(v)) < 1e-9
+      ? String(Math.round(v))
+      : String(Math.round(v * 1e4) / 1e4);
+function fmtPoly(a, b, c) {
+  const term = (v, sym) => {
+    if (Math.abs(v) < 1e-12) return '';
+    const mag = Math.abs(v);
+    const body = sym && Math.abs(mag - 1) < 1e-12 ? sym : trimNum(mag) + sym;
+    return (v < 0 ? ' − ' : ' + ') + body;
+  };
+  const s = (term(a, 'k²') + term(b, 'k') + term(c, '')).replace(/^ \+ /, '').replace(/^ − /, '−');
+  return `n(k) = ${s || '0'}`;
+}
+/* x0 of row width rw under the current alignment — same rule as makeCellToN */
+function sliceRowX0(rw) {
+  return sliceAlign === 'right' ? gridW - rw : sliceAlign === 'center' ? (gridW - rw) >> 1 : 0;
+}
+function columnQuadratic(ks, ns, x) {
+  if (ks.length >= 3 && ks[1] === ks[0] + 1 && ks[2] === ks[0] + 2) {
+    const k0 = ks[0];
+    const a = (ns[2] - 2 * ns[1] + ns[0]) / 2;
+    const b = ns[1] - ns[0] - a * (2 * k0 + 1);
+    const c = ns[0] - a * k0 * k0 - b * k0;
+    let ok = true;
+    for (let i = 0; i < ks.length; i++) {
+      const k = ks[i];
+      if (a * k * k + b * k + c !== ns[i]) {
+        ok = false;
+        break;
+      }
+    }
+    if (ok) return { a, b, c, exact: true };
+  }
+  /* closed form with the floors dropped */
+  const d = sliceDelta,
+    W = gridW,
+    a = d / 2;
+  if (sliceAlign === 'right') return { a, b: 1 + d / 2, c: spiralOrigin + x - W + 1, exact: false };
+  if (sliceAlign === 'center') return { a, b: 1, c: spiralOrigin + x - (W - 1) / 2, exact: false };
+  return { a, b: 1 - d / 2, c: spiralOrigin + x, exact: false };
+}
+/* the column block of the tooltip — cached, so pointermove stays free */
+function describeColumn(x) {
+  if (spiralMode !== 'linear' || !sliceRowW || !sliceRowStart || !fields) return '';
+  if (x < 0 || x >= gridW) return '';
+  const key = `${x}|${spiralLabel}`;
+  if (sliceColCache.key === key) return sliceColCache.text;
+  const rows = sliceRowW.length,
+    ks = [],
+    ns = [];
+  for (let k = 0; k < rows; k++) {
+    const rw = sliceRowW[k];
+    const dx = x - sliceRowX0(rw);
+    if (dx < 0 || dx >= rw) continue;
+    const i = sliceRowStart[k] + dx + 1; // 1-based position along the walk
+    if (i > spiralCells) break;
+    ks.push(k);
+    ns.push(i + spiralOrigin - 1);
+  }
+  let text = '';
+  if (ks.length) {
+    const q = columnQuadratic(ks, ns, x);
+    const omA = fields.omega,
+      OmA = fields.Omega,
+      raA = fields.lum;
+    let cnt = 0,
+      pr = 0;
+    let omMin = Infinity,
+      omMax = -Infinity,
+      omSum = 0;
+    let OmMin = Infinity,
+      OmMax = -Infinity,
+      OmSum = 0;
+    let spMin = Infinity,
+      spMax = -Infinity,
+      spSum = 0;
+    let raMin = Infinity,
+      raMax = -Infinity,
+      raSum = 0;
+    for (let i = 0; i < ns.length; i++) {
+      const n = ns[i];
+      if (n < 2 || n >= omA.length) continue; // ω, Ω undefined at 0 and 1
+      const o = omA[n],
+        O = OmA[n],
+        r = raA ? raA[n] : NaN,
+        s = r * n; // sopfr(n) = n·(sopfr/n)
+      cnt++;
+      if (O === 1) pr++;
+      if (o < omMin) omMin = o;
+      if (o > omMax) omMax = o;
+      omSum += o;
+      if (O < OmMin) OmMin = O;
+      if (O > OmMax) OmMax = O;
+      OmSum += O;
+      if (s < spMin) spMin = s;
+      if (s > spMax) spMax = s;
+      spSum += s;
+      if (r < raMin) raMin = r;
+      if (r > raMax) raMax = r;
+      raSum += r;
+    }
+    const avg = (s) => (cnt ? s / cnt : NaN);
+    const lines = [
+      `── column x = ${fmt(x)} of ${fmt(gridW)} · ${fmt(ks.length)} cells · ` +
+        `rows k = ${fmt(ks[0])}…${fmt(ks[ks.length - 1])}`,
+      `${fmtPoly(q.a, q.b, q.c)}${q.exact ? '   (exact)' : '   (≈, floors dropped)'}`,
+      `Δ²n = ${trimNum(2 * q.a)} · n ∈ [${fmt(ns[0])}, ${fmt(ns[ns.length - 1])}]`,
+    ];
+    if (cnt)
+      lines.push(
+        `primes    ${fmt(pr)} / ${fmt(cnt)}  (${((100 * pr) / cnt).toFixed(2)} %)`,
+        `ω(n)      min ${fmt(omMin)} · avg ${avg(omSum).toFixed(3)} · max ${fmt(omMax)}`,
+        `Ω(n)      min ${fmt(OmMin)} · avg ${avg(OmSum).toFixed(3)} · max ${fmt(OmMax)}`,
+        `sopfr(n)  min ${fmt(Math.round(spMin))} · avg ${fmt(Math.round(avg(spSum)))} · ` +
+          `max ${fmt(Math.round(spMax))}`,
+        `sopfr/n   min ${raMin.toFixed(3)} · avg ${avg(raSum).toFixed(3)} · max ${raMax.toFixed(3)}`
+      );
+    text = lines.join('\n');
+  }
+  sliceColCache = { key, text };
+  return text;
+}
 
 /* --- palette / legend controls -------------------------------------- */
 const hueSource = () =>
@@ -393,8 +536,10 @@ function hideSpiralTooltip() {
   const el = tooltipEl();
   if (el) el.style.display = 'none';
 }
-/* pixel → integer, the exact inverse of the two draw paths */
-function spiralIntegerAt(clientX, clientY) {
+/* pixel → grid cell { gx, gy, n }, the exact inverse of the draw paths.
+    n = −1 when the cell carries no integer (outside the spiral/slice) —
+    the column read-out still needs gx there, so the cell is returned. */
+function spiralCellAt(clientX, clientY) {
   const canvas = spiralCanvas();
   if (!canvas || !pyr) return null;
   const rect = canvas.getBoundingClientRect();
@@ -407,7 +552,6 @@ function spiralIntegerAt(clientX, clientY) {
     py = my * dpr;
   const ox = spiralView.tx * dpr,
     oy = spiralView.ty * dpr;
-  let n;
   if (spiralMode === 'hex') {
     const R = spiralR;
     const inv = 1 / cellPx;
@@ -423,31 +567,43 @@ function spiralIntegerAt(clientX, clientY) {
       if (dq > dr && dq > ds) q = -r - s;
       else if (dr > ds) r = -q - s;
     }
-    n = cellToN(q + R, r + R);
-  } else {
-    const gx = Math.floor((px - ox) / cellPx);
-    const gy = Math.floor((py - oy) / cellPx);
-    const W = gridW || spiralL,
-      H = gridH || spiralL;
-    if (gx < 0 || gy < 0 || gx >= W || gy >= H) return null;
-    n = cellToN(gx, gy);
+    return { gx: q + R, gy: r + R, n: cellToN(q + R, r + R) };
   }
-  return n < 0 ? null : n;
+  const gx = Math.floor((px - ox) / cellPx);
+  const gy = Math.floor((py - oy) / cellPx);
+  const W = gridW || spiralL,
+    H = gridH || spiralL;
+  if (gx < 0 || gy < 0 || gx >= W || gy >= H) return null;
+  return { gx, gy, n: cellToN(gx, gy) };
+}
+/* pixel → integer (null outside) — kept for callers that only want n */
+function spiralIntegerAt(clientX, clientY) {
+  const c = spiralCellAt(clientX, clientY);
+  return !c || c.n < 0 ? null : c.n;
 }
 
 function moveSpiralTooltip(clientX, clientY) {
   const canvas = spiralCanvas();
   const el = tooltipEl();
   if (!canvas || !el || !fields) return;
-  const n = spiralIntegerAt(clientX, clientY);
-  if (n == null) {
+  const cell = spiralCellAt(clientX, clientY);
+  const n = cell && cell.n >= 0 ? cell.n : null;
+  /* describeCell is three lines: n = … , ω/Ω, sopfr(n)/n.  In the linear
+      slice the whole column under the cursor is summarised underneath —
+      quadratic n(k) plus min/avg/max of ω, Ω, sopfr along the column. */
+  let text = n == null ? '' : describeCell(n, fields);
+  if (cell && spiralMode === 'linear') {
+    const col = describeColumn(cell.gx);
+    if (col) text = text ? `${text}\n${col}` : col;
+  }
+  if (!text) {
     el.style.display = 'none';
     return;
   }
   const rect = canvas.getBoundingClientRect();
-  /* describeCell is three lines: n = … , ω/Ω, sopfr(n)/n */
-  el.style.whiteSpace = 'pre-line';
-  el.textContent = describeCell(n, fields);
+  el.style.whiteSpace = 'pre'; // the column block is column-aligned
+  el.style.maxWidth = 'none';
+  el.textContent = text;
   el.style.display = 'block';
   let x = clientX - rect.left + 12;
   let y = clientY - rect.top + 12;
@@ -619,6 +775,7 @@ async function drawUlamSpiral() {
     return;
   }
   cellToN = makeCellToN();
+  sliceColCache = { key: null, text: '' }; // layout changed → column stats stale
 
   /* --- field + pyramid -------------------------------------------- */
   info.textContent = `factorising n ≤ ${fmt(Nspiral)} (ω, Ω, sopfr)…`;

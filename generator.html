@@ -86,9 +86,14 @@
           <code>δ = 2</code> gives the odd rows <code>1, 3, 5, …</code> and exactly
           <code>R²</code> integers (Ulam's rings unrolled), <code>δ = 1</code> the triangular
           numbers, <code>δ = 0</code> a single column, fractional δ everything in between. Rows can
-          be aligned <b>left</b>, <b>centre</b> or <b>right</b> inside the bounding box; cells
-          outside the slice stay background. Because a row is an arithmetic progression, the
-          vertical striping of the field is the residue structure mod the row width.
+          aligned <b>left</b>, <b>centre</b> or <b>right</b> inside the bounding box; cells outside
+          the slice stay background. Because a row is an arithmetic progression, the vertical
+          striping of the field is the residue structure mod the row width. Hovering a cell in this
+          mode also reports the whole <b>column</b> under the cursor: the quadratic
+          <code>n(k) = (δ/2)k² + βk + γ</code> that generates it (exact when the floors are
+          harmless, otherwise the closed form), its row range, and the min / avg / max of
+          <code>ω</code>, <code>Ω</code>, <code>sopfr</code> and <code>sopfr/n</code> together with
+          the prime count along the column.
         </p>
         <p class="note">
           Every cell is coloured, not just the primes: the spiral carries the
