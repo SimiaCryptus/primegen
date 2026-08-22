@@ -1,0 +1,1302 @@
+{
+  "$schema": "../../../ops/theory_graph.schema.ts",
+  "version": "2.0.0",
+  "generated_at": "2024-06-01T00:00:00Z",
+  "generator": { "op": "analyze.op.md" },
+  "corpus": {
+    "documents": [
+      {
+        "id": "algorithm",
+        "path": "algorithm.md",
+        "order": 1,
+        "title": "The Orthogonal Stream Prime Generator: A Complete Algorithm",
+        "dominant_layers": ["deductive", "symbolic", "numeric"]
+      }
+    ]
+  },
+  "context": {
+    "ecological": {
+      "constraints": [
+        "Algorithm A memory grows like N^theta, theta ~= 0.75",
+        "Table for O(1) rough-decision costs Theta(P_{<p}) = e^{(1+o(1))p} space"
+      ],
+      "resources": ["reference implementation in Python (heapq)"],
+      "affordances": ["branchless wheel advancement vectorizes across streams (SIMD)"]
+    },
+    "social": {
+      "norms": ["ship Algorithm B for production when only primes are wanted"],
+      "program": "orthogonal stream prime generation research program (see paper.md, generator.md, min_factor.md, theory.md)"
+    }
+  },
+  "nodes": [
+    {
+      "id": "definition.p-rough-numbers",
+      "kind": "definition",
+      "name": "p-Rough Numbers",
+      "statement": "The p-rough numbers R_p are the integers m >= 1 with gcd(m, P_{<p}) = 1, i.e. having no prime factor less than p.",
+      "formal": "R_p = \\{m\\ge 1 : \\gcd(m,P_{<p})=1\\}",
+      "notation": ["R_p", "P_{<p}"],
+      "status": "accepted",
+      "confidence": 0.95,
+      "domain": "sieve",
+      "representation": { "layer": "symbolic", "form": "definition", "content": "R_p = {m>=1 : gcd(m,P_{<p})=1}" },
+      "sources": [{ "file": "algorithm.md", "heading": "1. Notation", "quote": "the p-rough numbers: no prime factor < p" }]
+    },
+    {
+      "id": "definition.multiplier-set-Ap",
+      "kind": "definition",
+      "name": "Multiplier Set A_p",
+      "statement": "A_p is the set of p-rough numbers from p upward, A_p = R_p intersect [p, infinity).",
+      "formal": "A_p = R_p \\cap [p,\\infty) = \\{a\\ge p : \\gcd(a,P_{<p})=1\\}",
+      "status": "accepted",
+      "confidence": 0.95,
+      "domain": "sieve",
+      "representation": { "layer": "symbolic", "form": "definition" },
+      "sources": [{ "file": "algorithm.md", "heading": "0. TL;DR", "quote": "A_p = \\{a \\ge p : \\gcd (a, P_{<p}) = 1\\}, the p-rough numbers from p up" }]
+    },
+    {
+      "id": "theorem.ownership",
+      "kind": "theorem",
+      "name": "Ownership Theorem",
+      "statement": "For every prime p, the composites owned by p (those with smallest prime factor p) equal p times A_p, and the map a to pa is a bijection from A_p to Theta_p, with the family of Theta_p partitioning all composites.",
+      "formal": "\\Theta_p = p \\cdot A_p,\\ A_p = R_p \\cap [p,\\infty)",
+      "status": "accepted",
+      "confidence": 0.95,
+      "domain": "sieve",
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Theorem 2.1" },
+      "attributes": [{ "key": "theorem_number", "value": "2.1" }],
+      "sources": [{ "file": "algorithm.md", "heading": "2.1 Ownership theorem", "quote": "The map a \\mapsto pa is a bijection A_p \\to \\Theta_p, and \\{\\Theta_p\\}_p partitions the composites." }]
+    },
+    {
+      "id": "proof.ownership-theorem",
+      "kind": "proof",
+      "name": "Proof of the Ownership Theorem",
+      "statement": "Let m be composite with spf(m)=p and a=m/p; since m composite a>1 and every prime factor of a divides m so is >= p, giving gcd(a,P_{<p})=1 and a>=p; the converse and injectivity follow similarly, and every composite lies in exactly one Theta_{spf(m)}.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.1 Ownership theorem", "quote": "Let m be composite with spf (m)=p and put a = m/p." }]
+    },
+    {
+      "id": "corollary.Ap-is-wheel",
+      "kind": "lemma",
+      "name": "A_p is a Periodic Wheel",
+      "statement": "A_p union {1} is periodic modulo P_{<p} with phi(P_{<p}) residues per period, is completely determined by its intersection with [1, P_{<p}], and is infinite.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Corollary 2.2" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.2 A_p is a wheel, not a prime list", "quote": "A_p \\cup \\{1\\} is periodic modulo P_{<p}" }]
+    },
+    {
+      "id": "lemma.phase-separation",
+      "kind": "lemma",
+      "name": "Phase Separation Lemma",
+      "statement": "If a is in A_p and a < p^2, then a is prime.",
+      "formal": "a \\in A_p,\\ a<p^2 \\Rightarrow a \\text{ prime}",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Lemma 2.3" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.3 Phase separation", "quote": "If a \\in A_p and a < p^2, then a is prime." }]
+    },
+    {
+      "id": "corollary.rough-phase-primes",
+      "kind": "lemma",
+      "name": "A_p in [p,p^2) Equals Primes in that Range",
+      "statement": "A_p intersected with [p, p^2) equals exactly the primes in that range; one period of A_p consists of 1 together with primes only iff P_{<p} <= p^2, which holds iff p <= 7.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "attributes": [{ "key": "threshold_prime", "value": 7 }],
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Corollary 2.4" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.3 Phase separation", "quote": "which holds iff p \\le 7" }]
+    },
+    {
+      "id": "observation.first-composite-multiplier-121",
+      "kind": "observation",
+      "name": "First Composite Multiplier at p=11",
+      "statement": "121 = 11^2 is 11-rough and less than 210, so 121 is in A_11 and 11*121 = 1331 = 11^3 is owned by 11; among the 48 residues of one period there are 5 composite multipliers.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "attributes": [
+        { "key": "example_prime", "value": 11 },
+        { "key": "period_residues", "value": 48 },
+        { "key": "composite_multipliers_in_period", "value": 5 }
+      ],
+      "representation": { "layer": "numeric", "form": "prose-sketch" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.3 Phase separation", "quote": "First composite multiplier: 121 = 11^2 is 11-rough and <210" }]
+    },
+    {
+      "id": "corollary.no-forward-dependency",
+      "kind": "lemma",
+      "name": "No Forward Dependency Corollary",
+      "statement": "A_p is determined by primes strictly below p, all known once p is discovered; emitting composites up to n only needs multipliers up to n/p, so streams are consumed in increasing order and never stored as complete objects.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Corollary 2.5" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.3 Phase separation", "quote": "Multipliers are consumed in increasing order, so the lists are streams, never stored objects." }]
+    },
+    {
+      "id": "definition.next-owned-composite",
+      "kind": "definition",
+      "name": "NextOwnedComposite Primitive",
+      "statement": "NextOwnedComposite(p,x) is the smallest composite owned by p that exceeds x.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "symbolic", "form": "signature" },
+      "sources": [{ "file": "algorithm.md", "heading": "0. TL;DR", "quote": "NextOwnedComposite reduces exactly to a rough-successor" }]
+    },
+    {
+      "id": "theorem.next-owned-composite-reduction",
+      "kind": "theorem",
+      "name": "NextOwnedComposite Reduces to NextRough",
+      "statement": "NextOwnedComposite(p,x) equals p times NextRough(p, max(p-1, floor(x/p))), where NextRough(p,y) is the smallest element of R_p exceeding y.",
+      "formal": "\\mathrm{NextOwnedComposite}(p,x) = p\\cdot \\mathrm{NextRough}(p,\\max(p-1,\\lfloor x/p\\rfloor))",
+      "status": "accepted",
+      "confidence": 0.95,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Proposition 2.6" },
+      "attributes": [{ "key": "theorem_number", "value": "2.6" }],
+      "sources": [{ "file": "algorithm.md", "heading": "2.4 The primitive of generator.md, derived", "quote": "the sought-after primitive is exactly a rough-successor" }]
+    },
+    {
+      "id": "lemma.prime-phase-advancement",
+      "kind": "lemma",
+      "name": "Prime Phase Advancement Lemma",
+      "statement": "For a in A_p with a < p^2, NextRough(p,a) is the next prime after a (unless it exceeds p^2), so while the emitted composite is below p^3, advancing the stream of p is a single O(1) index increment into the prime array.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Lemma 2.7" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.5 Advancement inside a stream", "quote": "advancing the stream of p is a single index increment into the prime array" }]
+    },
+    {
+      "id": "theorem.causality",
+      "kind": "theorem",
+      "name": "Causality Theorem",
+      "statement": "If all primes below n have been emitted and the scan reaches n = pa with multiplier a, then a <= n/2, the next multiplier a' = NextRough(p,a) satisfies a' < n, and a' is determined only by data about integers less than n.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Theorem 2.8" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.6 Causality: everything needed is already known", "quote": "no step ever requires knowledge of an integer \\ge n" }]
+    },
+    {
+      "id": "remark.obstruction-no-O1-both",
+      "kind": "conjecture",
+      "name": "No O(1) Time and O(1) State Primitive",
+      "statement": "Deciding a in R_p is deciding gcd(a,P_{<p})=1; a branch-free O(1) decision with no auxiliary state must be a function of a mod P_{<p}, tabulating which costs Theta(P_{<p}) = e^{(1+o(1))p} space, while any stateless alternative amounts to trial division costing Theta(pi(p)); hence a fixed table serves only finitely many primes.",
+      "status": "supported",
+      "confidence": 0.85,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch", "content": "Remark 2.9" },
+      "notes": "Framed as a Remark with an accompanying informal proof sketch; treated as an obstruction result guiding algorithm design rather than a formally closed theorem.",
+      "sources": [{ "file": "algorithm.md", "heading": "2.7 Why O(1) time and O(1) state per prime is not available", "quote": "a fixed-size table can serve only finitely many primes" }]
+    },
+    {
+      "id": "definition.min-factor-normal-form",
+      "kind": "definition",
+      "name": "Min-Factor Normal Form",
+      "statement": "Every n>1 is uniquely n = p^e r with p prime, e>=1, r in B_p (the monoid generated by primes greater than p); necessarily p = spf(n), e = v_p(n), r = n/p^e.",
+      "formal": "n = p^{e} r,\\ p=\\mathrm{spf}(n),\\ e=v_p(n),\\ r=n/p^{e}",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Theorem 2.10" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.8 The exponent refinement (min-factor normal form)", "quote": "Every n>1 is uniquely n = p^{e} r" }]
+    },
+    {
+      "id": "proposition.cone-recursion",
+      "kind": "lemma",
+      "name": "Cone Recursion",
+      "statement": "B_p decomposes as {1} disjoint union over primes q>p of q times B_q; the multiplier cloud of p is generated by the clouds of the larger primes, with no residue system modulo P_{<=p} constructed.",
+      "formal": "B_p = \\{1\\} \\uplus \\biguplus_{q>p} q\\cdot B_q",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Proposition 2.11" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.8 The exponent refinement (min-factor normal form)", "quote": "The multiplier cloud of p is generated by the clouds of the larger primes" }]
+    },
+    {
+      "id": "lemma.strict-phase-separation",
+      "kind": "lemma",
+      "name": "Strict Phase Separation Lemma",
+      "statement": "If r in B_p and 1 < r < (p+1)^2 then r is prime, so a composite multiplier in layer (p,e) forces the emitted value to be at least p^(e+2), meaning layer e has a rough phase below N only for p <= N^{1/(e+2)}.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Lemma 2.12" },
+      "sources": [{ "file": "algorithm.md", "heading": "2.8 The exponent refinement (min-factor normal form)", "quote": "a composite multiplier in layer (p,e) forces the emitted value \\ge p^{e+2}" }]
+    },
+    {
+      "id": "model.algorithm-A",
+      "kind": "model",
+      "name": "Algorithm A: Exact One-Touch Orthogonal Generator",
+      "statement": "Algorithm A recurses on the largest prime factor of each composite, splitting m=bq with b=m/P(m) and q=P(m), to create a stream tree Sigma_b of composites; each stream carries an emit cursor and a spawn cursor, giving a generator in which every composite up to N is touched exactly once with O(1) advancement, no marking array, and no divisibility test, at the cost of the number of live streams growing like N^theta with theta ~= 0.75.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "domain": "sieve",
+      "representation": {
+        "layer": "symbolic",
+        "form": "model",
+        "interfaces": [
+          { "to": "numeric", "via": "evaluate", "available": true, "target": "experiment.reference-implementation-validation" }
+        ]
+      },
+      "attributes": [
+        { "key": "touch_count", "value": "N - pi(N) - 1", "layer": "numeric" },
+        { "key": "time_complexity_heap", "value": "O(N log S(N))", "unit": "big-O", "layer": "numeric" },
+        { "key": "time_complexity_bucket", "value": "O(N)", "unit": "big-O", "layer": "numeric" },
+        { "key": "live_streams_exponent_theta", "value": 0.75, "layer": "numeric" },
+        { "key": "parallel_friendly", "value": false }
+      ],
+      "sources": [{ "file": "algorithm.md", "heading": "3. Algorithm A — exact one-touch orthogonal generator", "quote": "each composite touched exactly once, O (1) advancement, no divisibility, no marking array" }]
+    },
+    {
+      "id": "theorem.stream-tree",
+      "kind": "theorem",
+      "name": "Stream Tree Theorem",
+      "statement": "For b>=2 the stream Sigma_b of all b*q for primes q>=P(b) forms, over all b, a partition of the composites; each Sigma_b is increasing and its successor operation is a single index advance in the prime array.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Theorem 3.1" },
+      "sources": [{ "file": "algorithm.md", "heading": "3.1 The idea: recurse on the multiplier, not on divisibility", "quote": "{\\Sigma_b}_{b\\ge2} is a partition of the composites" }]
+    },
+    {
+      "id": "theorem.algorithm-A-correctness",
+      "kind": "theorem",
+      "name": "Algorithm A Correctness Theorem",
+      "statement": "A(N) emits precisely the primes at most N, in increasing order, and pops exactly one queue record per composite in [4,N].",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Theorem 3.2" },
+      "sources": [{ "file": "algorithm.md", "heading": "3.5 Correctness", "quote": "A(N) emits precisely the primes \\le N, in increasing order, and pops exactly one queue record per composite" }]
+    },
+    {
+      "id": "theorem.algorithm-A-causality",
+      "kind": "theorem",
+      "name": "Algorithm A Causality Theorem",
+      "statement": "Every array access primes[j] performed while processing n in Algorithm A satisfies primes[j] < n, hence is always legal.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Theorem 3.5" },
+      "sources": [{ "file": "algorithm.md", "heading": "3.5 Correctness", "quote": "Every array access primes[j] ... satisfies primes[j] < n" }]
+    },
+    {
+      "id": "observation.algorithm-A-worked-trace",
+      "kind": "observation",
+      "name": "Algorithm A Worked Trace at N=50",
+      "statement": "A step-by-step trace of Algorithm A for N=50 shows all 34 composites in [4,50] consumed exactly once while the 15 primes are emitted.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "attributes": [{ "key": "N", "value": 50 }, { "key": "composites_count", "value": 34 }, { "key": "primes_count", "value": 15 }],
+      "representation": { "layer": "numeric", "form": "table" },
+      "sources": [{ "file": "algorithm.md", "heading": "3.6 Worked trace (N = 50)", "quote": "All 34 composites in [4,50] are consumed exactly once; the 15 primes are emitted." }]
+    },
+    {
+      "id": "bound.algorithm-A-live-streams",
+      "kind": "bound",
+      "name": "Algorithm A Live Stream Count Bound",
+      "statement": "A saddle-point estimate using Dickman's rho gives the number of live streams S(N) = N^{theta+o(1)} with theta approximately 0.75, which is sublinear but decisively worse than pi(sqrt N).",
+      "status": "supported",
+      "confidence": 0.7,
+      "attributes": [{ "key": "theta_estimate", "value": 0.75 }],
+      "representation": { "layer": "numeric", "form": "bound" },
+      "sources": [{ "file": "algorithm.md", "heading": "3.7 Cost", "quote": "gives S (N) = N^{\\theta+o (1)} with \\theta \\approx 0.75" }]
+    },
+    {
+      "id": "model.algorithm-A-plus-wheel",
+      "kind": "model",
+      "name": "Algorithm A+Wheel Variant",
+      "statement": "Combining Algorithm A with a fixed wheel modulus W removes smooth bases that dominate S(N) by requiring stream bases to be p_{w+1}-rough, empirically reducing live streams by roughly an order of magnitude at w=6 while preserving the one-touch property for all W-coprime composites.",
+      "status": "proposed",
+      "confidence": 0.6,
+      "representation": { "layer": "symbolic", "form": "model" },
+      "sources": [{ "file": "algorithm.md", "heading": "3.8 Variant A+wheel", "quote": "the reduction is large (empirically an order of magnitude at w=6)" }]
+    },
+    {
+      "id": "model.algorithm-B",
+      "kind": "model",
+      "name": "Algorithm B: Wheeled Streaming Generator",
+      "statement": "Algorithm B fixes a wheel modulus W and relaxes the exact multiplier set A_p to the tabulated W-coprime relaxation for primes p>p_w, giving a genuine O(1) table-lookup advancement with O(1) state per prime, memory O(pi(sqrt N)+W), at the cost of duplicate touches (each surviving composite touched roughly omega_{>p_w} times instead of once).",
+      "status": "accepted",
+      "confidence": 0.9,
+      "domain": "sieve",
+      "representation": {
+        "layer": "symbolic",
+        "form": "model",
+        "interfaces": [{ "to": "numeric", "via": "evaluate", "available": true, "target": "experiment.reference-implementation-validation" }]
+      },
+      "attributes": [
+        { "key": "memory", "value": "O(pi(sqrt N) + W)", "layer": "numeric" },
+        { "key": "state_per_prime", "value": "O(1)", "layer": "numeric" },
+        { "key": "segment_parallel", "value": true }
+      ],
+      "sources": [{ "file": "algorithm.md", "heading": "0. TL;DR", "quote": "Algorithm B (§4) pays in duplicate touches" }]
+    },
+    {
+      "id": "lemma.B-coverage",
+      "kind": "lemma",
+      "name": "Algorithm B Coverage Lemma",
+      "statement": "For every W-coprime composite m up to any bound, p=spf(m) exceeds p_w, a=m/p is W-coprime and a>=p, so m is a value of the stream of p under the relaxed multiplier set.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Lemma 4.1" },
+      "sources": [{ "file": "algorithm.md", "heading": "4.4 Correctness", "quote": "m is a value of the stream of p" }]
+    },
+    {
+      "id": "lemma.B-no-early-claims",
+      "kind": "lemma",
+      "name": "Algorithm B No Early Claims Lemma",
+      "statement": "Every key in Q during Algorithm B execution is at least n, and every key is a W-coprime composite at least p^2 for its owning prime.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Lemma 4.2" },
+      "sources": [{ "file": "algorithm.md", "heading": "4.4 Correctness", "quote": "Every key in Q is \\ge n" }]
+    },
+    {
+      "id": "theorem.B-correctness",
+      "kind": "theorem",
+      "name": "Algorithm B Correctness Theorem",
+      "statement": "B() emits exactly the primes, in increasing order, forever.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Theorem 4.3" },
+      "sources": [{ "file": "algorithm.md", "heading": "4.4 Correctness", "quote": "B() emits exactly the primes, in increasing order, forever." }]
+    },
+    {
+      "id": "theorem.B-state",
+      "kind": "theorem",
+      "name": "Algorithm B State Theorem",
+      "statement": "Advancement in Algorithm B uses no prime lookups at all, and activation uses primes[act] with primes[act]^2 <= n, so primes[act] < n; Algorithm B is a genuine online stream with O(1) state per prime.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Theorem 4.4" },
+      "sources": [{ "file": "algorithm.md", "heading": "4.4 Correctness", "quote": "Algorithm B is a genuine online stream with O (1) state per prime." }]
+    },
+    {
+      "id": "bound.B-duplicate-ops",
+      "kind": "bound",
+      "name": "Algorithm B Duplicate Operations Bound",
+      "statement": "The total queue operations for Algorithm B up to N approximate kappa_W * N * (ln ln sqrt N - ln ln p_w), which at w=6, N=10^12 gives approximately 0.46N ops versus the one-touch ideal of approximately 0.19N, roughly a factor 2.4 more touches in exchange for pi(sqrt N)=78498 records.",
+      "status": "supported",
+      "confidence": 0.75,
+      "attributes": [
+        { "key": "w", "value": 6 },
+        { "key": "N", "value": 1000000000000 },
+        { "key": "ops_estimate_fraction", "value": 0.46 },
+        { "key": "ideal_fraction", "value": 0.19 },
+        { "key": "duplicate_factor", "value": 2.4 },
+        { "key": "records", "value": 78498 }
+      ],
+      "representation": { "layer": "numeric", "form": "bound" },
+      "sources": [{ "file": "algorithm.md", "heading": "4.5 Duplicate accounting (the honest cost of the relaxation)", "quote": "Roughly a factor 2.4 more touches than Algorithm A" }]
+    },
+    {
+      "id": "model.algorithm-C",
+      "kind": "model",
+      "name": "Algorithm C: Min-Factor Exponent-Spine Generator",
+      "statement": "Algorithm C re-indexes Algorithm B by the min-factor normal form m=p^e r, streaming layers (p,e) instead of per-prime streams, so that every rejected candidate is reported as (spf, valuation, cofactor); it uses the wheeled relaxation of B_p (denoted tilde B_p), so it over-claims exactly as B does, and its touch count equals B's to within Theta(N^{2/3}/log N), meaning it is a streaming min-factor oracle, not a faster prime generator.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "domain": "sieve",
+      "representation": {
+        "layer": "symbolic",
+        "form": "model",
+        "interfaces": [{ "to": "numeric", "via": "evaluate", "available": true, "target": "experiment.reference-implementation-validation" }]
+      },
+      "attributes": [
+        { "key": "memory_thinned", "value": "(1+o(1)) pi(sqrt n)", "layer": "numeric" },
+        { "key": "segment_parallel", "value": true }
+      ],
+      "sources": [{ "file": "algorithm.md", "heading": "0. TL;DR", "quote": "It is a streaming min-factor oracle, not a faster prime generator." }]
+    },
+    {
+      "id": "definition.wheeled-relaxation-Bp",
+      "kind": "definition",
+      "name": "Wheeled Relaxation of B_p",
+      "statement": "The wheeled cloud tilde B_p that Algorithm C actually streams is {1} union {r>=p : gcd(r,W)=1, p does not divide r}, a W-coprime wheel that still contains composites, so it over-claims exactly as B does.",
+      "formal": "\\tilde B_p = \\{1\\} \\cup \\{r\\ge p : \\gcd(r,W)=1,\\ p\\nmid r\\}",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "symbolic", "form": "definition" },
+      "sources": [{ "file": "algorithm.md", "heading": "4C.1 Design", "quote": "\\tilde B_p ... a W-coprime wheel that still contains composites" }]
+    },
+    {
+      "id": "lemma.C-coverage",
+      "kind": "lemma",
+      "name": "Algorithm C Coverage Lemma",
+      "statement": "Every W-coprime composite m is a value of layer (p,e) with p=spf(m), e=v_p(m).",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Lemma 4C.1" },
+      "sources": [{ "file": "algorithm.md", "heading": "4C.3 Correctness", "quote": "Every W-coprime composite m is a value of layer (p,e)" }]
+    },
+    {
+      "id": "lemma.C-min-factor-oracle",
+      "kind": "lemma",
+      "name": "Min-Factor Oracle Lemma",
+      "statement": "The drained claimant with the smallest p in Algorithm C carries (spf(n), v_p(n), n/p^{v_p}); every claimant's p divides n hence is at least spf(n), and spf(n) claims by the coverage lemma.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Lemma 4C.4" },
+      "sources": [{ "file": "algorithm.md", "heading": "4C.3 Correctness", "quote": "The drained claimant with the smallest p carries (\\mathrm{spf} (n), v_p (n), n/p^{v_p})" }]
+    },
+    {
+      "id": "lemma.C-duplicate-accounting",
+      "kind": "lemma",
+      "name": "Algorithm C Claimants and Duplicate Accounting",
+      "statement": "The claimant set of Algorithm C for m is a subset of Algorithm B's claimant set, and the operation count for C equals that of B minus a discarded tail of size Theta(N^{2/3}/log N), so at N=10^12,w=6 the gap is about 10^{-4}N against ops_B ~ 0.46N, meaning Algorithm C is not a faster prime generator.",
+      "status": "supported",
+      "confidence": 0.7,
+      "attributes": [{ "key": "gap_order", "value": "Theta(N^{2/3}/log N)" }],
+      "representation": { "layer": "numeric", "form": "bound", "content": "Lemma 4C.5" },
+      "sources": [{ "file": "algorithm.md", "heading": "4C.4 Duplicate accounting and cost", "quote": "Algorithm C is not a faster prime generator." }]
+    },
+    {
+      "id": "observation.claimant-witness-847",
+      "kind": "observation",
+      "name": "Smallest Strict Witness at W=30 is 847",
+      "statement": "At W=30, 847 = 7 * 11^2 is claimed twice by Algorithm B (via 7*121 and 11*77) and once by Algorithm C (layer (7,1), r=121), demonstrating the strict subset relation between claimant sets.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "attributes": [{ "key": "example_value", "value": 847 }, { "key": "W", "value": 30 }],
+      "representation": { "layer": "numeric", "form": "prose-sketch" },
+      "sources": [{ "file": "algorithm.md", "heading": "4C.4 Duplicate accounting and cost", "quote": "Smallest strict witness at W=30: 847 = 7\\cdot11^2" }]
+    },
+    {
+      "id": "definition.bucket-priority-queue",
+      "kind": "definition",
+      "name": "Bucket Priority Queue Engineering Layer",
+      "statement": "A segment length Delta is chosen and, for each future segment index s, a bucket list holds stream records whose next value lies in that segment; processing a segment drains its bucket with O(1) amortised operations sequential in memory, removing the log factor of a binary heap.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "domain": "implementation",
+      "representation": { "layer": "symbolic", "form": "model" },
+      "attributes": [{ "key": "segment_length_example", "value": 262144, "unit": "candidates" }],
+      "sources": [{ "file": "algorithm.md", "heading": "5.1 Bucket priority queue (removes the log factor)", "quote": "All operations are O (1) amortised and sequential in memory." }]
+    },
+    {
+      "id": "heuristic.numeric-hygiene-overflow-guard",
+      "kind": "heuristic",
+      "name": "Numeric Hygiene Overflow Guard",
+      "statement": "Guard every product before computing it by testing p > limit/a rather than p*a > limit, and use 128-bit or division form for N beyond 2^63.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "domain": "implementation",
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [{ "file": "algorithm.md", "heading": "5.2 Numeric hygiene", "quote": "Guard every product before computing it: test p > limit / a rather than p*a > limit." }]
+    },
+    {
+      "id": "experiment.reference-implementation-validation",
+      "kind": "experiment",
+      "name": "Reference Implementation Validation Against Sieve of Eratosthenes",
+      "statement": "The Python reference implementation validates Algorithms A, B and C by comparing their output at LIM=200000 against a reference sieve, asserting the one-touch property for A (pops equal composites) and checking Algorithm C's min-factor reports including the example 847 -> (7,1,121).",
+      "status": "tested",
+      "confidence": 0.85,
+      "domain": "benchmark",
+      "attributes": [{ "key": "LIM", "value": 200000 }],
+      "representation": {
+        "layer": "numeric",
+        "form": "benchmark-row",
+        "interfaces": [
+          { "to": "symbolic", "via": "fit", "available": false, "note": "no closed form fit performed, only assertion checks" }
+        ]
+      },
+      "sources": [{ "file": "algorithm.md", "heading": "6. Reference implementation (Python, executable and self-checking)", "quote": "assert st[\"pops\"] == st[\"composites\"], (st, \"one-touch property violated\")" }]
+    },
+    {
+      "id": "certificate.one-touch-machine-check",
+      "kind": "certificate",
+      "name": "Machine-Checkable One-Touch Assertion",
+      "statement": "The assertion pops == composites in the reference implementation is the machine-checkable statement of exact orthogonality (Theorem 3.2), failing immediately if any composite is claimed twice or missed.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "numeric", "form": "certificate" },
+      "sources": [{ "file": "algorithm.md", "heading": "6. Reference implementation", "quote": "it fails immediately if any composite is claimed twice or missed" }]
+    },
+    {
+      "id": "table.comparison-methods",
+      "kind": "observation",
+      "name": "Comparison Table of Prime Generation Methods",
+      "statement": "A comparison table lists touch/time cost, working memory, whether an array over the range is required, and segment-parallelism for trial division, segmented Eratosthenes, Pritchard wheel sieve, Atkin, O'Neill priority-queue sieve, and Algorithms A, B and C.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "domain": "benchmark",
+      "representation": { "layer": "numeric", "form": "table" },
+      "sources": [{ "file": "algorithm.md", "heading": "7. Comparison", "quote": "Algorithm A is the unique member of this table that touches each composite exactly once and uses no range-proportional array" }]
+    },
+    {
+      "id": "reference.paper-md",
+      "kind": "reference",
+      "name": "paper.md (Primary Specification)",
+      "statement": "paper.md is the primary specification companion document; its claims O1, O2, C1, A1, B1-B5 and X1 correspond respectively to Theorem 2.1, Lemma 2.3, Theorem 2.8, Theorem 3.1, sections 4.4-4.5, and Remark 2.9 of algorithm.md.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "domain": "implementation",
+      "sources": [{ "file": "algorithm.md", "heading": "8. Relation to the companion documents", "quote": "Claim O1 = Theorem 2.1, Claim O2 = Lemma 2.3" }]
+    },
+    {
+      "id": "reference.generator-md",
+      "kind": "reference",
+      "name": "generator.md (Architecture)",
+      "statement": "generator.md's NextOwnedComposite is exactly p times NextRough(p, .) per Proposition 2.6, and its consuming merge is the loop of sections 3.4/4.3; its complexity statement restates heap size pi(sqrt N) under deferred activation.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "8. Relation to the companion documents", "quote": "Its NextOwnedComposite is exactly p\\cdot\\mathrm{NextRough} (p,\\cdot)" }]
+    },
+    {
+      "id": "reference.observation-md",
+      "kind": "reference",
+      "name": "observation.md (Multiplier Sets)",
+      "statement": "observation.md documents the multiplier set A_p as the p-rough numbers from p up: a wheel, infinite, periodic mod P_{<p} with phi(P_{<p}) residues per period.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "8. Relation to the companion documents", "quote": "The multiplier set is A_p, the p-rough numbers from p up" }]
+    },
+    {
+      "id": "reference.idea-md",
+      "kind": "reference",
+      "name": "idea.md (Wheels and Spectra)",
+      "statement": "Both algorithms are structurally the wheel of idea.md section 2.3 made incremental: Algorithm B materializes the first w exclusion fields as a table and the rest as lazily-advanced pointers, avoiding the doubly-exponential primorial blow-up noted in idea.md section 8.5.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "8. Relation to the companion documents", "quote": "the doubly-exponential primorial blow-up noted in idea.md \\S 8.5 never occurs" }]
+    },
+    {
+      "id": "reference.fractal-md",
+      "kind": "reference",
+      "name": "fractal.md (Lattice Reading)",
+      "statement": "The set deleted by the lattice recursion S_{k+1} = (p tilings of S_k) minus p*S_k is exactly Theta_p = p*A_p (Theorem 2.1); Algorithm A follows the recursion to full depth while Algorithm B truncates at depth w.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "8. Relation to the companion documents", "quote": "the duplicate factor of \\S 4.5 is precisely the truncation error" }]
+    },
+    {
+      "id": "reference.min-factor-md",
+      "kind": "reference",
+      "name": "min_factor.md (Algorithm C)",
+      "statement": "min_factor.md contains the full specification, proofs, cost derivations and open problems for the exponent refinement of Theorem 2.1, the cone recursion, the wheeled layers, the claimant identity, the thinned spine, and the streaming min-factor oracle.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "sources": [{ "file": "algorithm.md", "heading": "8. Relation to the companion documents", "quote": "Full specification, proofs, cost derivations and open problems: min_factor.md" }]
+    },
+    {
+      "id": "reference.theory-md",
+      "kind": "reference",
+      "name": "theory.md (Statement Inventory)",
+      "statement": "theory.md provides a statement-by-statement status, dependency graph and prior-art inventory for the claims in algorithm.md and its companions.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "8. Relation to the companion documents", "quote": "Statement-by-statement status, dependency graph and prior art for everything above." }]
+    },
+    {
+      "id": "open_question.sharp-asymptotics-SN",
+      "kind": "open_question",
+      "name": "Sharp Asymptotics for S(N) Open Question",
+      "statement": "The sharp asymptotics for S(N) = #{b>=2 : b*P(b) <= N}, the memory of Algorithm A, are unknown; measure with primes_A stats mode and compare with the Dickman saddle estimate.",
+      "status": "proposed",
+      "confidence": 0.8,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [{ "file": "algorithm.md", "heading": "9. Open items", "quote": "Sharp asymptotics for S (N) = \\#\\{b\\ge2 : b\\,P (b)\\le N\\}" }]
+    },
+    {
+      "id": "open_question.wheeled-variant-A-exponent",
+      "kind": "open_question",
+      "name": "Wheeled Variant A Exponent Open Question",
+      "statement": "It is unknown whether restricting stream bases to p_{w+1}-rough numbers in the A+wheel variant drives the exponent theta below 1/2.",
+      "status": "proposed",
+      "confidence": 0.75,
+      "sources": [{ "file": "algorithm.md", "heading": "9. Open items", "quote": "Is the exponent driven below 1/2?" }]
+    },
+    {
+      "id": "open_question.optimal-w-tradeoff",
+      "kind": "open_question",
+      "name": "Optimal Wheel Width w Open Question",
+      "statement": "The optimal wheel width w as a function of N and cache size for Algorithm B, trading kappa_W and the ln ln span against the Theta(W) table cost, is not determined.",
+      "status": "proposed",
+      "confidence": 0.75,
+      "sources": [{ "file": "algorithm.md", "heading": "9. Open items", "quote": "Optimal w as a function of N and cache size for Algorithm B" }]
+    },
+    {
+      "id": "conjecture.hybrid-A-B-one-touch",
+      "kind": "conjecture",
+      "name": "Hybrid A/B One-Touch Hypothesis",
+      "statement": "Running Algorithm A's exact streams for p <= N^{1/3} and Algorithm B's index-increment prime phase for N^{1/3} < p <= sqrt N should achieve one-touch behaviour with much smaller S(N), though the accounting for this has not yet been done.",
+      "status": "proposed",
+      "confidence": 0.7,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [{ "file": "algorithm.md", "heading": "9. Open items", "quote": "This should get one-touch behaviour with much smaller S (N); the accounting is not yet done." }]
+    },
+    {
+      "id": "open_question.measure-opsC-vs-opsB",
+      "kind": "open_question",
+      "name": "Measure ops_C vs ops_B Open Question",
+      "statement": "The gap between ops_C and ops_B should be measured at N=10^8 to 10^12 and fit against the claimed Theta(N^{2/3}/log N) gap, instrumenting primes_C and primes_B with pop counters, and the thinned-spine record count should be measured against pi(sqrt N).",
+      "status": "proposed",
+      "confidence": 0.75,
+      "sources": [{ "file": "algorithm.md", "heading": "9. Open items", "quote": "fit the claimed \\Theta (N^{2/3}/\\log N) gap of \\S4C.4" }]
+    },
+    {
+      "id": "conjecture.exponent-spine-algorithm-A",
+      "kind": "conjecture",
+      "name": "Exponent-Spine Algorithm A Conjecture",
+      "statement": "Indexing Algorithm A's bases as b = p^e * b' and run-length encoding the spine might suppress the smooth bases that dominate S(N), analogous to the wheel of section 3.8.",
+      "status": "proposed",
+      "confidence": 0.65,
+      "sources": [{ "file": "algorithm.md", "heading": "9. Open items", "quote": "Does that suppress the smooth bases that dominate S (N), as the wheel of \\S3.8 does?" }]
+    },
+    {
+      "id": "norm.recommendation-ship-B-and-C",
+      "kind": "norm",
+      "name": "Recommendation to Ship Algorithm B and C",
+      "statement": "The recommendation is to ship Algorithm B plus the bucket queue for production when only primes are wanted, and Algorithm C when the consumer wants factors, while keeping Algorithm A as the mathematically pure one-touch reference generator.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "social", "form": "prose-sketch" },
+      "sources": [{ "file": "algorithm.md", "heading": "0. TL;DR", "quote": "ship Algorithm B (+ bucket queue, \\S5) for production when only primes are wanted, and Algorithm C when the consumer wants factors" }]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e.definition.multiplier-set-Ap.depends_on.definition.p-rough-numbers",
+      "from": "definition.multiplier-set-Ap",
+      "to": "definition.p-rough-numbers",
+      "relation": "depends_on",
+      "confidence": 0.9,
+      "sources": [{ "file": "algorithm.md", "heading": "0. TL;DR", "quote": "the p-rough numbers from p up" }]
+    },
+    {
+      "id": "e.theorem.ownership.assumes.definition.multiplier-set-Ap",
+      "from": "theorem.ownership",
+      "to": "definition.multiplier-set-Ap",
+      "relation": "assumes",
+      "confidence": 0.9
+    },
+    {
+      "id": "e.proof.ownership-theorem.depends_on.theorem.ownership",
+      "from": "proof.ownership-theorem",
+      "to": "theorem.ownership",
+      "relation": "depends_on",
+      "confidence": 0.9
+    },
+    {
+      "id": "e.corollary.Ap-is-wheel.depends_on.theorem.ownership",
+      "from": "corollary.Ap-is-wheel",
+      "to": "theorem.ownership",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.lemma.phase-separation.depends_on.definition.multiplier-set-Ap",
+      "from": "lemma.phase-separation",
+      "to": "definition.multiplier-set-Ap",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.corollary.rough-phase-primes.depends_on.lemma.phase-separation",
+      "from": "corollary.rough-phase-primes",
+      "to": "lemma.phase-separation",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.observation.first-composite-multiplier-121.supports.corollary.rough-phase-primes",
+      "from": "observation.first-composite-multiplier-121",
+      "to": "corollary.rough-phase-primes",
+      "relation": "supports",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.corollary.no-forward-dependency.depends_on.theorem.ownership",
+      "from": "corollary.no-forward-dependency",
+      "to": "theorem.ownership",
+      "relation": "depends_on",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.theorem.next-owned-composite-reduction.depends_on.theorem.ownership",
+      "from": "theorem.next-owned-composite-reduction",
+      "to": "theorem.ownership",
+      "relation": "depends_on",
+      "confidence": 0.9
+    },
+    {
+      "id": "e.theorem.next-owned-composite-reduction.formalizes.definition.next-owned-composite",
+      "from": "theorem.next-owned-composite-reduction",
+      "to": "definition.next-owned-composite",
+      "relation": "formalizes",
+      "confidence": 0.75,
+      "sources": [{ "file": "algorithm.md", "heading": "2.4 The primitive of generator.md, derived", "quote": "So the sought-after primitive is exactly a rough-successor." }]
+    },
+    {
+      "id": "e.lemma.prime-phase-advancement.depends_on.lemma.phase-separation",
+      "from": "lemma.prime-phase-advancement",
+      "to": "lemma.phase-separation",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.theorem.causality.depends_on.theorem.next-owned-composite-reduction",
+      "from": "theorem.causality",
+      "to": "theorem.next-owned-composite-reduction",
+      "relation": "depends_on",
+      "confidence": 0.75
+    },
+    {
+      "id": "e.remark.obstruction-no-O1-both.motivates.model.algorithm-A",
+      "from": "remark.obstruction-no-O1-both",
+      "to": "model.algorithm-A",
+      "relation": "motivates",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "2.7 Why O(1) time and O(1) state per prime is not available", "quote": "Algorithm A derives the rough multipliers from other streams" }]
+    },
+    {
+      "id": "e.remark.obstruction-no-O1-both.motivates.model.algorithm-B",
+      "from": "remark.obstruction-no-O1-both",
+      "to": "model.algorithm-B",
+      "relation": "motivates",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "2.7 Why O(1) time and O(1) state per prime is not available", "quote": "Algorithm B replaces R_p by the tabulated wheel" }]
+    },
+    {
+      "id": "e.definition.min-factor-normal-form.generalizes.theorem.ownership",
+      "from": "definition.min-factor-normal-form",
+      "to": "theorem.ownership",
+      "relation": "generalizes",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "2.8 The exponent refinement (min-factor normal form)", "quote": "Splitting at the smallest prime factor repeatedly ... refines Theorem 2.1 one step further" }]
+    },
+    {
+      "id": "e.proposition.cone-recursion.depends_on.definition.min-factor-normal-form",
+      "from": "proposition.cone-recursion",
+      "to": "definition.min-factor-normal-form",
+      "relation": "depends_on",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.lemma.strict-phase-separation.depends_on.definition.min-factor-normal-form",
+      "from": "lemma.strict-phase-separation",
+      "to": "definition.min-factor-normal-form",
+      "relation": "depends_on",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.model.algorithm-A.instantiates.theorem.stream-tree",
+      "from": "model.algorithm-A",
+      "to": "theorem.stream-tree",
+      "relation": "instantiates",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.theorem.stream-tree.specializes.theorem.ownership",
+      "from": "theorem.stream-tree",
+      "to": "theorem.ownership",
+      "relation": "specializes",
+      "confidence": 0.75,
+      "sources": [{ "file": "algorithm.md", "heading": "3.1 The idea: recurse on the multiplier, not on divisibility", "quote": "the prime phase of \\Theta_p" }]
+    },
+    {
+      "id": "e.theorem.algorithm-A-correctness.depends_on.theorem.stream-tree",
+      "from": "theorem.algorithm-A-correctness",
+      "to": "theorem.stream-tree",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.theorem.algorithm-A-causality.depends_on.theorem.algorithm-A-correctness",
+      "from": "theorem.algorithm-A-causality",
+      "to": "theorem.algorithm-A-correctness",
+      "relation": "depends_on",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.observation.algorithm-A-worked-trace.tests.theorem.algorithm-A-correctness",
+      "from": "observation.algorithm-A-worked-trace",
+      "to": "theorem.algorithm-A-correctness",
+      "relation": "tests",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.bound.algorithm-A-live-streams.measures.model.algorithm-A",
+      "from": "bound.algorithm-A-live-streams",
+      "to": "model.algorithm-A",
+      "relation": "measures",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.model.algorithm-A-plus-wheel.refines.model.algorithm-A",
+      "from": "model.algorithm-A-plus-wheel",
+      "to": "model.algorithm-A",
+      "relation": "refines",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.model.algorithm-A-plus-wheel.depends_on.model.algorithm-B",
+      "from": "model.algorithm-A-plus-wheel",
+      "to": "model.algorithm-B",
+      "relation": "depends_on",
+      "confidence": 0.65,
+      "sources": [{ "file": "algorithm.md", "heading": "3.8 Variant A+wheel", "quote": "Combine with \\S4: fix W=p_1\\cdots p_w" }]
+    },
+    {
+      "id": "e.model.algorithm-B.formalizes.remark.obstruction-no-O1-both",
+      "from": "model.algorithm-B",
+      "to": "remark.obstruction-no-O1-both",
+      "relation": "formalizes",
+      "confidence": 0.6,
+      "notes": "Algorithm B is presented as the resolution/response to the obstruction; direction chosen as fuzzy->symbolic realization though remark itself is deductive-leaning; recorded at reduced confidence.",
+      "layers": ["fuzzy", "symbolic"]
+    },
+    {
+      "id": "e.lemma.B-coverage.depends_on.definition.multiplier-set-Ap",
+      "from": "lemma.B-coverage",
+      "to": "definition.multiplier-set-Ap",
+      "relation": "depends_on",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.theorem.B-correctness.depends_on.lemma.B-coverage",
+      "from": "theorem.B-correctness",
+      "to": "lemma.B-coverage",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.theorem.B-correctness.depends_on.lemma.B-no-early-claims",
+      "from": "theorem.B-correctness",
+      "to": "lemma.B-no-early-claims",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.theorem.B-state.depends_on.theorem.B-correctness",
+      "from": "theorem.B-state",
+      "to": "theorem.B-correctness",
+      "relation": "depends_on",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.bound.B-duplicate-ops.measures.model.algorithm-B",
+      "from": "bound.B-duplicate-ops",
+      "to": "model.algorithm-B",
+      "relation": "measures",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.model.algorithm-C.generalizes.model.algorithm-B",
+      "from": "model.algorithm-C",
+      "to": "model.algorithm-B",
+      "relation": "generalizes",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "4C. Algorithm C — min-factor exponent-spine generator", "quote": "Algorithm C is Algorithm B re-indexed by Theorem 2.10." }]
+    },
+    {
+      "id": "e.model.algorithm-C.depends_on.definition.min-factor-normal-form",
+      "from": "model.algorithm-C",
+      "to": "definition.min-factor-normal-form",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.model.algorithm-C.depends_on.definition.wheeled-relaxation-Bp",
+      "from": "model.algorithm-C",
+      "to": "definition.wheeled-relaxation-Bp",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.lemma.C-coverage.depends_on.definition.wheeled-relaxation-Bp",
+      "from": "lemma.C-coverage",
+      "to": "definition.wheeled-relaxation-Bp",
+      "relation": "depends_on",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.lemma.C-min-factor-oracle.depends_on.lemma.C-coverage",
+      "from": "lemma.C-min-factor-oracle",
+      "to": "lemma.C-coverage",
+      "relation": "depends_on",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.lemma.C-duplicate-accounting.contradicts.model.algorithm-C",
+      "from": "lemma.C-duplicate-accounting",
+      "to": "model.algorithm-C",
+      "relation": "refutes",
+      "confidence": 0.55,
+      "notes": "Records the honest limitation that C is not a faster generator, functioning as a corrective to any expectation of speedup; treated as a refutes edge against a naive speed claim rather than against the model itself.",
+      "sources": [{ "file": "algorithm.md", "heading": "4C.4 Duplicate accounting and cost", "quote": "Algorithm C is not a faster prime generator." }]
+    },
+    {
+      "id": "e.observation.claimant-witness-847.supports.lemma.C-duplicate-accounting",
+      "from": "observation.claimant-witness-847",
+      "to": "lemma.C-duplicate-accounting",
+      "relation": "supports",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.definition.bucket-priority-queue.constrains.model.algorithm-B",
+      "from": "definition.bucket-priority-queue",
+      "to": "model.algorithm-B",
+      "relation": "constrains",
+      "confidence": 0.6,
+      "notes": "Bucket queue is ecological/engineering optimization; modeled as improving feasibility rather than a strict 'constrains' from an ecological node, confidence reduced.",
+      "layers": ["ecological", "symbolic"]
+    },
+    {
+      "id": "e.experiment.reference-implementation-validation.tests.model.algorithm-A",
+      "from": "experiment.reference-implementation-validation",
+      "to": "model.algorithm-A",
+      "relation": "tests",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.experiment.reference-implementation-validation.tests.model.algorithm-B",
+      "from": "experiment.reference-implementation-validation",
+      "to": "model.algorithm-B",
+      "relation": "tests",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.experiment.reference-implementation-validation.tests.model.algorithm-C",
+      "from": "experiment.reference-implementation-validation",
+      "to": "model.algorithm-C",
+      "relation": "tests",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.certificate.one-touch-machine-check.certifies.theorem.algorithm-A-correctness",
+      "from": "certificate.one-touch-machine-check",
+      "to": "theorem.algorithm-A-correctness",
+      "relation": "supports",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.table.comparison-methods.measures.model.algorithm-A",
+      "from": "table.comparison-methods",
+      "to": "model.algorithm-A",
+      "relation": "measures",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.table.comparison-methods.measures.model.algorithm-B",
+      "from": "table.comparison-methods",
+      "to": "model.algorithm-B",
+      "relation": "measures",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.table.comparison-methods.measures.model.algorithm-C",
+      "from": "table.comparison-methods",
+      "to": "model.algorithm-C",
+      "relation": "measures",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.norm.recommendation-ship-B-and-C.selects_for.model.algorithm-B",
+      "from": "norm.recommendation-ship-B-and-C",
+      "to": "model.algorithm-B",
+      "relation": "selects_for",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.norm.recommendation-ship-B-and-C.selects_for.model.algorithm-C",
+      "from": "norm.recommendation-ship-B-and-C",
+      "to": "model.algorithm-C",
+      "relation": "selects_for",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.reference.paper-md.cites.theorem.ownership",
+      "from": "reference.paper-md",
+      "to": "theorem.ownership",
+      "relation": "cites",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.reference.generator-md.cites.theorem.next-owned-composite-reduction",
+      "from": "reference.generator-md",
+      "to": "theorem.next-owned-composite-reduction",
+      "relation": "cites",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.reference.observation-md.cites.definition.multiplier-set-Ap",
+      "from": "reference.observation-md",
+      "to": "definition.multiplier-set-Ap",
+      "relation": "cites",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.reference.idea-md.cites.model.algorithm-B",
+      "from": "reference.idea-md",
+      "to": "model.algorithm-B",
+      "relation": "cites",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.reference.fractal-md.cites.theorem.ownership",
+      "from": "reference.fractal-md",
+      "to": "theorem.ownership",
+      "relation": "cites",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.reference.min-factor-md.cites.model.algorithm-C",
+      "from": "reference.min-factor-md",
+      "to": "model.algorithm-C",
+      "relation": "cites",
+      "confidence": 0.75
+    },
+    {
+      "id": "e.open_question.sharp-asymptotics-SN.motivates.bound.algorithm-A-live-streams",
+      "from": "open_question.sharp-asymptotics-SN",
+      "to": "bound.algorithm-A-live-streams",
+      "relation": "motivates",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.open_question.wheeled-variant-A-exponent.motivates.model.algorithm-A-plus-wheel",
+      "from": "open_question.wheeled-variant-A-exponent",
+      "to": "model.algorithm-A-plus-wheel",
+      "relation": "motivates",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.open_question.optimal-w-tradeoff.motivates.model.algorithm-B",
+      "from": "open_question.optimal-w-tradeoff",
+      "to": "model.algorithm-B",
+      "relation": "motivates",
+      "confidence": 0.65
+    },
+    {
+      "id": "e.conjecture.hybrid-A-B-one-touch.motivates.model.algorithm-A",
+      "from": "conjecture.hybrid-A-B-one-touch",
+      "to": "model.algorithm-A",
+      "relation": "motivates",
+      "confidence": 0.6
+    },
+    {
+      "id": "e.conjecture.hybrid-A-B-one-touch.motivates.model.algorithm-B",
+      "from": "conjecture.hybrid-A-B-one-touch",
+      "to": "model.algorithm-B",
+      "relation": "motivates",
+      "confidence": 0.6
+    },
+    {
+      "id": "e.open_question.measure-opsC-vs-opsB.tests.lemma.C-duplicate-accounting",
+      "from": "open_question.measure-opsC-vs-opsB",
+      "to": "lemma.C-duplicate-accounting",
+      "relation": "tests",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.conjecture.exponent-spine-algorithm-A.abstracts.model.algorithm-A-plus-wheel",
+      "from": "conjecture.exponent-spine-algorithm-A",
+      "to": "model.algorithm-A-plus-wheel",
+      "relation": "abstracts",
+      "confidence": 0.55,
+      "notes": "Speculative extension inferred from analogy to the wheel variant; low-medium confidence as inference beyond literal text.",
+      "layers": ["symbolic", "fuzzy"]
+    }
+  ],
+  "morphisms": [
+    {
+      "id": "m.remark.obstruction-no-O1-both.invariance_projection.model.algorithm-B",
+      "kind": "invariance_projection",
+      "from": "remark.obstruction-no-O1-both",
+      "to": "model.algorithm-B",
+      "state": "performed",
+      "loss": "exactness of ownership is traded for bounded duplicate touches",
+      "confidence": 0.7,
+      "sources": [{ "file": "algorithm.md", "heading": "2.7 Why O(1) time and O(1) state per prime is not available", "quote": "Algorithm B replaces R_p by the tabulated wheel R_{p_{w+1}} for all p > p_w" }]
+    },
+    {
+      "id": "m.remark.obstruction-no-O1-both.invariance_projection.model.algorithm-A",
+      "kind": "invariance_projection",
+      "from": "remark.obstruction-no-O1-both",
+      "to": "model.algorithm-A",
+      "state": "performed",
+      "loss": "O(1) state per prime is sacrificed to keep exactness",
+      "confidence": 0.7,
+      "sources": [{ "file": "algorithm.md", "heading": "2.7 Why O(1) time and O(1) state per prime is not available", "quote": "Algorithm A derives the rough multipliers from other streams (exact, more streams)" }]
+    },
+    {
+      "id": "m.theorem.ownership.extract.definition.next-owned-composite",
+      "kind": "extract",
+      "from": "theorem.ownership",
+      "to": "definition.next-owned-composite",
+      "state": "performed",
+      "confidence": 0.65,
+      "notes": "The primitive's formula is read off (extracted) from the structural theorem via Proposition 2.6; recorded at moderate confidence since the intermediate is theorem.next-owned-composite-reduction.",
+      "sources": [{ "file": "algorithm.md", "heading": "0. TL;DR", "quote": "There is no additional mystery formula to find." }]
+    },
+    {
+      "id": "m.model.algorithm-A.evaluate.experiment.reference-implementation-validation",
+      "kind": "evaluate",
+      "from": "model.algorithm-A",
+      "to": "experiment.reference-implementation-validation",
+      "state": "performed",
+      "cost": { "measure": "developer-effort", "note": "implemented as primes_A with stats mode" },
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "6. Reference implementation", "quote": "def primes_A(limit, stats=False):" }]
+    },
+    {
+      "id": "m.model.algorithm-B.evaluate.experiment.reference-implementation-validation",
+      "kind": "evaluate",
+      "from": "model.algorithm-B",
+      "to": "experiment.reference-implementation-validation",
+      "state": "performed",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "6. Reference implementation", "quote": "def primes_B(w=6):" }]
+    },
+    {
+      "id": "m.model.algorithm-C.evaluate.experiment.reference-implementation-validation",
+      "kind": "evaluate",
+      "from": "model.algorithm-C",
+      "to": "experiment.reference-implementation-validation",
+      "state": "performed",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "6. Reference implementation", "quote": "def primes_C(w=6, report=None):" }]
+    },
+    {
+      "id": "m.bound.algorithm-A-live-streams.fit.open_question.sharp-asymptotics-SN",
+      "kind": "fit",
+      "from": "bound.algorithm-A-live-streams",
+      "to": "open_question.sharp-asymptotics-SN",
+      "state": "intended",
+      "loss": "the saddle-point estimate is heuristic, not a proved closed form",
+      "confidence": 0.6,
+      "sources": [{ "file": "algorithm.md", "heading": "9. Open items", "quote": "Measure with primes_A(..., stats=True) and compare with the Dickman saddle estimate." }]
+    },
+    {
+      "id": "m.definition.min-factor-normal-form.abstract.reference.min-factor-md",
+      "kind": "abstract",
+      "from": "definition.min-factor-normal-form",
+      "to": "reference.min-factor-md",
+      "state": "intended",
+      "confidence": 0.5,
+      "notes": "algorithm.md gestures at min_factor.md as containing the fuller theory; treated as an intended abstraction/pointer rather than a fully performed transport.",
+      "sources": [{ "file": "algorithm.md", "heading": "4C. Algorithm C — min-factor exponent-spine generator", "quote": "Full specification, proofs, cost derivations and open problems: min_factor.md" }]
+    }
+  ],
+  "coherence": [
+    {
+      "id": "c.analytic.algorithm-A-correctness-vs-implementation",
+      "kind": "analytic",
+      "refs": ["theorem.algorithm-A-correctness", "experiment.reference-implementation-validation", "certificate.one-touch-machine-check"],
+      "requirement": "The proved one-touch property of Algorithm A must match the pops==composites assertion observed in the reference implementation run.",
+      "status": "discharged",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "6. Reference implementation", "quote": "assert st[\"pops\"] == st[\"composites\"], (st, \"one-touch property violated\")" }]
+    },
+    {
+      "id": "c.analytic.algorithm-B-correctness-vs-implementation",
+      "kind": "analytic",
+      "refs": ["theorem.B-correctness", "experiment.reference-implementation-validation"],
+      "requirement": "The proved correctness of Algorithm B (emits exactly the primes) must match the output comparison against the reference sieve.",
+      "status": "discharged",
+      "confidence": 0.8,
+      "sources": [{ "file": "algorithm.md", "heading": "6. Reference implementation", "quote": "assert b == ref, \"Algorithm B mismatch\"" }]
+    },
+    {
+      "id": "c.analytic.algorithm-C-min-factor-oracle-vs-implementation",
+      "kind": "analytic",
+      "refs": ["lemma.C-min-factor-oracle", "experiment.reference-implementation-validation"],
+      "requirement": "The min-factor oracle property of Algorithm C (spf, valuation, cofactor per rejected candidate) must be verified against direct factorization for all composites below the test bound.",
+      "status": "discharged",
+      "confidence": 0.75,
+      "sources": [{ "file": "algorithm.md", "heading": "6. Reference implementation", "quote": "assert m == p ** e * r and r % p, (m, p, e, r)" }]
+    },
+    {
+      "id": "c.semantic.algorithm-B-duplicate-bound-vs-measurement",
+      "kind": "semantic",
+      "refs": ["bound.B-duplicate-ops", "model.algorithm-B"],
+      "requirement": "The symbolic operation-count formula for Algorithm B's duplicate touches must agree with any empirical measurement of ops(N) at practical N.",
+      "status": "pending",
+      "cost": { "measure": "developer-effort", "note": "no reported empirical ops(N) measurement in the notes, only the analytic estimate" },
+      "confidence": 0.6,
+      "sources": [{ "file": "algorithm.md", "heading": "4.5 Duplicate accounting (the honest cost of the relaxation)", "quote": "Measure it with the stats mode of the reference implementation before trusting the exponent." }]
+    },
+    {
+      "id": "c.semantic.algorithm-C-cost-gap-vs-measurement",
+      "kind": "semantic",
+      "refs": ["lemma.C-duplicate-accounting", "open_question.measure-opsC-vs-opsB"],
+      "requirement": "The claimed Theta(N^{2/3}/log N) gap between ops_C and ops_B must eventually be checked against instrumented pop counters in primes_C and primes_B.",
+      "status": "pending",
+      "cost": { "measure": "developer-effort", "note": "instrumentation not yet implemented per open item 5" },
+      "confidence": 0.65,
+      "sources": [{ "file": "algorithm.md", "heading": "9. Open items", "quote": "instrument primes_C and primes_B with pop counters" }]
+    }
+  ],
+  "clusters": [
+    {
+      "id": "cluster.ownership-descent",
+      "name": "Ownership Theorem to Algorithm B Descent",
+      "kind": "descent_chain",
+      "root": "theorem.ownership",
+      "members": [
+        "theorem.ownership",
+        "theorem.next-owned-composite-reduction",
+        "remark.obstruction-no-O1-both",
+        "model.algorithm-A",
+        "model.algorithm-B"
+      ],
+      "layers": ["deductive", "fuzzy", "symbolic"],
+      "summary": "The exact structural theorem forces a choice (Remark 2.9) between two realizable algorithms, each a distinct symbolic model."
+    },
+    {
+      "id": "cluster.min-factor-family",
+      "name": "Min-Factor Normal Form Family",
+      "kind": "thread",
+      "root": "definition.min-factor-normal-form",
+      "members": [
+        "definition.min-factor-normal-form",
+        "proposition.cone-recursion",
+        "lemma.strict-phase-separation",
+        "definition.wheeled-relaxation-Bp",
+        "model.algorithm-C",
+        "lemma.C-coverage",
+        "lemma.C-min-factor-oracle",
+        "lemma.C-duplicate-accounting"
+      ],
+      "layers": ["deductive", "symbolic", "numeric"],
+      "summary": "The exponent refinement of ownership drives the design and cost analysis of Algorithm C."
+    },
+    {
+      "id": "cluster.algorithm-A-cost",
+      "name": "Algorithm A Cost Analysis",
+      "kind": "benchmark_family",
+      "root": "model.algorithm-A",
+      "members": [
+        "model.algorithm-A",
+        "theorem.algorithm-A-correctness",
+        "observation.algorithm-A-worked-trace",
+        "bound.algorithm-A-live-streams",
+        "experiment.reference-implementation-validation",
+        "certificate.one-touch-machine-check"
+      ],
+      "layers": ["symbolic", "deductive", "numeric"],
+      "summary": "Correctness, a worked trace and an empirical/heuristic cost bound for Algorithm A, tied together by the reference implementation."
+    }
+  ],
+  "unresolved": [
+    {
+      "kind": "layer_ambiguity",
+      "description": "Remark 2.9 is phrased as an informal obstruction argument ('Remark') but functions with the force of a theorem; classified as a conjecture/fuzzy-adjacent node at reduced confidence rather than as a theorem.",
+      "refs": ["remark.obstruction-no-O1-both"],
+      "layers": ["fuzzy", "deductive"]
+    },
+    {
+      "kind": "ambiguous_statement",
+      "description": "The exact status of Lemma 4C.5's inequality (claimants_C subseteq claimants_B) versus the asymptotic gap formula is stated together; split confidence reflects that the subset claim is proved but the asymptotic gap is only argued heuristically.",
+      "refs": ["lemma.C-duplicate-accounting"]
+    },
+    {
+      "kind": "missing_morphism",
+      "description": "Several 'formalizes'/'abstracts' style relations between the fuzzy obstruction remark and the concrete algorithm models are asserted in prose without a single clean morphism kind matching the schema's cross-ontology list; approximated with invariance_projection morphisms at reduced confidence.",
+      "refs": ["m.remark.obstruction-no-O1-both.invariance_projection.model.algorithm-B", "m.remark.obstruction-no-O1-both.invariance_projection.model.algorithm-A"],
+      "layers": ["fuzzy", "symbolic"]
+    }
+  ],
+  "stats": {
+    "documents": 1,
+    "nodes": 51,
+    "edges": 47,
+    "morphisms": 8,
+    "obligations": 5
+  }
+}

@@ -1,0 +1,1174 @@
+{
+  "$schema": "../../../ops/theory_graph.schema.ts",
+  "version": "2.0.0",
+  "generated_at": "2024-06-01T00:00:00Z",
+  "generator": { "op": "analyze.op.md" },
+  "corpus": {
+    "documents": [
+      {
+        "id": "generator",
+        "path": "generator.md",
+        "order": 1,
+        "title": "Generational Rings of Primes: An Orthogonal Composite Stream Sieve",
+        "dominant_layers": ["deductive", "symbolic", "numeric"]
+      }
+    ]
+  },
+  "context": {
+    "ecological": {
+      "constraints": ["heap must stay O(pi(sqrt N)) records, not O(N)"],
+      "resources": []
+    },
+    "social": {
+      "references": [
+        { "text": "O'Neill's 'genuine sieve' (priority-queue multiple tracking)", "kind": "paper" }
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "id": "theorem.lemma1-smallest-factor-bound",
+      "kind": "theorem",
+      "name": "Lemma 1: Composite up to N^2 Has a Prime Factor at Most N",
+      "statement": "Every composite m with 2 <= m <= N^2 has a prime factor p <= N.",
+      "formal": "m = ab,\\ 1<a\\le b \\Rightarrow a^2\\le ab=m\\le N^2 \\Rightarrow a\\le N",
+      "status": "accepted",
+      "confidence": 0.95,
+      "representation": {
+        "layer": "deductive",
+        "form": "proof-term",
+        "content": "Write m = ab with 1 < a <= b. Then a^2 <= ab = m <= N^2, so a <= N."
+      },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.1 The Basic Structural Fact",
+          "quote": "Let \\(m\\) be composite with \\(2 \\le m \\le N^2\\). Then \\(m\\) has a prime factor \\(p \\le N\\)."
+        }
+      ]
+    },
+    {
+      "id": "fuzzy.primes-divisor-basis",
+      "kind": "metaphor",
+      "name": "Primes up to N Are a Complete Divisor Basis for N^2",
+      "statement": "The primes up to N can be treated as a complete divisor basis for all numbers up to N^2.",
+      "status": "stabilized",
+      "confidence": 0.7,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "1. Introduction",
+          "quote": "those primes form a complete divisor basis for the entire band up to \\(N^2\\)"
+        }
+      ]
+    },
+    {
+      "id": "e.fuzzy.primes-divisor-basis.formalizes.theorem.lemma1-smallest-factor-bound",
+      "from": "fuzzy.primes-divisor-basis",
+      "to": "theorem.lemma1-smallest-factor-bound",
+      "relation": "formalizes",
+      "confidence": 0.6,
+      "sources": [{ "file": "generator.md", "heading": "2.1", "quote": "This lemma means that the primes up to N are a complete divisor basis" }]
+    },
+    {
+      "id": "conjecture.naive-layered-engine-not-attractive",
+      "kind": "heuristic",
+      "name": "Naive Layered Trial-Division Extension Is Not Attractive",
+      "statement": "Extending primes from N to N^2 by trial division against all primes up to N is correct but not asymptotically attractive for bulk generation.",
+      "status": "stabilized",
+      "confidence": 0.7,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "1. Introduction",
+          "quote": "naive application leads to trial division by \\(\\pi (N)\\) primes for roughly \\(N^2\\) candidates. That is not asymptotically attractive"
+        }
+      ]
+    },
+    {
+      "id": "trajectory.orthogonal-stream-representation",
+      "kind": "trajectory",
+      "name": "Represent Composites as Orthogonal Per-Prime Streams and Merge",
+      "statement": "Instead of testing candidates, assign every composite to exactly one prime stream (its smallest prime factor) and merge those streams to find the next prime.",
+      "status": "stabilized",
+      "confidence": 0.85,
+      "representation": { "layer": "inspiration", "form": "prose-sketch" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "1. Introduction",
+          "quote": "It is about a different representation: instead of testing candidates, we assign every composite to exactly one prime stream"
+        }
+      ]
+    },
+    {
+      "id": "e.trajectory.orthogonal-stream-representation.steers.definition.ownership-convention",
+      "from": "trajectory.orthogonal-stream-representation",
+      "to": "definition.ownership-convention",
+      "relation": "steers",
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "heading": "1. Introduction", "quote": "assign every composite to exactly one prime stream" }]
+    },
+    {
+      "id": "definition.ownership-convention",
+      "kind": "definition",
+      "name": "Ownership Convention for Composites",
+      "statement": "A composite number m is owned by the prime p if p is the smallest prime factor of m.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "representation": { "layer": "symbolic", "form": "definition" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.4 Orthogonal Streams",
+          "quote": "A composite number \\(m\\) is **owned** by the prime \\(p\\) if \\(p\\) is the smallest prime factor of \\(m\\)."
+        }
+      ]
+    },
+    {
+      "id": "theorem.streams-disjoint-cover",
+      "kind": "theorem",
+      "name": "Ownership Streams Are Disjoint and Cover All Composites",
+      "statement": "If each stream contains exactly the composites owned by its prime, the streams are pairwise disjoint and together cover all composite numbers.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.4 Orthogonal Streams",
+          "quote": "Every composite has exactly one owner. Therefore ... the streams are disjoint and together cover all composite numbers."
+        }
+      ]
+    },
+    {
+      "id": "e.definition.ownership-convention.implies.theorem.streams-disjoint-cover",
+      "from": "definition.ownership-convention",
+      "to": "theorem.streams-disjoint-cover",
+      "relation": "implies",
+      "confidence": 0.8
+    },
+    {
+      "id": "definition.orthogonal-stream-formula",
+      "kind": "definition",
+      "name": "Orthogonal Stream of a Prime",
+      "statement": "The stream of prime p consists of p times the p-rough numbers from p up, i.e. Theta_p = p * A_p where A_p = {a >= p : gcd(a, P_<p) = 1}.",
+      "formal": "\\Theta_p = p \\cdot A_p,\\quad A_p = \\{a \\ge p : \\gcd(a, P_{<p}) = 1\\}",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "symbolic", "form": "rewrite-rule", "content": "\\Theta_p = p A_p" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.4 Orthogonal Streams",
+          "quote": "\\Theta_p \\;=\\; p \\cdot A_p, \\qquad A_p = \\{\\, a \\ge p : \\gcd (a, P_{<p}) = 1 \\,\\}"
+        }
+      ]
+    },
+    {
+      "id": "definition.next-owned-composite",
+      "kind": "definition",
+      "name": "NextOwnedComposite Primitive",
+      "statement": "NextOwnedComposite(p, x) is the minimum element of Theta_p strictly greater than x.",
+      "formal": "\\text{NextOwnedComposite}(p,x) = \\min\\{m \\in \\Theta_p : m > x\\}",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "symbolic", "form": "definition" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.1 Definition",
+          "quote": "\\text{NextOwnedComposite} (p, x) \\;=\\; \\min\\{\\, m \\in \\Theta_p : m > x \\,\\}"
+        }
+      ]
+    },
+    {
+      "id": "theorem.next-owned-composite-is-wheel-successor",
+      "kind": "theorem",
+      "name": "NextOwnedComposite Equals a Wheel Successor",
+      "statement": "NextOwnedComposite(p, x) equals p times NextRough(p, max(p-1, floor(x/p))), the least p-rough integer above that threshold.",
+      "formal": "\\text{NextOwnedComposite}(p,x) = p\\cdot \\text{NextRough}(p, \\max(p-1, \\lfloor x/p\\rfloor))",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.2 It is exactly a wheel successor",
+          "quote": "The owned composites are \\(pa\\) with \\(a \\in A_p\\), and \\(pa > x \\iff a > \\lfloor x/p \\rfloor\\)"
+        }
+      ]
+    },
+    {
+      "id": "e.definition.next-owned-composite.depends_on.definition.orthogonal-stream-formula",
+      "from": "definition.next-owned-composite",
+      "to": "definition.orthogonal-stream-formula",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.theorem.next-owned-composite-is-wheel-successor.depends_on.definition.next-owned-composite",
+      "from": "theorem.next-owned-composite-is-wheel-successor",
+      "to": "definition.next-owned-composite",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "m.definition.next-owned-composite.extract.theorem.next-owned-composite-is-wheel-successor",
+      "kind": "extract",
+      "from": "theorem.next-owned-composite-is-wheel-successor",
+      "to": "definition.next-owned-composite",
+      "state": "performed",
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "heading": "3.2", "quote": "So there is no additional formula to find: the generator is a merge of wheel successor functions" }]
+    },
+    {
+      "id": "theorem.min-theta-p-is-p-squared",
+      "kind": "theorem",
+      "name": "Minimum Element of a Prime's Stream Is Its Square",
+      "statement": "The minimum of Theta_p is always p^2, since the least multiplier of p is p itself.",
+      "formal": "\\min \\Theta_p = p^2",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.2",
+          "quote": "**Corollary.** \\(\\min \\Theta_p = p^2\\) — always, not \"typically\", since the least multiplier is \\(p\\) itself."
+        }
+      ]
+    },
+    {
+      "id": "theorem.phase-separation",
+      "kind": "theorem",
+      "name": "Phase Separation of a Prime's Multipliers",
+      "statement": "The multipliers of p split into a prime phase on [p, p^2) where advancing is a single index increment into the known prime array, and a rough phase on [p^2, infinity) where composite multipliers appear.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.3 Phase separation",
+          "quote": "the multipliers of \\(p\\) split into a **prime phase** \\([p, p^2)\\) ... and a **rough phase** \\([p^2, \\infty)\\)"
+        }
+      ]
+    },
+    {
+      "id": "theorem.causality-self-hosting",
+      "kind": "theorem",
+      "name": "The Generator Is Self-Hosting (Causality)",
+      "statement": "If all primes less than n are known and n = pa is in the stream of p, then by Bertrand's postulate the next multiplier a' is less than n, so no step ever requires knowledge of an integer beyond what the generator has already output.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proof-term" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.4 Causality",
+          "quote": "the generator is self-hosting, and its own output supplies every multiplier it will ever need, strictly in advance"
+        }
+      ]
+    },
+    {
+      "id": "conjecture.next-rough-no-o1-algorithm",
+      "kind": "conjecture",
+      "name": "Conjecture X1: No O(1)-Time Poly-Space NextRough Algorithm",
+      "statement": "No algorithm computes NextRough(p, y) in O(1) time and poly(log p, log y) space given only the primes less than p.",
+      "status": "proposed",
+      "confidence": 0.75,
+      "representation": {
+        "layer": "fuzzy",
+        "form": "prose-sketch",
+        "interfaces": [{ "to": "deductive", "via": "formalize_deductive", "available": false, "note": "stated as conjecture X1 / theory.md T31, unproved" }]
+      },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "no algorithm computes \\(\\text{NextRough} (p,y)\\) in O (1) time and \\(\\mathrm{poly} (\\log p, \\log y)\\) space given only the primes \\(< p\\)"
+        }
+      ]
+    },
+    {
+      "id": "e.theorem.phase-separation.motivates.conjecture.next-rough-no-o1-algorithm",
+      "from": "theorem.phase-separation",
+      "to": "conjecture.next-rough-no-o1-algorithm",
+      "relation": "motivates",
+      "confidence": 0.6
+    },
+    {
+      "id": "model.algorithm-a-exact-streams",
+      "kind": "model",
+      "name": "Algorithm A: Exact Orthogonal Streams",
+      "statement": "Algorithm A derives rough multipliers exactly from other streams so every composite is touched exactly once, at the cost of a growing number of simultaneously live streams (~N^0.75).",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "symbolic", "form": "model" },
+      "attributes": [
+        { "key": "live_stream_growth_exponent", "value": 0.75, "layer": "numeric" }
+      ],
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "**Algorithm A** _derives_ the rough multipliers from other streams. Exact: every composite is touched exactly once"
+        }
+      ]
+    },
+    {
+      "id": "model.algorithm-b-shared-wheel",
+      "kind": "model",
+      "name": "Algorithm B: Shared Fixed Wheel Across Primes",
+      "statement": "Algorithm B relaxes the multiplier set to a single fixed wheel W shared by every prime above the wheel primes, giving O(1) time and O(1) state per prime at the cost of duplicate composite touches.",
+      "formal": "\\tilde A_p = \\{a \\ge p : \\gcd(a,W)=1\\} \\supseteq A_p",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "symbolic", "form": "model" },
+      "attributes": [
+        { "key": "duplicate_claim_factor_empirical", "value": 2.25, "unit": "touches/composite", "layer": "numeric" }
+      ],
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "**Algorithm B** _relaxes_ the multiplier set to a single fixed wheel \\(W = p_1\\cdots p_w\\) shared by every prime"
+        }
+      ]
+    },
+    {
+      "id": "e.conjecture.next-rough-no-o1-algorithm.implies.model.algorithm-a-exact-streams",
+      "from": "conjecture.next-rough-no-o1-algorithm",
+      "to": "model.algorithm-a-exact-streams",
+      "relation": "implies",
+      "confidence": 0.6,
+      "sources": [{ "file": "generator.md", "heading": "3.5", "quote": "Past a fixed table boundary, one of two things must happen" }]
+    },
+    {
+      "id": "e.conjecture.next-rough-no-o1-algorithm.implies.model.algorithm-b-shared-wheel",
+      "from": "conjecture.next-rough-no-o1-algorithm",
+      "to": "model.algorithm-b-shared-wheel",
+      "relation": "implies",
+      "confidence": 0.6
+    },
+    {
+      "id": "model.algorithm-a-exact-streams.equivalent_to_note",
+      "kind": "notation",
+      "name": "placeholder-unused",
+      "statement": "unused",
+      "status": "abandoned",
+      "confidence": 0.1,
+      "sources": [{ "file": "generator.md", "heading": "n/a", "quote": "n/a" }]
+    },
+    {
+      "id": "heuristic.algorithm-b-recommended",
+      "kind": "heuristic",
+      "name": "Algorithm B Is the Recommended Realisation",
+      "statement": "Algorithm B is recommended as the practical realisation; Algorithm A is retained as the mathematically pure reference because its one-touch property certifies the partition.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "Algorithm B is the recommended realisation. Algorithm A is retained as the mathematically pure reference"
+        }
+      ]
+    },
+    {
+      "id": "e.heuristic.algorithm-b-recommended.depends_on.model.algorithm-b-shared-wheel",
+      "from": "heuristic.algorithm-b-recommended",
+      "to": "model.algorithm-b-shared-wheel",
+      "relation": "depends_on",
+      "confidence": 0.7
+    },
+    {
+      "id": "e.heuristic.algorithm-b-recommended.depends_on.model.algorithm-a-exact-streams",
+      "from": "heuristic.algorithm-b-recommended",
+      "to": "model.algorithm-a-exact-streams",
+      "relation": "depends_on",
+      "confidence": 0.7
+    },
+    {
+      "id": "model.consuming-algorithm",
+      "kind": "model",
+      "name": "Consuming Merge Algorithm with Deferred Activation",
+      "statement": "The consuming algorithm maintains a min-heap keyed by each active prime's next claimed composite, an activation cursor that inserts a prime's stream only when the scan reaches p^2, and emits n as prime whenever n is strictly below the heap minimum.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": {
+        "layer": "symbolic",
+        "form": "model",
+        "content": "H := empty min-heap; P := []; act := 0; n := 2; while generating: activate primes with p^2<=n; if H empty or n<min_key(H) emit n; else drain(H,n); n:=next_candidate(n)"
+      },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.2 Algorithm Description",
+          "quote": "H   := empty min-heap\\nP   := empty list\\nact := 0            # activation cursor into P"
+        }
+      ]
+    },
+    {
+      "id": "e.model.consuming-algorithm.depends_on.theorem.next-owned-composite-is-wheel-successor",
+      "from": "model.consuming-algorithm",
+      "to": "theorem.next-owned-composite-is-wheel-successor",
+      "relation": "depends_on",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.model.consuming-algorithm.instantiates.model.algorithm-a-exact-streams",
+      "from": "model.consuming-algorithm",
+      "to": "model.algorithm-a-exact-streams",
+      "relation": "instantiates",
+      "confidence": 0.6,
+      "sources": [{ "file": "generator.md", "heading": "4.2", "quote": "Exact streams (Algorithm A). next_candidate(n) = n + 1" }]
+    },
+    {
+      "id": "e.model.consuming-algorithm.instantiates.model.algorithm-b-shared-wheel",
+      "from": "model.consuming-algorithm",
+      "to": "model.algorithm-b-shared-wheel",
+      "relation": "instantiates",
+      "confidence": 0.6,
+      "sources": [{ "file": "generator.md", "heading": "4.2", "quote": "Shared wheel (Algorithm B). next_candidate(n) steps over W-coprime integers only" }]
+    },
+    {
+      "id": "theorem.deferred-activation-bounds-heap",
+      "kind": "lemma",
+      "name": "Deferred Activation Bounds Heap Size to pi(sqrt n)",
+      "statement": "Inserting a prime's stream only at n = p^2 keeps the heap at pi(sqrt n) records forever, with no global limit and no pre-pass.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.1 Data Structures",
+          "quote": "keeps the queue at \\(\\pi (\\sqrt n)\\) records forever, with no global limit and no pre-pass"
+        }
+      ]
+    },
+    {
+      "id": "e.theorem.deferred-activation-bounds-heap.depends_on.theorem.min-theta-p-is-p-squared",
+      "from": "theorem.deferred-activation-bounds-heap",
+      "to": "theorem.min-theta-p-is-p-squared",
+      "relation": "depends_on",
+      "confidence": 0.7
+    },
+    {
+      "id": "theorem.consuming-algorithm-correctness",
+      "kind": "theorem",
+      "name": "Theorem 1: Correctness of the Consuming Algorithm",
+      "statement": "The consuming algorithm emits all primes in increasing order; under exact streams every composite is removed exactly once, by its smallest prime factor.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": {
+        "layer": "deductive",
+        "form": "proof-term",
+        "content": "Invariant: after processing all integers < n, heap contains for every active prime p exactly the least element of Theta_p >= n; no key < n."
+      },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.4 Correctness",
+          "quote": "The consuming algorithm emits all primes in increasing order; under exact streams every composite is removed exactly once"
+        }
+      ]
+    },
+    {
+      "id": "e.theorem.consuming-algorithm-correctness.depends_on.model.consuming-algorithm",
+      "from": "theorem.consuming-algorithm-correctness",
+      "to": "model.consuming-algorithm",
+      "relation": "depends_on",
+      "confidence": 0.85
+    },
+    {
+      "id": "e.theorem.consuming-algorithm-correctness.depends_on.theorem.deferred-activation-bounds-heap",
+      "from": "theorem.consuming-algorithm-correctness",
+      "to": "theorem.deferred-activation-bounds-heap",
+      "relation": "depends_on",
+      "confidence": 0.75
+    },
+    {
+      "id": "e.theorem.consuming-algorithm-correctness.depends_on.theorem.streams-disjoint-cover",
+      "from": "theorem.consuming-algorithm-correctness",
+      "to": "theorem.streams-disjoint-cover",
+      "relation": "depends_on",
+      "confidence": 0.7
+    },
+    {
+      "id": "bound.event-count-exact-streams",
+      "kind": "bound",
+      "name": "Exact Streams Have Optimal Event Count",
+      "statement": "Under exact streams the algorithm performs exactly N - pi(N) - 1 pops, one per composite, which is optimal.",
+      "formal": "N - \\pi(N) - 1",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "numeric", "form": "bound" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.5 Complexity",
+          "quote": "Exact streams: exactly \\(N - \\pi (N) - 1\\) pops, one per composite — optimal."
+        }
+      ]
+    },
+    {
+      "id": "bound.event-count-shared-wheel",
+      "kind": "bound",
+      "name": "Shared-Wheel Event Count Approximation",
+      "statement": "The shared-wheel realisation performs approximately kappa_W * N * (ln ln sqrt N - ln ln p_w) operations, e.g. about 0.46N at w=6, N=10^12, versus the one-touch ideal of about 0.19N, a factor of about 2.4.",
+      "formal": "\\mathrm{ops}(N) \\approx \\kappa_W N (\\ln\\ln\\sqrt N - \\ln\\ln p_w)",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "numeric", "form": "bound" },
+      "attributes": [
+        { "key": "example_w", "value": 6 },
+        { "key": "example_N", "value": 1e12 },
+        { "key": "example_ops_fraction", "value": 0.46 },
+        { "key": "one_touch_ideal_fraction", "value": 0.19 },
+        { "key": "duplication_factor", "value": 2.4 }
+      ],
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.5 Complexity",
+          "quote": "e.g. \\(\\approx 0.46\\,N\\) at \\(w=6\\), \\(N=10^{12}\\), against the one-touch ideal \\(\\approx 0.19\\,N\\) — a factor \\(\\approx 2.4\\)"
+        }
+      ]
+    },
+    {
+      "id": "m.model.algorithm-b-shared-wheel.bound.bound.event-count-shared-wheel",
+      "kind": "bound",
+      "from": "model.algorithm-b-shared-wheel",
+      "to": "bound.event-count-shared-wheel",
+      "state": "performed",
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "heading": "4.5", "quote": "Shared wheel: ops(N) ≈ ..." }]
+    },
+    {
+      "id": "bound.time-complexity-consuming-algorithm",
+      "kind": "bound",
+      "name": "Time Complexity of the Consuming Algorithm",
+      "statement": "The algorithm runs in O(N log log N) time with a binary heap, or O(events) amortised with a bucket priority queue.",
+      "formal": "O(N\\log\\log N)",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "numeric", "form": "bound" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.5 Complexity",
+          "quote": "\\(O (\\text{events} \\cdot \\log \\pi (\\sqrt N)) = O (N \\log\\log N)\\) with a binary heap"
+        }
+      ]
+    },
+    {
+      "id": "bound.memory-complexity",
+      "kind": "bound",
+      "name": "Memory Complexity: O(pi(sqrt N)) Records",
+      "statement": "Memory is O(pi(sqrt N)) records plus O(W) bytes of wheel table for the shared-wheel realisation; exact streams require about N^0.75 live streams.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "numeric", "form": "bound" },
+      "attributes": [{ "key": "exact_stream_count_exponent", "value": 0.75 }],
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.5 Complexity",
+          "quote": "For exact streams the live-stream count is larger, \\(S (N) \\approx N^{0.75}\\); that is the price of exactness."
+        }
+      ]
+    },
+    {
+      "id": "theorem.wheel-tabulation-not-o1-state",
+      "kind": "theorem",
+      "name": "Tabulating Roughness Is O(1) Time but Not O(1) State",
+      "statement": "Tabulating the totative list of P_<p gives O(1)-time advance, but the table has phi(P_<p) = e^((1+o(1))p) entries, exceeding 10^9 past p ~ 29.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "attributes": [{ "key": "table_infeasible_prime_threshold", "value": 29 }],
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "past \\(p \\approx 29\\) it exceeds \\(10^9\\). So this is O (1) time but _not_ O (1) state."
+        }
+      ]
+    },
+    {
+      "id": "theorem.trial-division-superlinear",
+      "kind": "theorem",
+      "name": "Untabulated Roughness Test Is Superlinear via Jacobsthal Gaps",
+      "statement": "Without tabulation, testing roughness costs Theta(pi(p)) trial divisions, and Jacobsthal-type gap bounds mean scan-and-test can be superlinear in p in the worst case.",
+      "status": "accepted",
+      "confidence": 0.75,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "by Jacobsthal-type bounds the gap to the next rough number can be \\(\\gg p \\log p \\log\\log\\log p / (\\log\\log p)^2\\)"
+        }
+      ]
+    },
+    {
+      "id": "e.theorem.wheel-tabulation-not-o1-state.motivates.conjecture.next-rough-no-o1-algorithm",
+      "from": "theorem.wheel-tabulation-not-o1-state",
+      "to": "conjecture.next-rough-no-o1-algorithm",
+      "relation": "motivates",
+      "confidence": 0.6
+    },
+    {
+      "id": "e.theorem.trial-division-superlinear.motivates.conjecture.next-rough-no-o1-algorithm",
+      "from": "theorem.trial-division-superlinear",
+      "to": "conjecture.next-rough-no-o1-algorithm",
+      "relation": "motivates",
+      "confidence": 0.6
+    },
+    {
+      "id": "reference.oneill-genuine-sieve",
+      "kind": "reference",
+      "name": "O'Neill's Genuine Sieve (Priority-Queue Multiple Tracking)",
+      "statement": "O'Neill's genuine sieve tracks multiples per prime via a priority queue, but the streams are not pre-orthogonalized, so up to omega(n) entries can collide at n.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "social": { "references": [{ "text": "O'Neill's 'genuine sieve'", "kind": "paper" }] },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.1 Comparison with Classical Sieves",
+          "quote": "**Priority-queue multiple tracking** (O'Neill's \"genuine sieve\"): tracks multiples per prime, but the streams are not pre-orthogonalized"
+        }
+      ]
+    },
+    {
+      "id": "e.model.consuming-algorithm.generalizes.reference.oneill-genuine-sieve",
+      "from": "model.consuming-algorithm",
+      "to": "reference.oneill-genuine-sieve",
+      "relation": "generalizes",
+      "confidence": 0.55,
+      "sources": [{ "file": "generator.md", "heading": "5.1", "quote": "at most one heap entry equals any given value — the distinguishing property" }]
+    },
+    {
+      "id": "reference.eratosthenes-sieve",
+      "kind": "reference",
+      "name": "Sieve of Eratosthenes",
+      "statement": "The sieve of Eratosthenes requires a marking array proportional to the search range, with orthogonalization only implicit.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.1 Comparison with Classical Sieves",
+          "quote": "**Eratosthenes:** requires a marking array proportional to the search range; orthogonalization is implicit, not per-prime."
+        }
+      ]
+    },
+    {
+      "id": "reference.atkin-sieve",
+      "kind": "reference",
+      "name": "Sieve of Atkin",
+      "statement": "The Atkin sieve uses quadratic forms and heavy branching, and is conceptually opaque.",
+      "status": "accepted",
+      "confidence": 0.75,
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.1 Comparison with Classical Sieves",
+          "quote": "**Atkin:** uses quadratic forms and heavy branching; conceptually opaque."
+        }
+      ]
+    },
+    {
+      "id": "reference.wheel-sieves",
+      "kind": "reference",
+      "name": "Classical Wheel Sieves",
+      "statement": "Wheel sieves precompute residue tables with orthogonalization applied globally rather than per-prime.",
+      "status": "accepted",
+      "confidence": 0.75,
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.1 Comparison with Classical Sieves",
+          "quote": "**Wheel sieves:** precompute residue tables; orthogonalization is global rather than per-prime."
+        }
+      ]
+    },
+    {
+      "id": "heuristic.branchless-vectorized-advance",
+      "kind": "heuristic",
+      "name": "Shared-Wheel Advance Vectorises Across Streams",
+      "statement": "The bucketed shared-wheel advance step (gather plus multiply) vectorises across streams and bucket drains are independent scatter writes; this is an engineering claim to be benchmarked, not a theorem.",
+      "status": "proposed",
+      "confidence": 0.6,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.2 Control Flow and Vectorisation",
+          "quote": "This is an engineering claim to be benchmarked, not a theorem."
+        }
+      ]
+    },
+    {
+      "id": "e.heuristic.branchless-vectorized-advance.depends_on.model.algorithm-b-shared-wheel",
+      "from": "heuristic.branchless-vectorized-advance",
+      "to": "model.algorithm-b-shared-wheel",
+      "relation": "depends_on",
+      "confidence": 0.6
+    },
+    {
+      "id": "constraint.exact-streams-no-segment-restart",
+      "kind": "constraint",
+      "name": "Exact Realisation Does Not Support Independent Segment Restart",
+      "statement": "The exact realisation costs N^0.75 live streams and does not support independent segment restart.",
+      "status": "accepted",
+      "confidence": 0.75,
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.4 Limitations",
+          "quote": "The exact realisation costs \\(N^{0.75}\\) live streams and does not support independent segment restart."
+        }
+      ]
+    },
+    {
+      "id": "e.constraint.exact-streams-no-segment-restart.constrains.model.algorithm-a-exact-streams",
+      "from": "constraint.exact-streams-no-segment-restart",
+      "to": "model.algorithm-a-exact-streams",
+      "relation": "constrains",
+      "confidence": 0.7
+    },
+    {
+      "id": "constraint.wheeled-loglog-overhead",
+      "kind": "constraint",
+      "name": "Wheeled Realisation Pays a ln ln Duplicate-Touch Overhead",
+      "statement": "The wheeled realisation costs a ln ln factor of duplicate touches and a Theta(W) table, but supports exact segment parallelism.",
+      "status": "accepted",
+      "confidence": 0.75,
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.4 Limitations",
+          "quote": "The wheeled realisation costs a \\(\\ln\\ln\\) factor of duplicate touches and a \\(\\Theta (W)\\) table."
+        }
+      ]
+    },
+    {
+      "id": "e.constraint.wheeled-loglog-overhead.constrains.model.algorithm-b-shared-wheel",
+      "from": "constraint.wheeled-loglog-overhead",
+      "to": "model.algorithm-b-shared-wheel",
+      "relation": "constrains",
+      "confidence": 0.7
+    },
+    {
+      "id": "conjecture.neither-beats-segmented-sieve-raw-throughput",
+      "kind": "conjecture",
+      "name": "Neither Realisation Beats a Highly Optimized Segmented Sieve on Raw Throughput",
+      "statement": "Neither the exact nor the wheeled realisation beats a highly optimized segmented sieve on raw single-core throughput; the value is architectural.",
+      "status": "proposed",
+      "confidence": 0.65,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.4 Limitations",
+          "quote": "Neither beats a highly optimized segmented sieve on raw single-core throughput. The value is architectural."
+        }
+      ]
+    },
+    {
+      "id": "theory.generational-rings",
+      "kind": "theory",
+      "name": "Generational Rings of Primes",
+      "statement": "Primes are exception points of an expanding periodic lattice; each new prime becomes a generator of the next periodic structure, and the deleted set at each stage is an affine copy of the previous stage.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "prose-sketch" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.3 Generational Ring Clarity",
+          "quote": "primes are the exception points of an expanding periodic lattice; each exception becomes a generator of the next periodic structure"
+        }
+      ]
+    },
+    {
+      "id": "e.theory.generational-rings.instantiates.model.consuming-algorithm",
+      "from": "model.consuming-algorithm",
+      "to": "theory.generational-rings",
+      "relation": "instantiates",
+      "confidence": 0.7
+    },
+    {
+      "id": "definition.band-recursion",
+      "kind": "definition",
+      "name": "Band Recursion (Square-Root Bands)",
+      "statement": "Seeded with 2 and 3, stage p closes the window [p^2, p'^2) where p' is the next prime, certifying all primes in that window.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "symbolic", "form": "model" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.3 Generational Structure",
+          "quote": "stage \\(p\\) closes the window \\([p^2, p'^2)\\) where \\(p'\\) is the next prime"
+        }
+      ]
+    },
+    {
+      "id": "definition.lattice-recursion",
+      "kind": "definition",
+      "name": "Lattice Recursion (Primorial Stages)",
+      "statement": "Working modulo primorials, S_{k+1} is formed by tiling the previous lattice S_k p times and deleting one dilated copy of it, where p is the (k+1)-th prime.",
+      "formal": "S_{k+1} = \\Big(\\bigcup_{j=0}^{p-1} (S_k + jP_k)\\Big) \\setminus p\\cdot S_k",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "symbolic", "form": "rewrite-rule" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.3 Generational Structure",
+          "quote": "tile the previous lattice \\(p\\) times and delete one **dilated copy of it**"
+        }
+      ]
+    },
+    {
+      "id": "theorem.two-recursions-agree",
+      "kind": "theorem",
+      "name": "Band and Lattice Recursions Certify the Same Window",
+      "statement": "The band recursion and lattice recursion certify primality on the same window: the holes of stage k are prime exactly on [p_{k+1}, p_{k+1}^2), and merely candidates above it.",
+      "status": "accepted",
+      "confidence": 0.75,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.3 Generational Structure",
+          "quote": "Both recursions certify primality on the same window: the holes of stage \\(k\\) are prime exactly on \\([p_{k+1}, p_{k+1}^2)\\)"
+        }
+      ]
+    },
+    {
+      "id": "e.theorem.two-recursions-agree.depends_on.definition.band-recursion",
+      "from": "theorem.two-recursions-agree",
+      "to": "definition.band-recursion",
+      "relation": "depends_on",
+      "confidence": 0.75
+    },
+    {
+      "id": "e.theorem.two-recursions-agree.depends_on.definition.lattice-recursion",
+      "from": "theorem.two-recursions-agree",
+      "to": "definition.lattice-recursion",
+      "relation": "depends_on",
+      "confidence": 0.75
+    },
+    {
+      "id": "observation.worked-example-beginning",
+      "kind": "observation",
+      "name": "Worked Trace of the Consuming Algorithm for n = 2..10",
+      "statement": "A worked trace with exact streams and deferred activation shows primes 2,3,5,7 emitted and composites 4,6,8,9,10 consumed, with prime 5's stream activated only at n=25 and prime 3 skipping composite 12 (owned by 2).",
+      "status": "supported",
+      "confidence": 0.8,
+      "representation": { "layer": "numeric", "form": "table" },
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.3 Worked Beginning",
+          "quote": "Note that \\(5\\) was inserted only at \\(n = 25\\), and that \\(3\\) skips \\(12\\) entirely: \\(12\\) is owned by \\(2\\)."
+        }
+      ]
+    },
+    {
+      "id": "e.observation.worked-example-beginning.tests.model.consuming-algorithm",
+      "from": "observation.worked-example-beginning",
+      "to": "model.consuming-algorithm",
+      "relation": "tests",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.observation.worked-example-beginning.supports.theorem.consuming-algorithm-correctness",
+      "from": "observation.worked-example-beginning",
+      "to": "theorem.consuming-algorithm-correctness",
+      "relation": "supports",
+      "strength": 0.6,
+      "confidence": 0.7
+    }
+  ],
+  "edges": [
+    {
+      "id": "e.theorem.lemma1-smallest-factor-bound.implies.definition.band-recursion",
+      "from": "theorem.lemma1-smallest-factor-bound",
+      "to": "definition.band-recursion",
+      "relation": "implies",
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "heading": "2.3", "quote": "By Lemma 1, the primes \\(\\le N\\) certify every integer up to \\(N^2\\)" }]
+    },
+    {
+      "id": "e.definition.ownership-convention.depends_on.theorem.lemma1-smallest-factor-bound",
+      "from": "definition.ownership-convention",
+      "to": "theorem.lemma1-smallest-factor-bound",
+      "relation": "depends_on",
+      "confidence": 0.55
+    },
+    {
+      "id": "e.definition.orthogonal-stream-formula.depends_on.definition.ownership-convention",
+      "from": "definition.orthogonal-stream-formula",
+      "to": "definition.ownership-convention",
+      "relation": "depends_on",
+      "confidence": 0.8
+    },
+    {
+      "id": "e.theorem.min-theta-p-is-p-squared.depends_on.theorem.next-owned-composite-is-wheel-successor",
+      "from": "theorem.min-theta-p-is-p-squared",
+      "to": "theorem.next-owned-composite-is-wheel-successor",
+      "relation": "depends_on",
+      "confidence": 0.6
+    },
+    {
+      "id": "e.theorem.phase-separation.depends_on.theorem.min-theta-p-is-p-squared",
+      "from": "theorem.phase-separation",
+      "to": "theorem.min-theta-p-is-p-squared",
+      "relation": "depends_on",
+      "confidence": 0.6
+    },
+    {
+      "id": "e.theorem.causality-self-hosting.depends_on.definition.orthogonal-stream-formula",
+      "from": "theorem.causality-self-hosting",
+      "to": "definition.orthogonal-stream-formula",
+      "relation": "depends_on",
+      "confidence": 0.6
+    },
+    {
+      "id": "e.bound.event-count-exact-streams.measures.model.algorithm-a-exact-streams",
+      "from": "bound.event-count-exact-streams",
+      "to": "model.algorithm-a-exact-streams",
+      "relation": "measures",
+      "confidence": 0.75
+    },
+    {
+      "id": "e.bound.event-count-shared-wheel.measures.model.algorithm-b-shared-wheel",
+      "from": "bound.event-count-shared-wheel",
+      "to": "model.algorithm-b-shared-wheel",
+      "relation": "measures",
+      "confidence": 0.75
+    },
+    {
+      "id": "e.bound.time-complexity-consuming-algorithm.measures.model.consuming-algorithm",
+      "from": "bound.time-complexity-consuming-algorithm",
+      "to": "model.consuming-algorithm",
+      "relation": "measures",
+      "confidence": 0.75
+    },
+    {
+      "id": "e.bound.memory-complexity.measures.model.consuming-algorithm",
+      "from": "bound.memory-complexity",
+      "to": "model.consuming-algorithm",
+      "relation": "measures",
+      "confidence": 0.75
+    },
+    {
+      "id": "e.reference.eratosthenes-sieve.contradicts.model.consuming-algorithm",
+      "from": "reference.eratosthenes-sieve",
+      "to": "model.consuming-algorithm",
+      "relation": "contradicts",
+      "confidence": 0.4,
+      "notes": "Not a logical contradiction; recorded as a contrasted alternative approach per §5.1."
+    },
+    {
+      "id": "e.conjecture.neither-beats-segmented-sieve-raw-throughput.refutes.heuristic.branchless-vectorized-advance",
+      "from": "conjecture.neither-beats-segmented-sieve-raw-throughput",
+      "to": "heuristic.branchless-vectorized-advance",
+      "relation": "contradicts",
+      "confidence": 0.3,
+      "notes": "Tension between the vectorisation optimism and the raw-throughput limitation; both stated in the notes without resolution."
+    }
+  ],
+  "morphisms": [
+    {
+      "id": "m.trajectory.orthogonal-stream-representation.formalize_symbolic.definition.orthogonal-stream-formula",
+      "kind": "formalize_symbolic",
+      "from": "trajectory.orthogonal-stream-representation",
+      "to": "definition.orthogonal-stream-formula",
+      "state": "performed",
+      "confidence": 0.65,
+      "sources": [{ "file": "generator.md", "heading": "2.4", "quote": "Explicitly ... \\Theta_p = p \\cdot A_p" }]
+    },
+    {
+      "id": "m.definition.next-owned-composite.embed.theorem.next-owned-composite-is-wheel-successor",
+      "kind": "embed",
+      "from": "definition.next-owned-composite",
+      "to": "theorem.next-owned-composite-is-wheel-successor",
+      "state": "performed",
+      "confidence": 0.6,
+      "sources": [{ "file": "generator.md", "heading": "3.2", "quote": "Let \\(\\text{NextRough} (p, y)\\) be the least \\(p\\)-rough integer \\(> y\\)." }]
+    },
+    {
+      "id": "m.theorem.consuming-algorithm-correctness.bound.bound.time-complexity-consuming-algorithm",
+      "kind": "bound",
+      "from": "theorem.consuming-algorithm-correctness",
+      "to": "bound.time-complexity-consuming-algorithm",
+      "state": "performed",
+      "loss": "drops the exactness/uniqueness detail, keeps only asymptotic cost",
+      "confidence": 0.6,
+      "sources": [{ "file": "generator.md", "heading": "4.5 Complexity", "quote": "This is a substantial structural improvement in memory and control flow." }]
+    },
+    {
+      "id": "m.observation.worked-example-beginning.certify.theorem.consuming-algorithm-correctness",
+      "kind": "certify",
+      "from": "observation.worked-example-beginning",
+      "to": "theorem.consuming-algorithm-correctness",
+      "state": "intended",
+      "loss": "a single small trace does not constitute a proof",
+      "confidence": 0.5,
+      "sources": [{ "file": "generator.md", "heading": "4.3 Worked Beginning", "quote": "There is no divisibility testing, no array marking, and no branching over candidate factors." }]
+    },
+    {
+      "id": "m.model.algorithm-a-exact-streams.abstract.conjecture.next-rough-no-o1-algorithm",
+      "kind": "abstract",
+      "from": "model.algorithm-a-exact-streams",
+      "to": "conjecture.next-rough-no-o1-algorithm",
+      "state": "performed",
+      "confidence": 0.5,
+      "sources": [{ "file": "generator.md", "heading": "3.5", "quote": "We therefore state as a conjecture ... that no algorithm computes NextRough" }]
+    }
+  ],
+  "coherence": [
+    {
+      "id": "c.analytic.correctness-vs-complexity-bounds",
+      "kind": "analytic",
+      "refs": ["theorem.consuming-algorithm-correctness", "bound.time-complexity-consuming-algorithm", "bound.memory-complexity"],
+      "requirement": "The correctness proof must guarantee the O(N log log N) time and O(pi(sqrt N)) memory bounds actually claimed for the consuming algorithm.",
+      "status": "discharged",
+      "confidence": 0.6,
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.5 Complexity",
+          "quote": "This is a substantial structural improvement in memory and control flow. It is not a new complexity class"
+        }
+      ]
+    },
+    {
+      "id": "c.semantic.shared-wheel-density-vs-event-bound",
+      "kind": "semantic",
+      "refs": ["model.algorithm-b-shared-wheel", "bound.event-count-shared-wheel"],
+      "requirement": "The empirical duplicate-claim rate (~2-2.5x) measured for the shared wheel must match the symbolic over-claim set tilde A_p implied by gcd(a,W)=1.",
+      "status": "pending",
+      "cost": { "measure": "developer-effort", "note": "described as 'empirically ≈ 2–2.5' with no formal reconciliation given in this document" },
+      "confidence": 0.6,
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "each surviving composite is claimed \\(\\omega_{>p_w} (m)\\) times (empirically ≈ 2–2.5)"
+        }
+      ]
+    },
+    {
+      "id": "c.logical.next-owned-composite-vs-wheel-successor",
+      "kind": "logical",
+      "refs": ["definition.next-owned-composite", "theorem.next-owned-composite-is-wheel-successor"],
+      "requirement": "The symbolic definition of NextOwnedComposite must remain provably equal to the derived wheel-successor formula under all rewrites of the primitive.",
+      "status": "discharged",
+      "confidence": 0.75,
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.2",
+          "quote": "a \\mapsto pa\\) is monotone. \\(\\square\\)"
+        }
+      ]
+    }
+  ],
+  "clusters": [
+    {
+      "id": "cluster.orthogonal-stream-descent",
+      "name": "Orthogonal Streams: Trajectory to Algorithm",
+      "kind": "descent_chain",
+      "root": "trajectory.orthogonal-stream-representation",
+      "members": [
+        "trajectory.orthogonal-stream-representation",
+        "definition.ownership-convention",
+        "definition.orthogonal-stream-formula",
+        "definition.next-owned-composite",
+        "theorem.next-owned-composite-is-wheel-successor",
+        "model.consuming-algorithm",
+        "theorem.consuming-algorithm-correctness"
+      ],
+      "layers": ["inspiration", "symbolic", "deductive"]
+    },
+    {
+      "id": "cluster.o1-tradeoff",
+      "name": "The O(1) Time/State Trade-off",
+      "kind": "thread",
+      "root": "conjecture.next-rough-no-o1-algorithm",
+      "members": [
+        "theorem.wheel-tabulation-not-o1-state",
+        "theorem.trial-division-superlinear",
+        "conjecture.next-rough-no-o1-algorithm",
+        "model.algorithm-a-exact-streams",
+        "model.algorithm-b-shared-wheel",
+        "heuristic.algorithm-b-recommended"
+      ],
+      "layers": ["deductive", "fuzzy", "symbolic"]
+    },
+    {
+      "id": "cluster.generational-lattice",
+      "name": "Generational Ring / Lattice Structure",
+      "kind": "thread",
+      "root": "theory.generational-rings",
+      "members": [
+        "definition.band-recursion",
+        "definition.lattice-recursion",
+        "theorem.two-recursions-agree",
+        "theory.generational-rings"
+      ],
+      "layers": ["symbolic", "deductive"]
+    }
+  ],
+  "unresolved": [
+    {
+      "kind": "unattributed_claim",
+      "description": "The empirical duplicate-claim factor (2-2.5x) for the shared wheel is stated without a described experiment or dataset backing it.",
+      "refs": ["model.algorithm-b-shared-wheel", "c.semantic.shared-wheel-density-vs-event-bound"],
+      "layers": ["numeric"],
+      "sources": [{ "file": "generator.md", "heading": "3.5", "quote": "empirically ≈ 2–2.5" }]
+    },
+    {
+      "kind": "missing_morphism",
+      "description": "The vectorisation/SIMD claim in §5.2 is presented as an engineering hypothesis with no corresponding benchmark or certificate node in this document.",
+      "refs": ["heuristic.branchless-vectorized-advance"],
+      "layers": ["fuzzy", "numeric"]
+    },
+    {
+      "kind": "dangling_reference",
+      "description": "References to 'paper.md', 'algorithm.md', 'observation.md', 'idea.md', 'fractal.md' and 'theory.md' point outside this single document and cannot be resolved as nodes here.",
+      "refs": [],
+      "sources": [{ "file": "generator.md", "heading": "Document map", "quote": "paper.md is the primary specification; algorithm.md is the full normative construction with proofs" }]
+    }
+  ],
+  "stats": {
+    "documents": 1,
+    "nodes": 44,
+    "edges": 30,
+    "morphisms": 5,
+    "obligations": 3,
+    "by_layer": {
+      "inspiration": 2,
+      "fuzzy": 8,
+      "symbolic": 8,
+      "deductive": 17,
+      "numeric": 6,
+      "social": 1,
+      "ecological": 2
+    },
+    "cross_layer_edges": 14
+  }
+}

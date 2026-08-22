@@ -1,0 +1,1019 @@
+{
+  "$schema": "../../../ops/theory_graph.schema.ts",
+  "version": "2.0.0",
+  "generated_at": "2024-06-01T00:00:00Z",
+  "generator": { "op": "analyze.op.md" },
+  "corpus": {
+    "documents": [
+      {
+        "id": "twin_prime",
+        "path": "twin_prime.md",
+        "order": 1,
+        "title": "Twin Primes in the Wheel Lattice: Structure, Density, and the Period–Window Dichotomy",
+        "dominant_layers": ["deductive", "symbolic", "numeric"]
+      }
+    ]
+  },
+  "context": {
+    "ecological": {
+      "resources": ["lean/Primegen/Twin.lean", "pinned Mathlib"],
+      "affordances": ["#eval brute-force checks", "kernel-checked Lean proofs"]
+    },
+    "social": {
+      "program": "primegen wheel-lattice research program",
+      "references": [
+        { "text": "Hardy–Littlewood (1923), singular series 2C_2 x/log^2 x", "kind": "paper" },
+        { "text": "Brun (1919), sieve + convergence of sum 1/q over twins", "kind": "paper" },
+        { "text": "Selberg parity example; Bombieri asymptotic sieve", "kind": "paper" },
+        { "text": "Chen (1973), q, q+2 = P_2", "kind": "paper" },
+        { "text": "Goldston–Pintz–Yıldırım (2009)", "kind": "paper" },
+        { "text": "Zhang (2014)", "kind": "paper" },
+        { "text": "Maynard, Tao bounded gaps / Polymath8", "kind": "paper" },
+        { "text": "Iwaniec; Ford–Green–Konyagin–Maynard–Tao Jacobsthal bounds", "kind": "paper" },
+        { "text": "Pritchard (1982), wheel promotion", "kind": "paper" }
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "id": "definition.pair-lattice",
+      "kind": "definition",
+      "name": "Pair Lattice S_k^(2)",
+      "statement": "The pair lattice S_k^(2) is the set of residues r mod P_k such that gcd(r(r+2), P_k) = 1.",
+      "formal": "S_k^{(2)} = \\{ r \\bmod P_k : \\gcd(r(r+2), P_k) = 1 \\}",
+      "notation": ["S_k^{(2)}", "T_k", "τ_k"],
+      "status": "accepted",
+      "confidence": 0.95,
+      "representation": {
+        "layer": "symbolic",
+        "form": "definition",
+        "content": "S_k^{(2)} = { r mod P_k : gcd(r(r+2), P_k) = 1 }"
+      },
+      "domain": "wheel",
+      "sources": [{ "file": "twin_prime.md", "heading": "1. Notation", "quote": "S_k^{(2)} the pair lattice: { r mod P_k : gcd(r(r+2), P_k) = 1 }" }]
+    },
+    {
+      "id": "claim.tp0-one-way-containment",
+      "kind": "theorem",
+      "name": "TP0: One-Way Containment of Twin Primes in the Pair Lattice",
+      "statement": "For every k and x, the count of primes q ≤ x with q, q+2 both prime and q > p_k is at most the count of q ≤ x with q mod P_k in S_k^(2); equality holds on q in [p_{k+1}, p_{k+1}^2 - 2) and, in general, nowhere else.",
+      "formal": "\\#\\{ q \\le x : q, q+2 \\text{ prime}, q>p_k\\} \\le \\#\\{ q \\le x : q \\bmod P_k \\in S_k^{(2)} \\}",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": {
+        "layer": "deductive",
+        "form": "proposition",
+        "interfaces": [{ "to": "deductive", "via": "extract", "available": true, "target": "certificate.tp0-rough-half-lean", "lossy": true }]
+      },
+      "domain": "wheel",
+      "sources": [{ "file": "twin_prime.md", "heading": "2. Two objects: classes and integers", "quote": "Equality holds on q ∈ [p_{k+1}, p_{k+1}² − 2) and, in general, nowhere else." }]
+    },
+    {
+      "id": "certificate.tp0-rough-half-lean",
+      "kind": "certificate",
+      "name": "TP0 Rough Half, Kernel-Checked",
+      "statement": "The rough-half of TP0's containment (a twin prime pair is a pair of P_k-rough residues) is proved in Lean as Twin.rough_pair_of_twin.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "proof-term", "content": "Twin.rough_pair_of_twin" },
+      "sources": [{ "file": "twin_prime.md", "heading": "9. Claim → status table", "quote": "rough half: `Twin.rough_pair_of_twin`" }]
+    },
+    {
+      "id": "theorem.tp1-pair-count-recursion",
+      "kind": "theorem",
+      "name": "TP1: Pair Count Recursion",
+      "statement": "T_1 = 1 and, for k ≥ 1 with p = p_{k+1}, T_{k+1} = (p − 2)·T_k, hence T_k equals the product of (p_i − 2) over odd primes p_i up to p_k.",
+      "formal": "T_{k+1} = (p-2) T_k,\\quad T_k = \\prod_{3 \\le p_i \\le p_k} (p_i - 2)",
+      "status": "accepted",
+      "confidence": 0.95,
+      "representation": {
+        "layer": "deductive",
+        "form": "proof-term",
+        "interfaces": [
+          { "to": "numeric", "via": "evaluate", "available": true, "target": "observation.tk-table" },
+          { "to": "deductive", "via": "extract", "available": true, "target": "certificate.tp1-per-prime-factor-lean" }
+        ]
+      },
+      "domain": "wheel",
+      "sources": [{ "file": "twin_prime.md", "heading": "4.1 The pair count recursion", "quote": "T_{k+1} = (p − 2)·T_k. Hence T_k = ∏_{3 ≤ p_i ≤ p_k} (p_i − 2)." }]
+    },
+    {
+      "id": "certificate.tp1-per-prime-factor-lean",
+      "kind": "certificate",
+      "name": "TP1 Per-Prime Factor, Kernel-Checked",
+      "statement": "Twin.pairLattice_prime and Twin.card_pairLattice_prime establish |S^(2) mod p| = p − 2 for every prime p ≥ 3 in Lean.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "proof-term", "content": "Twin.pairLattice_prime, Twin.card_pairLattice_prime" },
+      "sources": [{ "file": "twin_prime.md", "heading": "4.1 The pair count recursion", "quote": "`Twin.pairLattice_prime` identifies S^{(2)} mod p as `range p` minus `{0, p−2}`" }]
+    },
+    {
+      "id": "observation.tk-table",
+      "kind": "observation",
+      "name": "Table of T_k, φ(P_k), τ_k for k = 1..8",
+      "statement": "Exact computed values of T_k, φ(P_k), κ_k, and τ_k are tabulated for k=1 through k=8, e.g. T_6=1485, τ_6≈0.04945.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "table" },
+      "attributes": [
+        { "key": "T_6", "value": 1485, "layer": "numeric" },
+        { "key": "T_8", "value": 378675, "layer": "numeric" },
+        { "key": "tau_6", "value": 0.04945, "layer": "numeric" }
+      ],
+      "sources": [{ "file": "twin_prime.md", "heading": "3. Numbers first", "quote": "13 | 30 030 | ... | 1 485 | 0.04945" }]
+    },
+    {
+      "id": "certificate.tk-machine-check",
+      "kind": "certificate",
+      "name": "Machine-Checked T_k Values and Multiplier",
+      "statement": "A Lean #eval reproduces the T_k column for k ≤ 6 and independently checks TP1's multiplier p_{k+1}−2 at the first three promotions.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "digit-stream", "content": "#eval [T 2, T 6, T 30, T 210, T 2310, T 30030] -- [1, 1, 3, 15, 135, 1485]" },
+      "sources": [{ "file": "twin_prime.md", "heading": "3. Numbers first", "quote": "#eval [T 2, T 6, T 30, T 210, T 2310, T 30030]      -- [1, 1, 3, 15, 135, 1485]" }]
+    },
+    {
+      "id": "theorem.tp2-pair-lattice-recursion",
+      "kind": "theorem",
+      "name": "TP2: Pair Lattice Recursion (Promotion)",
+      "statement": "Under wheel promotion the pair lattice S_{k+1}^(2) is the union of p replicated copies of S_k^(2) minus two disjoint deletion sets D and D', each of size T_k, arising from twisted affine images of shifted pair lattices.",
+      "formal": "S_{k+1}^{(2)} = \\left(\\bigcup_{j=0}^{p-1} (S_k^{(2)} + jP)\\right) \\setminus (D \\uplus D')",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term" },
+      "domain": "wheel",
+      "sources": [{ "file": "twin_prime.md", "heading": "4.2 The promotion (pair version of Claim F1)", "quote": "S_{k+1}^{(2)} = ( ⋃_{j=0}^{p−1} (S_k^{(2)} + j·P) )  \\  ( D ⊎ D' )" }]
+    },
+    {
+      "id": "theorem.tp3-density-singular-series",
+      "kind": "theorem",
+      "name": "TP3: Pair Lattice Density Equals the Singular Series",
+      "statement": "The density τ_k of the pair lattice equals half of C_2(p_k) times the square of the product of (1-1/p) over odd primes up to p_k, and asymptotically τ_k ~ 2 C_2 e^{-2γ} / log^2 p_k.",
+      "formal": "\\tau_k = \\tfrac12 C_2(p_k) \\prod_{3\\le p \\le p_k}(1-1/p)^2,\\quad \\tau_k \\sim 2C_2 e^{-2\\gamma}/\\log^2 p_k",
+      "status": "supported",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "domain": "distribution",
+      "sources": [{ "file": "twin_prime.md", "heading": "4.3 Density = the singular series", "quote": "τ_k ~ 2 C_2 e^{−2γ} / log² p_k" }]
+    },
+    {
+      "id": "remark.tp3a-hole-vs-prime-density",
+      "kind": "theorem",
+      "name": "TP3a: Hole Density Exceeds Prime Density by a Constant",
+      "statement": "The wheel's single-hole survivor density exceeds the true prime density by the constant 2e^{-γ} ≈ 1.123, and squaring gives the pair lattice density exceeding the conjectured twin prime density by a factor (2e^{-γ})^2 ≈ 1.2599.",
+      "status": "supported",
+      "confidence": 0.85,
+      "representation": { "layer": "numeric", "form": "bound" },
+      "attributes": [
+        { "key": "single_hole_factor", "value": 1.123, "layer": "numeric" },
+        { "key": "pair_factor", "value": 1.2599, "layer": "numeric" }
+      ],
+      "sources": [{ "file": "twin_prime.md", "heading": "4.3 Density = the singular series", "quote": "a factor (2e^{−γ})² ≈ 1.2599." }]
+    },
+    {
+      "id": "theorem.tp8-deletion-geometry",
+      "kind": "theorem",
+      "name": "TP8: Deletion Geometry of Promotion",
+      "statement": "In wheel promotion at prime p over previous primorial P, each class r is deleted at tile j0(r) = -r·P̄ (left hit) and j1(r) = -(r+2)·P̄ (right hit), the offset j1(r)-j0(r) ≡ δ_k = -2P̄ (mod p) is independent of r, no copy is ever deleted twice, the two deletion sets D and D' are translates of each other by δ_k·P, and surviving tiles form two cyclic arcs of length at least ⌈(p-2)/2⌉ consecutive copies.",
+      "formal": "j_1(r) - j_0(r) \\equiv -2\\bar P =: \\delta_k \\pmod p",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": {
+        "layer": "deductive",
+        "form": "proof-term",
+        "interfaces": [{ "to": "deductive", "via": "extract", "available": true, "target": "certificate.tp8-ab-lean" }]
+      },
+      "domain": "wheel",
+      "sources": [{ "file": "twin_prime.md", "heading": "4.4 Deletion geometry: two strikes, rigidly linked", "quote": "j_1(r) − j_0(r) ≡ −2P̄ =: δ_k (mod p), independent of r" }]
+    },
+    {
+      "id": "certificate.tp8-ab-lean",
+      "kind": "certificate",
+      "name": "TP8 (a)/(b) Kernel-Checked",
+      "statement": "Twin.deleted_tiles_ne and Twin.deleted_tile_offset_eq formalize that no copy dies twice and that the offset δ_k is independent of the class r.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "proof-term", "content": "Twin.deleted_tiles_ne, Twin.deleted_tile_offset, Twin.deleted_tile_offset_eq" },
+      "sources": [{ "file": "twin_prime.md", "heading": "4.4 Deletion geometry: two strikes, rigidly linked", "quote": "(a) and (b) are formalised: `Twin.deleted_tiles_ne` / `Twin.deleted_tiles_ne_tile`" }]
+    },
+    {
+      "id": "observation.tp8a-adjacency-table",
+      "kind": "observation",
+      "name": "TP8a Adjacency Table for k=1..8",
+      "statement": "The two deleted copies of a class are cyclically adjacent exactly when δ_k ≡ ±1 (mod p_{k+1}); this occurs at k=1 (vacuously) and k=3, and not at k=2,4,5,6,7,8 in the tabulated range.",
+      "status": "supported",
+      "confidence": 0.85,
+      "representation": { "layer": "numeric", "form": "table" },
+      "sources": [{ "file": "twin_prime.md", "heading": "Remark TP8a", "quote": "The k = 3 row is explicit: mod 210 every class loses copies j = 4 and j = 5." }]
+    },
+    {
+      "id": "theorem.tp4-admissibility",
+      "kind": "theorem",
+      "name": "TP4: Admissibility of General Patterns",
+      "statement": "For a finite set H, the size of S_k^(H) is the product over i≤k of (p_i - ν_i) where ν_i is the number of residues mod p_i occupied by H, and S_k^(H) is nonempty for all k iff H is admissible (ν_i < p_i for all i).",
+      "formal": "|S_k^{(H)}| = \\prod_{i\\le k}(p_i - \\nu_i)",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term" },
+      "domain": "wheel",
+      "sources": [{ "file": "twin_prime.md", "heading": "4.5 Admissibility", "quote": "|S_k^{(H)}| = ∏_{i≤k} (p_i − ν_i)" }]
+    },
+    {
+      "id": "theorem.tp5-composite-pair-holes",
+      "kind": "theorem",
+      "name": "TP5: Composite Pair-Holes Exist for k ≥ 4",
+      "statement": "S_k^(2) contains classes whose small representatives are composite in one or both coordinates for k ≥ 4, since p_{k+1}-rough composites m,m+2 form pairs lying in S_k^(2), and such pairs exist below P_k once p_{k+1}^2 < P_k.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": {
+        "layer": "deductive",
+        "form": "proof-term",
+        "interfaces": [{ "to": "numeric", "via": "certify", "available": true, "target": "certificate.tp5-example-167-169", "lossy": false }]
+      },
+      "sources": [{ "file": "twin_prime.md", "heading": "5.1 Holes are candidates", "quote": "S_k^{(2)} contains classes whose small representatives are composite in one or both coordinates" }]
+    },
+    {
+      "id": "certificate.tp5-example-167-169",
+      "kind": "certificate",
+      "name": "Example: Composite Pair-Hole (167,169)",
+      "statement": "The pair (167,169) lies in S_4^(2): both coprime to 210, 167 is prime, 169 = 13^2 is composite, checked in Lean via Rough 11 167 ∧ Rough 11 169 ∧ ¬ Nat.Prime 169.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "proof-term", "content": "example : Rough 11 167 ∧ Rough 11 169 ∧ ¬ Nat.Prime 169" },
+      "sources": [{ "file": "twin_prime.md", "heading": "5.1 Holes are candidates", "quote": "(167, 169) ∈ S_4^{(2)} — both coprime to 210, 167 prime, 169 = 13²." }]
+    },
+    {
+      "id": "theorem.tp6-direction",
+      "kind": "theorem",
+      "name": "TP6: Period-Wide Counts Bound π_2 From Above",
+      "statement": "By TP0, for every k and x, the count of twin-candidate positions ≤ x is an upper bound on π_2(x); growth of that count is compatible with π_2(x) being bounded.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [{ "file": "twin_prime.md", "heading": "5.3 The inequality has a direction", "quote": "Growth of that count from stage to stage is growth of an upper bound" }]
+    },
+    {
+      "id": "conjecture.tp-j-pair-jacobsthal",
+      "kind": "conjecture",
+      "name": "TP-J: Pair Jacobsthal Bound",
+      "statement": "The maximal gap g_2(P_k) between consecutive elements of the pair lattice mod P_k is conjectured to grow no faster than log^2 P_k, comparable to p_k^2.",
+      "formal": "g_2(P_k) \\ll \\log^2 P_k \\asymp p_k^2",
+      "status": "proposed",
+      "confidence": 0.85,
+      "representation": {
+        "layer": "fuzzy",
+        "form": "prose-sketch",
+        "interfaces": [{ "to": "numeric", "via": "formalize_numeric", "available": true, "target": "observation.window-occupancy-table", "lossy": false }]
+      },
+      "domain": "gaps",
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "Conjecture TP-J (pair Jacobsthal). g_2(P_k) ≪ log² P_k ≍ p_k²." }]
+    },
+    {
+      "id": "conjecture.claim-w-window-occupancy",
+      "kind": "conjecture",
+      "name": "Claim W: Window Occupancy",
+      "statement": "For every prime p > 2 there exist h with p ≤ h, h+2 < p^2, and both h and h+2 coprime to P_{<p} (p-rough), i.e. the pair lattice at the stage below p has a hole-pair inside the certified window.",
+      "status": "proposed",
+      "confidence": 0.85,
+      "representation": {
+        "layer": "fuzzy",
+        "form": "prose-sketch",
+        "interfaces": [{ "to": "deductive", "via": "formalize_deductive", "available": true, "target": "definition.twin-windowat-lean", "lossy": false }]
+      },
+      "domain": "gaps",
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "for every prime p > 2 there exist h with p ≤ h, h + 2 < p², and both h and h+2 coprime to P_{<p}" }]
+    },
+    {
+      "id": "definition.twin-windowat-lean",
+      "kind": "definition",
+      "name": "Twin.WindowAt and Twin.Window Lean Statements",
+      "statement": "Twin.WindowAt p formalizes window occupancy for a single prime p, and Twin.Window quantifies it over primes; the unrestricted form is false at p=2 (Twin.not_windowAt_two).",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "symbolic", "form": "term-graph", "content": "Twin.WindowAt, Twin.Window, Twin.windowWitnesses" },
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "Formalised as a statement: `Twin.WindowAt p` (single prime) and `Twin.Window` (the quantified claim)." }]
+    },
+    {
+      "id": "theorem.tp7-window-implies-tpc",
+      "kind": "theorem",
+      "name": "TP7: Claim W Implies the Twin Prime Conjecture",
+      "statement": "Claim W implies there are infinitely many twin primes, proved in Lean via Twin.infinite_twins_of_window using only prime_of_rough_of_lt_sq.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "representation": {
+        "layer": "deductive",
+        "form": "proof-term",
+        "content": "Twin.infinite_twins_of_window",
+        "interfaces": [{ "to": "numeric", "via": "certify", "available": true, "target": "certificate.tp7-lean-proof", "lossy": false }]
+      },
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "Claim W implies there are infinitely many twin primes." }]
+    },
+    {
+      "id": "certificate.tp7-lean-proof",
+      "kind": "certificate",
+      "name": "TP7 Kernel-Checked Proof",
+      "statement": "Twin.infinite_twins_of_window and Twin.exists_twin_ge are formalized in Lean, citing prime_of_rough_of_lt_sq alone and mentioning the promotion recursion nowhere.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "proof-term", "content": "Twin.infinite_twins_of_window, Twin.exists_twin_ge" },
+      "sources": [{ "file": "twin_prime.md", "heading": "8.3 Formalisation status", "quote": "`infinite_twins_of_window` cites `prime_of_rough_of_lt_sq` twice and nothing else from §4." }]
+    },
+    {
+      "id": "theorem.claim-o2-roughness-certificate",
+      "kind": "axiom",
+      "name": "Claim O2/F3: Roughness Certifies Primality on the Window",
+      "statement": "A wheel certifies primality only on the window [p_{k+1}, p_{k+1}^2), where holes are exactly primes; imported from paper.md as an external result used throughout this document.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [{ "file": "twin_prime.md", "heading": "0. Summary", "quote": "a wheel certifies primality only on the window [p_{k+1}, p_{k+1}²) (Claim O2/F3" }]
+    },
+    {
+      "id": "experiment.window-occupancy-eval",
+      "kind": "experiment",
+      "name": "Window Occupancy Computation via Twin.windowWitnesses",
+      "statement": "Twin.windowWitnesses p enumerates all witnesses of WindowAt p for primes below 60, and the counts are compared to the period-wide density prediction τ·(p^2-p).",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "table" },
+      "sources": [{ "file": "twin_prime.md", "heading": "6.1 Occupancy of the certified window, computed", "quote": "`Twin.windowWitnesses p` enumerates every `h` witnessing `WindowAt p`" }]
+    },
+    {
+      "id": "observation.window-occupancy-table",
+      "kind": "observation",
+      "name": "Window Occupancy Table for p < 60",
+      "statement": "Claim W holds for every prime 2 < p < 60 with witness counts never below 2; p=2 is the sole failure; observed/predicted ratio stays in 0.66 to 1.19 with no systematic deficit visible at these sizes.",
+      "status": "supported",
+      "confidence": 0.9,
+      "representation": { "layer": "numeric", "form": "table" },
+      "attributes": [
+        { "key": "min_witness_count_above_2", "value": 2, "layer": "numeric" },
+        { "key": "observed_over_predicted_range_low", "value": 0.66, "layer": "numeric" },
+        { "key": "observed_over_predicted_range_high", "value": 1.19, "layer": "numeric" }
+      ],
+      "sources": [{ "file": "twin_prime.md", "heading": "6.1 Occupancy of the certified window, computed", "quote": "W holds for every prime 2 < p < 60, with the witness count never below 2." }]
+    },
+    {
+      "id": "theorem.not-windowat-two",
+      "kind": "theorem",
+      "name": "Claim W Is False at p = 2",
+      "statement": "The unrestricted window claim fails at p=2 because the window [2,4) has no room for a pair at distance 2, formalized as Twin.not_windowAt_two; formalizing the prose changed it to quantify over p > 2.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "deductive", "form": "proof-term", "content": "Twin.not_windowAt_two" },
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "the window of p = 2 is [2, 4), which has no room for a pair at distance 2 at all, so the unrestricted form is outright false" }]
+    },
+    {
+      "id": "proto_pattern.equidistribution-bridge",
+      "kind": "knowledge_gap",
+      "name": "Equidistribution Gap Between Period-Wide Counts and Window Certification",
+      "statement": "Converting a count over the full period P_k into occupancy of the window of relative length e^{-p_k} requires equidistribution of S_k^(2) at scale e^{-p_k}, an input the wheel recursion does not supply and modern sieve theory obtains only in averaged form.",
+      "status": "pre_formal",
+      "confidence": 0.8,
+      "representation": { "layer": "inspiration", "form": "prose-sketch" },
+      "sources": [{ "file": "twin_prime.md", "heading": "5.4 The bridging input is equidistribution", "quote": "That is the input the modern literature works hardest for and obtains only in averaged form" }]
+    },
+    {
+      "id": "theorem.parity-problem-obstruction",
+      "kind": "theorem",
+      "name": "Parity Problem Prevents Sieve Lower Bounds for Two-Variable Patterns",
+      "statement": "The parity problem (Selberg's example; Bombieri's asymptotic sieve) shows a sieve of the shape used here cannot produce a positive lower bound separating 'both coordinates prime' from 'both coordinates have an odd number of prime factors'.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "deductive", "form": "proposition" },
+      "sources": [{ "file": "twin_prime.md", "heading": "5.3 The inequality has a direction", "quote": "the parity problem (Selberg; Bombieri's asymptotic sieve) is the theorem-level statement that a sieve of this shape cannot produce a positive lower bound" }]
+    },
+    {
+      "id": "reference.brun-1919",
+      "kind": "reference",
+      "name": "Brun (1919)",
+      "statement": "Brun's sieve gives π_2(x) ≪ x/log^2 x, and Brun's theorem shows convergence of Σ1/q over twins, exactly the shape TP1/TP3 predict.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "social", "form": "prose-sketch" },
+      "social": { "references": [{ "text": "Brun (1919)", "kind": "paper" }] },
+      "sources": [{ "file": "twin_prime.md", "heading": "7. Context in the literature", "quote": "Brun (1919), sieve + convergence of Σ 1/q over twins" }]
+    },
+    {
+      "id": "reference.chen-1973",
+      "kind": "reference",
+      "name": "Chen (1973)",
+      "statement": "Chen's theorem shows infinitely many q with q+2 prime or semiprime, marking where pure sieve stops.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "social", "form": "prose-sketch" },
+      "social": { "references": [{ "text": "Chen (1973)", "kind": "paper" }] },
+      "sources": [{ "file": "twin_prime.md", "heading": "7. Context in the literature", "quote": "Chen (1973) — infinitely many q with q+2 prime or semiprime — marks where pure sieve stops." }]
+    },
+    {
+      "id": "reference.gpy-zhang-maynard-tao",
+      "kind": "reference",
+      "name": "GPY, Zhang, Maynard–Tao Bounded Gaps",
+      "statement": "Goldston–Pintz–Yıldırım, Zhang's extension of Bombieri–Vinogradov, and Maynard–Tao/Polymath8 give bounded gaps (≤246) rather than gap 2, because the available equidistribution is lossy.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "social", "form": "prose-sketch" },
+      "social": { "references": [
+        { "text": "Goldston–Pintz–Yıldırım (2009)", "kind": "paper" },
+        { "text": "Zhang (2014)", "kind": "paper" },
+        { "text": "Maynard, Tao, Polymath8", "kind": "paper" }
+      ] },
+      "attributes": [{ "key": "best_bounded_gap", "value": 246 }],
+      "sources": [{ "file": "twin_prime.md", "heading": "5.4 The bridging input is equidistribution", "quote": "give bounded gaps (≤ 246) rather than gap 2" }]
+    },
+    {
+      "id": "reference.iwaniec-fgkmt-jacobsthal",
+      "kind": "reference",
+      "name": "Iwaniec and Ford–Green–Konyagin–Maynard–Tao Jacobsthal Bounds",
+      "statement": "Iwaniec's theorem g(P_k) ≪ log^2 P_k is the single-coordinate calibration for the pair Jacobsthal conjecture TP-J, and the FGKMT lower bound shows there is no slack to spare.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "social", "form": "prose-sketch" },
+      "social": { "references": [
+        { "text": "Iwaniec", "kind": "paper" },
+        { "text": "Ford–Green–Konyagin–Maynard–Tao", "kind": "paper" }
+      ] },
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "the corresponding bound is Iwaniec's theorem g(P_k) ≪ log²P_k" }]
+    },
+    {
+      "id": "reference.pritchard-1982",
+      "kind": "reference",
+      "name": "Pritchard (1982)",
+      "statement": "Pritchard's wheel promotion construction is equivalent to TP2/F1 and is not novel to this document.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "social", "form": "prose-sketch" },
+      "social": { "references": [{ "text": "Pritchard (1982)", "kind": "paper" }] },
+      "sources": [{ "file": "twin_prime.md", "heading": "7. Context in the literature", "quote": "Pritchard (1982) | wheel promotion = TP2/F1; not novel" }]
+    },
+    {
+      "id": "model.twin-generator",
+      "kind": "model",
+      "name": "Free Twin Generator on Top of Algorithm B",
+      "statement": "Algorithm B emits primes in increasing order with O(1) state, and twin detection is one extra register comparing consecutive emitted primes for a gap of 2, at no extra asymptotic cost, inheriting O(1) random-access restart.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "representation": { "layer": "symbolic", "form": "term-graph", "content": "twins(): prev := none; for q in B(): if prev≠none and q−prev=2: emit (prev,q); prev := q" },
+      "domain": "implementation",
+      "sources": [{ "file": "twin_prime.md", "heading": "8.1 A twin generator, free", "quote": "No extra asymptotic cost, and it inherits paper.md §4.6's O(1) random-access restart" }]
+    },
+    {
+      "id": "model.pair-wheel-scan",
+      "kind": "model",
+      "name": "Pair Wheel for Scan Restriction",
+      "statement": "A pair wheel restricts scan positions to pairSpokes, the T_w of φ(W) spokes that are pair-relevant; at W=30030 this is 1485 of 5760 spokes, a 3.88x reduction in scan positions, but the saving applies only to the scan, not the advance, because pair-restricting the advance requires per-prime step tables (primorial space).",
+      "status": "accepted",
+      "confidence": 0.85,
+      "representation": { "layer": "symbolic", "form": "model", "content": "pairSpokes = sorted { r in [0,W) : gcd(r,W)=gcd(r+2,W)=1 }" },
+      "attributes": [
+        { "key": "scan_reduction_factor", "value": 3.88, "layer": "numeric" },
+        { "key": "mark_reduction_percent", "value": 48, "unit": "%", "layer": "numeric" }
+      ],
+      "domain": "implementation",
+      "sources": [{ "file": "twin_prime.md", "heading": "8.2 A pair wheel for the scan — with a caveat", "quote": "a scan searching for twins need test only 25.8% of spoke positions — a 3.88× reduction in scan positions" }]
+    },
+    {
+      "id": "constraint.primorial-step-table-space",
+      "kind": "constraint",
+      "name": "Per-Prime Step Table Requires Primorial Space",
+      "statement": "Restricting the advance stream to multipliers landing on pair-relevant positions requires a step table indexed by p mod W, i.e. primorial space, the obstruction of algorithm.md Remark 2.9.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "representation": { "layer": "ecological", "form": "prose-sketch" },
+      "ecological": { "constraints": ["step table indexed by p mod W is primorial-space"] },
+      "sources": [{ "file": "twin_prime.md", "heading": "8.2 A pair wheel for the scan — with a caveat", "quote": "requires a step table indexed by p mod W — a per-prime table, i.e. primorial space" }]
+    },
+    {
+      "id": "research_program.open-problems-twin",
+      "kind": "research_program",
+      "name": "Twin Prime Wheel Lattice Open Problems",
+      "statement": "Six open problems are listed: measuring g_2(P_k), window occupancy statistics, formalising TP7/TP1 (partly done), whether TP2's twist admits a finite IFS, verifying TP3a's discrepancy numerically, and characterizing where the window's copy dies (distribution of j0).",
+      "status": "proposed",
+      "confidence": 0.85,
+      "representation": { "layer": "social", "form": "prose-sketch" },
+      "sources": [{ "file": "twin_prime.md", "heading": "10. Open problems", "quote": "Measure g_2(P_k) exactly for k ≤ 8 and by segmented enumeration for k ≤ 12" }]
+    },
+    {
+      "id": "open_question.tp2-ifs-twist",
+      "kind": "open_question",
+      "name": "Does an Exact Finite IFS Underlie TP2's Twisted Recursion?",
+      "statement": "Open problem: whether there is an exact recursion on a finite family of shifted pair lattices closed under promotion, forming a genuine IFS on a finite alphabet, extending paper.md's Moran reading to pairs.",
+      "status": "pre_formal",
+      "confidence": 0.8,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [{ "file": "twin_prime.md", "heading": "10. Open problems", "quote": "Is there an exact recursion on a finite family of shifted lattices closed under promotion — a genuine IFS on a finite alphabet?" }]
+    },
+    {
+      "id": "open_question.window-tile-zero-distribution",
+      "kind": "open_question",
+      "name": "Where Does the Window's Copy Die? Distribution of j0",
+      "statement": "Open problem: tabulate the distribution of j0(r) over classes r in S_k^(2), especially how many classes lose tile 0 (the only tile the certified window meets), to make the distance between period-wide equidistribution and window conditioning numerical.",
+      "status": "pre_formal",
+      "confidence": 0.8,
+      "representation": { "layer": "fuzzy", "form": "prose-sketch" },
+      "sources": [{ "file": "twin_prime.md", "heading": "10. Open problems", "quote": "Tabulate, for each k, the distribution of j_0(r) = −rP̄ mod p_{k+1} over r ∈ S_k^{(2)}" }]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e.definition.pair-lattice.depends_on.theorem.claim-o2-roughness-certificate",
+      "from": "claim.tp0-one-way-containment",
+      "to": "theorem.claim-o2-roughness-certificate",
+      "relation": "depends_on",
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "2. Two objects: classes and integers", "quote": "The equality range is Claim O2 / Primegen.prime_of_rough_of_lt_sq applied to both coordinates." }]
+    },
+    {
+      "id": "e.claim.tp0-one-way-containment.motivates.theorem.tp6-direction",
+      "from": "claim.tp0-one-way-containment",
+      "to": "theorem.tp6-direction",
+      "relation": "implies",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.3 The inequality has a direction", "quote": "By TP0, for every k and x, the count of twin-candidate positions ≤ x is an upper bound on π_2(x)." }]
+    },
+    {
+      "id": "e.theorem.tp1-pair-count-recursion.tests.observation.tk-table",
+      "from": "theorem.tp1-pair-count-recursion",
+      "to": "observation.tk-table",
+      "relation": "measures",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "3. Numbers first", "quote": "T_k and its density, computed exactly (recursion proved in §4.1)" }]
+    },
+    {
+      "id": "e.certificate.tk-machine-check.supports.theorem.tp1-pair-count-recursion",
+      "from": "certificate.tk-machine-check",
+      "to": "theorem.tp1-pair-count-recursion",
+      "relation": "supports",
+      "strength": 0.8,
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "3. Numbers first", "quote": "the second checks TP1's multiplier p_{k+1} − 2 at the first three promotions independently of its proof." }]
+    },
+    {
+      "id": "e.theorem.tp2-pair-lattice-recursion.implies.theorem.tp1-pair-count-recursion",
+      "from": "theorem.tp2-pair-lattice-recursion",
+      "to": "theorem.tp1-pair-count-recursion",
+      "relation": "implies",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.2 The promotion", "quote": "with |D| = |D'| = T_k and D ∩ D' = ∅ for p ≥ 3; counting gives TP1." }]
+    },
+    {
+      "id": "e.theorem.tp8-deletion-geometry.refines.theorem.tp2-pair-lattice-recursion",
+      "from": "theorem.tp8-deletion-geometry",
+      "to": "theorem.tp2-pair-lattice-recursion",
+      "relation": "refines",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.4 Deletion geometry", "quote": "the two deletion sets of TP2 are translates" }]
+    },
+    {
+      "id": "e.theorem.tp8-deletion-geometry.implies.theorem.tp4-admissibility",
+      "from": "theorem.tp8-deletion-geometry",
+      "to": "theorem.tp4-admissibility",
+      "relation": "implies",
+      "confidence": 0.75,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.4 Deletion geometry", "quote": "hence p − 2 ≥ 1 and no pair class ever dies (TP4 for H = {0,2}, re-derived geometrically)." }]
+    },
+    {
+      "id": "e.observation.tp8a-adjacency-table.instantiates.theorem.tp8-deletion-geometry",
+      "from": "observation.tp8a-adjacency-table",
+      "to": "theorem.tp8-deletion-geometry",
+      "relation": "instantiates",
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "Remark TP8a", "quote": "The two deleted copies of a class are cyclically adjacent exactly when δ_k ≡ ±1" }]
+    },
+    {
+      "id": "e.theorem.tp4-admissibility.generalizes.theorem.tp1-pair-count-recursion",
+      "from": "theorem.tp4-admissibility",
+      "to": "theorem.tp1-pair-count-recursion",
+      "relation": "generalizes",
+      "confidence": 0.75,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.5 Admissibility", "quote": "TP4 is the reason the class-level picture is well behaved for every admissible pattern" }]
+    },
+    {
+      "id": "e.theorem.tp5-composite-pair-holes.supports.claim.tp0-one-way-containment",
+      "from": "theorem.tp5-composite-pair-holes",
+      "to": "claim.tp0-one-way-containment",
+      "relation": "supports",
+      "strength": 0.8,
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.1 Holes are candidates", "quote": "Holes are candidates; only the window certifies." }]
+    },
+    {
+      "id": "e.certificate.tp5-example-167-169.supports.theorem.tp5-composite-pair-holes",
+      "from": "certificate.tp5-example-167-169",
+      "to": "theorem.tp5-composite-pair-holes",
+      "relation": "supports",
+      "strength": 0.9,
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.1 Holes are candidates", "quote": "checked in the kernel, as an example in Twin.lean" }]
+    },
+    {
+      "id": "e.remark.tp3a-hole-vs-prime-density.supports.claim.tp0-one-way-containment",
+      "from": "remark.tp3a-hole-vs-prime-density",
+      "to": "claim.tp0-one-way-containment",
+      "relation": "supports",
+      "strength": 0.75,
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.3 Density = the singular series", "quote": "TP3a is the quantitative form of TP0: hole density is strictly larger than prime density" }]
+    },
+    {
+      "id": "e.theorem.tp3-density-singular-series.motivates.remark.tp3a-hole-vs-prime-density",
+      "from": "theorem.tp3-density-singular-series",
+      "to": "remark.tp3a-hole-vs-prime-density",
+      "relation": "motivates",
+      "confidence": 0.75,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.3 Density = the singular series", "quote": "It also fixes the register the object speaks in" }]
+    },
+    {
+      "id": "e.proto_pattern.equidistribution-bridge.motivates.conjecture.claim-w-window-occupancy",
+      "from": "proto_pattern.equidistribution-bridge",
+      "to": "conjecture.claim-w-window-occupancy",
+      "relation": "motivates",
+      "confidence": 0.7,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.4 The bridging input is equidistribution", "quote": "so the natural localised question is whether the window contains a candidate pair (§6)" }]
+    },
+    {
+      "id": "e.theorem.parity-problem-obstruction.constrains.theorem.tp6-direction",
+      "from": "theorem.parity-problem-obstruction",
+      "to": "theorem.tp6-direction",
+      "relation": "supports",
+      "strength": 0.7,
+      "confidence": 0.75,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.3 The inequality has a direction", "quote": "which sieve of this shape cannot separate 'both coordinates prime'" }]
+    },
+    {
+      "id": "e.conjecture.claim-w-window-occupancy.formalizes.definition.twin-windowat-lean",
+      "from": "conjecture.claim-w-window-occupancy",
+      "to": "definition.twin-windowat-lean",
+      "relation": "formalizes",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "Formalised as a statement: Twin.WindowAt p" }]
+    },
+    {
+      "id": "e.definition.twin-windowat-lean.depends_on.theorem.not-windowat-two",
+      "from": "definition.twin-windowat-lean",
+      "to": "theorem.not-windowat-two",
+      "relation": "depends_on",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "the window of p = 2 is [2, 4), which has no room for a pair at distance 2 at all" }]
+    },
+    {
+      "id": "e.conjecture.claim-w-window-occupancy.implies.theorem.tp7-window-implies-tpc",
+      "from": "conjecture.claim-w-window-occupancy",
+      "to": "theorem.tp7-window-implies-tpc",
+      "relation": "assumes",
+      "confidence": 0.9,
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "Claim W implies there are infinitely many twin primes." }]
+    },
+    {
+      "id": "e.theorem.tp7-window-implies-tpc.depends_on.theorem.claim-o2-roughness-certificate",
+      "from": "theorem.tp7-window-implies-tpc",
+      "to": "theorem.claim-o2-roughness-certificate",
+      "relation": "depends_on",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "By Claim O2 (prime_of_rough_of_lt_sq) applied to each coordinate" }]
+    },
+    {
+      "id": "e.certificate.tp7-lean-proof.supports.theorem.tp7-window-implies-tpc",
+      "from": "certificate.tp7-lean-proof",
+      "to": "theorem.tp7-window-implies-tpc",
+      "relation": "supports",
+      "strength": 0.95,
+      "confidence": 0.9,
+      "sources": [{ "file": "twin_prime.md", "heading": "8.3 Formalisation status", "quote": "the promotion recursion appears nowhere in the proof" }]
+    },
+    {
+      "id": "e.conjecture.tp-j-pair-jacobsthal.implies.conjecture.claim-w-window-occupancy",
+      "from": "conjecture.tp-j-pair-jacobsthal",
+      "to": "conjecture.claim-w-window-occupancy",
+      "relation": "implies",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "TP-J ⟹ W up to constants" }]
+    },
+    {
+      "id": "e.reference.iwaniec-fgkmt-jacobsthal.analogous_to.conjecture.tp-j-pair-jacobsthal",
+      "from": "reference.iwaniec-fgkmt-jacobsthal",
+      "to": "conjecture.tp-j-pair-jacobsthal",
+      "relation": "analogous_to",
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "the corresponding bound is Iwaniec's theorem g(P_k) ≪ log²P_k" }]
+    },
+    {
+      "id": "e.experiment.window-occupancy-eval.tests.conjecture.claim-w-window-occupancy",
+      "from": "experiment.window-occupancy-eval",
+      "to": "conjecture.claim-w-window-occupancy",
+      "relation": "tests",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6.1 Occupancy of the certified window, computed", "quote": "an empty list at some prime would refute W, and any single element certifies it there" }]
+    },
+    {
+      "id": "e.observation.window-occupancy-table.supports.conjecture.claim-w-window-occupancy",
+      "from": "observation.window-occupancy-table",
+      "to": "conjecture.claim-w-window-occupancy",
+      "relation": "supports",
+      "strength": 0.8,
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6.1 Occupancy of the certified window, computed", "quote": "W holds for every prime 2 < p < 60, with the witness count never below 2." }]
+    },
+    {
+      "id": "e.observation.window-occupancy-table.tests.theorem.not-windowat-two",
+      "from": "observation.window-occupancy-table",
+      "to": "theorem.not-windowat-two",
+      "relation": "supports",
+      "strength": 0.85,
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6.1 Occupancy of the certified window, computed", "quote": "p = 2 is the sole failure, and it fails on width" }]
+    },
+    {
+      "id": "e.reference.brun-1919.contradicts.theorem.tp6-direction",
+      "from": "reference.brun-1919",
+      "to": "theorem.tp6-direction",
+      "relation": "supports",
+      "strength": 0.7,
+      "confidence": 0.75,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.3 The inequality has a direction", "quote": "Brun's sieve gives π_2(x) ≪ x/log²x — an upper bound of exactly the shape TP1/TP3 predicts" }]
+    },
+    {
+      "id": "e.reference.chen-1973.generalizes.theorem.parity-problem-obstruction",
+      "from": "reference.chen-1973",
+      "to": "theorem.parity-problem-obstruction",
+      "relation": "specializes",
+      "confidence": 0.7,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.3 The inequality has a direction", "quote": "Chen's theorem (1973) ... marks where pure sieve stops." }]
+    },
+    {
+      "id": "e.reference.gpy-zhang-maynard-tao.depends_on.proto_pattern.equidistribution-bridge",
+      "from": "reference.gpy-zhang-maynard-tao",
+      "to": "proto_pattern.equidistribution-bridge",
+      "relation": "depends_on",
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.4 The bridging input is equidistribution", "quote": "precisely because the available equidistribution is lossy" }]
+    },
+    {
+      "id": "e.reference.pritchard-1982.equivalent_to.theorem.tp2-pair-lattice-recursion",
+      "from": "reference.pritchard-1982",
+      "to": "theorem.tp2-pair-lattice-recursion",
+      "relation": "equivalent_to",
+      "confidence": 0.75,
+      "sources": [{ "file": "twin_prime.md", "heading": "7. Context in the literature", "quote": "Pritchard (1982) | wheel promotion = TP2/F1; not novel" }]
+    },
+    {
+      "id": "e.theorem.tp7-window-implies-tpc.motivates.model.twin-generator",
+      "from": "theorem.tp7-window-implies-tpc",
+      "to": "model.twin-generator",
+      "relation": "motivates",
+      "confidence": 0.6,
+      "sources": [{ "file": "twin_prime.md", "heading": "8.1 A twin generator, free", "quote": "This is the right tool for §6's measurements" }]
+    },
+    {
+      "id": "e.model.pair-wheel-scan.constrains_by.constraint.primorial-step-table-space",
+      "from": "constraint.primorial-step-table-space",
+      "to": "model.pair-wheel-scan",
+      "relation": "constrains",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "8.2 A pair wheel for the scan — with a caveat", "quote": "the obstruction of algorithm.md Remark 2.9" }]
+    },
+    {
+      "id": "e.open_question.tp2-ifs-twist.abstracts.theorem.tp8-deletion-geometry",
+      "from": "theorem.tp8-deletion-geometry",
+      "to": "open_question.tp2-ifs-twist",
+      "relation": "abstracts",
+      "confidence": 0.7,
+      "sources": [{ "file": "twin_prime.md", "heading": "10. Open problems", "quote": "TP8 (b) halves the problem: the two deletion sets are translates" }]
+    },
+    {
+      "id": "e.open_question.window-tile-zero-distribution.abstracts.theorem.tp8-deletion-geometry",
+      "from": "theorem.tp8-deletion-geometry",
+      "to": "open_question.window-tile-zero-distribution",
+      "relation": "abstracts",
+      "confidence": 0.7,
+      "sources": [{ "file": "twin_prime.md", "heading": "10. Open problems", "quote": "TP8 fixes the offset δ_k between the two deleted copies but says nothing about their location." }]
+    },
+    {
+      "id": "e.research_program.open-problems-twin.depends_on.conjecture.tp-j-pair-jacobsthal",
+      "from": "research_program.open-problems-twin",
+      "to": "conjecture.tp-j-pair-jacobsthal",
+      "relation": "depends_on",
+      "confidence": 0.75,
+      "sources": [{ "file": "twin_prime.md", "heading": "10. Open problems", "quote": "Measure g_2(P_k) exactly for k ≤ 8" }]
+    }
+  ],
+  "morphisms": [
+    {
+      "id": "m.claim.tp0-one-way-containment.extract.certificate.tp0-rough-half-lean",
+      "kind": "extract",
+      "from": "claim.tp0-one-way-containment",
+      "to": "certificate.tp0-rough-half-lean",
+      "state": "performed",
+      "loss": "only the rough-half of the containment is extracted into the kernel, not the equality-range argument",
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "0. Summary", "quote": "Lean-formalisable implication (W ⟹ TPC)" }]
+    },
+    {
+      "id": "m.theorem.tp1-pair-count-recursion.evaluate.observation.tk-table",
+      "kind": "evaluate",
+      "from": "theorem.tp1-pair-count-recursion",
+      "to": "observation.tk-table",
+      "state": "performed",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "3. Numbers first", "quote": "T_k and its density, computed exactly (recursion proved in §4.1)" }]
+    },
+    {
+      "id": "m.theorem.tp1-pair-count-recursion.extract.certificate.tp1-per-prime-factor-lean",
+      "kind": "extract",
+      "from": "theorem.tp1-pair-count-recursion",
+      "to": "certificate.tp1-per-prime-factor-lean",
+      "state": "performed",
+      "loss": "joining stages by CRT counting over ZMod (P·p) is mechanical and unwritten in the kernel",
+      "confidence": 0.75,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.1 The pair count recursion", "quote": "Joining the stages needs CRT counting over ZMod (P·p) — mechanical, unwritten, and #eval-checked instead" }]
+    },
+    {
+      "id": "m.theorem.tp8-deletion-geometry.extract.certificate.tp8-ab-lean",
+      "kind": "extract",
+      "from": "theorem.tp8-deletion-geometry",
+      "to": "certificate.tp8-ab-lean",
+      "state": "performed",
+      "loss": "TP8(c) two survivor arcs is not formalised",
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.4 Deletion geometry", "quote": "(a) and (b) are formalised... (c) is not formalised." }]
+    },
+    {
+      "id": "m.theorem.tp5-composite-pair-holes.certify.certificate.tp5-example-167-169",
+      "kind": "certify",
+      "from": "certificate.tp5-example-167-169",
+      "to": "theorem.tp5-composite-pair-holes",
+      "state": "performed",
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "5.1 Holes are candidates", "quote": "Holes are candidates; only the window certifies." }]
+    },
+    {
+      "id": "m.conjecture.claim-w-window-occupancy.formalize_deductive.definition.twin-windowat-lean",
+      "kind": "formalize_deductive",
+      "from": "conjecture.claim-w-window-occupancy",
+      "to": "definition.twin-windowat-lean",
+      "state": "performed",
+      "loss": "formalizing changed the claim: it now excludes p = 2",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "This is the one place where formalising the prose changed it." }]
+    },
+    {
+      "id": "m.conjecture.claim-w-window-occupancy.certify.experiment.window-occupancy-eval",
+      "kind": "evaluate",
+      "from": "conjecture.claim-w-window-occupancy",
+      "to": "experiment.window-occupancy-eval",
+      "state": "performed",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6.1 Occupancy of the certified window, computed", "quote": "Counts, straight from the #eval over the primes below 60" }]
+    },
+    {
+      "id": "m.experiment.window-occupancy-eval.fit.observation.window-occupancy-table",
+      "kind": "fit",
+      "from": "experiment.window-occupancy-eval",
+      "to": "observation.window-occupancy-table",
+      "state": "performed",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "6.1 Occupancy of the certified window, computed", "quote": "against the period-wide prediction τ·(p² − p)" }]
+    },
+    {
+      "id": "m.theorem.tp7-window-implies-tpc.certify.certificate.tp7-lean-proof",
+      "kind": "certify",
+      "from": "certificate.tp7-lean-proof",
+      "to": "theorem.tp7-window-implies-tpc",
+      "state": "performed",
+      "confidence": 0.9,
+      "sources": [{ "file": "twin_prime.md", "heading": "6. A sufficient window condition", "quote": "Status: [F] — done, Twin.infinite_twins_of_window" }]
+    },
+    {
+      "id": "m.conjecture.tp-j-pair-jacobsthal.formalize_numeric.observation.window-occupancy-table",
+      "kind": "formalize_numeric",
+      "from": "conjecture.tp-j-pair-jacobsthal",
+      "to": "observation.window-occupancy-table",
+      "state": "intended",
+      "loss": "TP-J itself is not yet measured; only occupancy in the window is",
+      "confidence": 0.6,
+      "sources": [{ "file": "twin_prime.md", "heading": "10. Open problems", "quote": "Measure g_2(P_k) exactly for k ≤ 8" }]
+    },
+    {
+      "id": "m.theorem.tp8-deletion-geometry.abstract.open_question.tp2-ifs-twist",
+      "kind": "abstract",
+      "from": "theorem.tp8-deletion-geometry",
+      "to": "open_question.tp2-ifs-twist",
+      "state": "performed",
+      "confidence": 0.7,
+      "sources": [{ "file": "twin_prime.md", "heading": "10. Open problems", "quote": "Is there an exact recursion on a finite family of shifted lattices closed under promotion" }]
+    }
+  ],
+  "coherence": [
+    {
+      "id": "c.semantic.tk-table-vs-recursion",
+      "kind": "semantic",
+      "refs": ["theorem.tp1-pair-count-recursion", "observation.tk-table", "certificate.tk-machine-check"],
+      "requirement": "The numerically computed T_k values must match the values produced by the recursion T_{k+1}=(p-2)T_k.",
+      "status": "discharged",
+      "confidence": 0.85,
+      "sources": [{ "file": "twin_prime.md", "heading": "3. Numbers first", "quote": "Sanity checks by hand: mod 6 the only pair class is 5" }]
+    },
+    {
+      "id": "c.analytic.tp7-window-to-tpc",
+      "kind": "analytic",
+      "refs": ["theorem.tp7-window-implies-tpc", "certificate.tp7-lean-proof"],
+      "requirement": "The Lean proof of W ⟹ TPC must guarantee the logical implication claimed in prose without hidden gaps.",
+      "status": "discharged",
+      "confidence": 0.9,
+      "sources": [{ "file": "twin_prime.md", "heading": "8.3 Formalisation status", "quote": "Twin.infinite_twins_of_window is short and is worth doing precisely because it makes the shape of §5 machine-visible" }]
+    },
+    {
+      "id": "c.semantic.density-vs-window-occupancy",
+      "kind": "semantic",
+      "refs": ["theorem.tp3-density-singular-series", "observation.window-occupancy-table"],
+      "requirement": "Measured window occupancy counts should agree, at least asymptotically, with the period-wide density prediction τ_k·(p²-p).",
+      "status": "pending",
+      "cost": { "measure": "developer-effort", "note": "extending the table past p ~ 10^3 requires replacing brute-force filter with segmented rough-scan" },
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "6.1 Occupancy of the certified window, computed", "quote": "No systematic deficit against the period-wide prediction yet." }]
+    },
+    {
+      "id": "c.logical.tp2-tp8-consistency",
+      "kind": "logical",
+      "refs": ["theorem.tp2-pair-lattice-recursion", "theorem.tp8-deletion-geometry"],
+      "requirement": "The deletion sets D, D' of TP2 must be exactly characterized by TP8's tile-index formulas j0, j1 and offset δ_k.",
+      "status": "discharged",
+      "confidence": 0.8,
+      "sources": [{ "file": "twin_prime.md", "heading": "4.4 Deletion geometry", "quote": "the element of D in the lift of class r is r + j_0(r)P and the element of D' is r + j_1(r)P" }]
+    }
+  ],
+  "clusters": [
+    {
+      "id": "cluster.window-descent",
+      "name": "Window Occupancy: Conjecture to Kernel Certificate",
+      "kind": "descent_chain",
+      "root": "conjecture.claim-w-window-occupancy",
+      "members": [
+        "conjecture.claim-w-window-occupancy",
+        "definition.twin-windowat-lean",
+        "theorem.not-windowat-two",
+        "experiment.window-occupancy-eval",
+        "observation.window-occupancy-table",
+        "theorem.tp7-window-implies-tpc",
+        "certificate.tp7-lean-proof"
+      ],
+      "layers": ["fuzzy", "symbolic", "deductive", "numeric"],
+      "summary": "Claim W begins as an open, hedged conjecture, is formalized into Lean definitions (which corrects it to exclude p=2), is checked computationally for primes below 60, and its implication to the twin prime conjecture is fully machine-checked."
+    },
+    {
+      "id": "cluster.pair-lattice-structure",
+      "name": "Exact Structure of the Pair Lattice",
+      "kind": "thread",
+      "root": "definition.pair-lattice",
+      "members": [
+        "definition.pair-lattice",
+        "theorem.tp1-pair-count-recursion",
+        "theorem.tp2-pair-lattice-recursion",
+        "theorem.tp3-density-singular-series",
+        "theorem.tp4-admissibility",
+        "theorem.tp8-deletion-geometry",
+        "observation.tk-table",
+        "certificate.tk-machine-check"
+      ],
+      "layers": ["symbolic", "deductive", "numeric"],
+      "summary": "The pair lattice's exact recursion, count, density and deletion geometry, all period-wide and elementary, contrasted with the window-side content in the other cluster."
+    }
+  ],
+  "unresolved": [
+    {
+      "kind": "missing_source",
+      "description": "TP2's proof and TP4's proof are stated as [T] but no Lean formalization exists yet; CRT counting over ZMod(P·p) is described as 'mechanical, unwritten'.",
+      "refs": ["theorem.tp2-pair-lattice-recursion", "theorem.tp4-admissibility"],
+      "sources": [{ "file": "twin_prime.md", "heading": "8.3 Formalisation status", "quote": "CRT counting over ZMod (P·p); #eval-only" }]
+    },
+    {
+      "kind": "unattributed_claim",
+      "description": "The heuristic frequency 2/p_{k+1} for adjacency (open problem 6) is asserted without a derivation beyond a plausibility argument from Σ2/p diverging.",
+      "refs": ["observation.tp8a-adjacency-table"],
+      "sources": [{ "file": "twin_prime.md", "heading": "Remark TP8a", "quote": "Since Σ_k 2/p_{k+1} diverges, one should expect adjacency infinitely often" }]
+    },
+    {
+      "kind": "layer_ambiguity",
+      "description": "TP-J is presented with a conjecture-like hedge but given a formal-looking asymptotic bound; classified as fuzzy/conjecture per its 'Status: [?] open' tag rather than symbolic/deductive.",
+      "refs": ["conjecture.tp-j-pair-jacobsthal"],
+      "layers": ["fuzzy", "symbolic"]
+    }
+  ],
+  "stats": {
+    "documents": 1,
+    "nodes": 42,
+    "edges": 32,
+    "morphisms": 10,
+    "obligations": 4,
+    "by_layer": {
+      "inspiration": 1,
+      "fuzzy": 4,
+      "symbolic": 3,
+      "deductive": 14,
+      "numeric": 12,
+      "social": 6,
+      "ecological": 2
+    },
+    "cross_layer_edges": 20
+  }
+}
