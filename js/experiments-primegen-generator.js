@@ -81,6 +81,12 @@ let spiralExtH = 0;
 let spiralLabel = ''; // HUD prefix
 let spiralOrigin = 1; // integer sitting on the centre cell (0…3)
 let spiralLast = 0; // largest integer placed on the grid
+let gridW = 0; // grid bounding box in cells (all three layouts)
+let gridH = 0;
+let sliceRowStart = null; // linear slice: Σ widths of the rows above
+let sliceRowW = null; // linear slice: ⌊1 + δ·k⌋ per row
+let sliceAlign = 'center'; // 'left' | 'center' | 'right'
+let sliceDelta = 2; // row-width growth per row
 
 /* =====================================================================
 layout — closed-form inverse of the two walks
@@ -119,6 +125,48 @@ function hexIndex(q, r, R) {
   if (r === k && q >= -k + 1 && q <= 0) return base + 6 * k + q;
   return -1;
 }
+/* =====================================================================
+linear slice — the third layout
+---------------------------------------------------------------------
+Row k (top = 0) holds  w_k = ⌊1 + δ·k⌋  cells, i.e. the literal
+recurrence "next row = ⌊δ + previous⌋" written in closed form so the
+flooring never accumulates.  After R rows the walk has covered
+     T(R) = Σ_{k<R} ⌊1 + δ·k⌋ ≈ R + δ·R(R−1)/2,
+so δ selects the quadratic projection: δ = 2 gives the odd rows
+1, 3, 5, … and T(R) = R² exactly (a right triangle / square when
+centred), δ = 1 gives the triangular numbers, δ = 0 a single column.
+Rows are aligned left, centred or right inside the bounding box; the
+cells outside the slice return −1 and are painted as background.
+===================================================================== */
+function sliceRowWidth(k, delta) {
+  return Math.max(1, Math.floor(1 + delta * k));
+}
+function buildSlice(budget, delta) {
+  const starts = [],
+    widths = [];
+  let total = 0,
+    maxW = 0;
+  for (let k = 0; k < MAX_SIDE; k++) {
+    const rw = sliceRowWidth(k, delta);
+    if (rw > MAX_SIDE) break; // row wider than the largest grid we allow
+    if (total + rw > budget) break; // would run past N
+    const nw = rw > maxW ? rw : maxW;
+    if (nw * (k + 1) > FIELD_MAX_CELLS) break; // bounding box budget
+    starts.push(total);
+    widths.push(rw);
+    total += rw;
+    maxW = nw;
+  }
+  const rows = widths.length;
+  if (rows === 0) return null;
+  return {
+    starts: Int32Array.from(starts),
+    widths: Int32Array.from(widths),
+    rows,
+    maxW,
+    cells: total,
+  };
+}
 /* the layout closure handed to buildFieldPyramid / renderFieldTo */
 function makeCellToN() {
   const first = spiralOrigin,
@@ -128,6 +176,22 @@ function makeCellToN() {
     return (x, y) => {
       const i = hexIndex(x - R, y - R, R);
       return i >= 1 && i <= cells ? i + first - 1 : -1;
+    };
+  }
+  if (spiralMode === 'linear') {
+    const starts = sliceRowStart,
+      widths = sliceRowW,
+      rows = widths ? widths.length : 0,
+      W = gridW,
+      align = sliceAlign;
+    return (x, y) => {
+      if (y < 0 || y >= rows) return -1;
+      const rw = widths[y];
+      const x0 = align === 'right' ? W - rw : align === 'center' ? (W - rw) >> 1 : 0;
+      const dx = x - x0;
+      if (dx < 0 || dx >= rw) return -1;
+      const i = starts[y] + dx + 1; // 1-based position along the walk
+      return i <= cells ? i + first - 1 : -1;
     };
   }
   const L = spiralL;
@@ -140,6 +204,25 @@ function makeCellToN() {
 /* --- palette / legend controls -------------------------------------- */
 const hueSource = () =>
   $('fieldHueSource') && $('fieldHueSource').value === 'Omega' ? 'Omega' : 'omega';
+const sliceDeltaInput = () => {
+  const el = $('sliceDelta'),
+    v = el ? Number(el.value) : 2;
+  return Number.isFinite(v) ? Math.max(0, Math.min(64, v)) : 2;
+};
+const sliceAlignInput = () => {
+  const v = $('sliceAlign') ? $('sliceAlign').value : 'center';
+  return v === 'left' || v === 'right' ? v : 'center';
+};
+/* δ / alignment only mean anything for the linear slice */
+function syncGridControls() {
+  const linear = ($('spiralGrid') && $('spiralGrid').value) === 'linear';
+  for (const id of ['sliceDelta', 'sliceAlign']) {
+    const el = $(id);
+    if (!el) continue;
+    el.disabled = !linear;
+    el.title = linear ? '' : 'linear slice only';
+  }
+}
 function syncPalette() {
   const num = (id, dflt) => {
     const el = $(id),
@@ -344,7 +427,9 @@ function spiralIntegerAt(clientX, clientY) {
   } else {
     const gx = Math.floor((px - ox) / cellPx);
     const gy = Math.floor((py - oy) / cellPx);
-    if (gx < 0 || gy < 0 || gx >= spiralL || gy >= spiralL) return null;
+    const W = gridW || spiralL,
+      H = gridH || spiralL;
+    if (gx < 0 || gy < 0 || gx >= W || gy >= H) return null;
     n = cellToN(gx, gy);
   }
   return n < 0 ? null : n;
@@ -434,15 +519,19 @@ async function drawUlamSpiral() {
   const info = document.getElementById('spiralInfo');
   const Ninput = Math.max(10, +$('limit').value | 0);
   const w = Math.max(1, Math.min(7, +$('w').value | 0));
-  const grid = $('spiralGrid').value === 'hex' ? 'hex' : 'square';
+  const gridSel = $('spiralGrid') ? $('spiralGrid').value : 'square';
+  const grid = gridSel === 'hex' ? 'hex' : gridSel === 'linear' ? 'linear' : 'square';
   const origin = Math.max(0, Math.min(3, +$('spiralOrigin').value | 0));
+  const delta = sliceDeltaInput();
+  const align = sliceAlignInput();
   /* the walk numbers its cells origin … origin+cells−1, so the truncation
        offset eats into the cell budget that still fits below N */
   const budget = Math.max(4, Ninput - origin + 1);
   let L = 0,
     R = 0,
     Nspiral = 0,
-    cells = 0;
+    cells = 0,
+    slice = null;
   if (grid === 'hex') {
     /* largest R with H_R = 1 + 3R(R+1) ≤ budget (sqrt then integer repair) */
     R = Math.max(0, Math.floor((Math.sqrt(12 * budget - 3) - 3) / 6));
@@ -455,6 +544,16 @@ async function drawUlamSpiral() {
     }
     cells = 1 + 3 * R * (R + 1);
     Nspiral = origin + cells - 1; // largest n on the plot
+  } else if (grid === 'linear') {
+    /* rows are grown one at a time: the widths are ⌊1 + δk⌋ and the
+          running total is exactly the cell count, so no repair pass */
+    slice = buildSlice(budget, delta);
+    if (!slice || slice.rows < 2) {
+      info.textContent = 'N too small for a linear slice.';
+      return;
+    }
+    cells = slice.cells;
+    Nspiral = origin + cells - 1;
   } else {
     L = Math.floor(Math.sqrt(budget));
     if (L > MAX_SIDE) L = MAX_SIDE;
@@ -492,6 +591,18 @@ async function drawUlamSpiral() {
     spiralExtW = spiralL; // X ∈ [0, D]
     spiralExtH = spiralL * HEX_K; // Y ∈ [0, D·√3/2]
     spiralLabel = `hex R = ${fmt(R)} · n₀ = ${origin}`;
+  } else if (grid === 'linear') {
+    sliceRowStart = slice.starts;
+    sliceRowW = slice.widths;
+    sliceAlign = align;
+    sliceDelta = delta;
+    spiralR = 0;
+    spiralL = slice.maxW; // widest row = bounding-box width
+    gw = slice.maxW;
+    gh = slice.rows;
+    spiralExtW = gw;
+    spiralExtH = gh;
+    spiralLabel = `slice δ = ${fmt(delta)} · ${fmt(slice.rows)} rows · ${align} · n₀ = ${origin}`;
   } else {
     spiralR = 0;
     spiralL = L;
@@ -500,6 +611,8 @@ async function drawUlamSpiral() {
     spiralExtH = L;
     spiralLabel = `L = ${fmt(L)} · n₀ = ${origin}`;
   }
+  gridW = gw; // cellToN / hit-testing need the box before the closure
+  gridH = gh;
   assertExact(gw * gh, 'grid cells');
   if (gw * gh > FIELD_MAX_CELLS) {
     info.textContent = `grid of ${fmt(gw * gh)} cells exceeds FIELD_MAX_CELLS (${fmt(FIELD_MAX_CELLS)}).`;
@@ -520,7 +633,11 @@ async function drawUlamSpiral() {
   const pi = countPrimesIn(primes, Math.max(2, spiralOrigin), spiralLast);
   info.textContent =
     `${fmt(cells)} cells · ${fmt(pi)} primes · ` +
-    (grid === 'hex' ? `${fmt(R)} rings (axial box ${fmt(spiralL)}²) · ` : `side ${fmt(L)} · `) +
+    (grid === 'hex'
+      ? `${fmt(R)} rings (axial box ${fmt(spiralL)}²) · `
+      : grid === 'linear'
+        ? `${fmt(gridH)} rows · δ = ${fmt(sliceDelta)} · widest ${fmt(gridW)} · ${sliceAlign} · `
+        : `side ${fmt(L)} · `) +
     `n ∈ [${fmt(spiralOrigin)}, ${fmt(spiralLast)}] · ` +
     `max ω = ${fmt(fields.omegaMax)} · ${pyr.levels.length - 1} mip levels · ` +
     `hue = ω(n), lightness = sopfr(n)/n · drag to pan, wheel to zoom`;
@@ -713,11 +830,21 @@ $('algo').onchange = () => {
   firstPrimes(); // cheap, and shows the selected module actually running
 };
 $('spiralGrid').onchange = () => {
+  syncGridControls();
   if (pyr) drawUlamSpiral(); // re-walk with the other geometry
 };
 $('spiralOrigin').onchange = () => {
   if (pyr) drawUlamSpiral(); // re-walk from the new origin
 };
+/* δ and the row alignment change the *layout*, so the walk (and with it
+    the field pyramid) has to be rebuilt — same cost as "draw spiral" */
+for (const id of ['sliceDelta', 'sliceAlign']) {
+  const el = $(id);
+  if (el)
+    el.addEventListener('change', () => {
+      if (pyr && spiralMode === 'linear') drawUlamSpiral();
+    });
+}
 /* palette controls: rebuild the LUT + legend, redraw from the same
    pyramid — no re-factorisation, so this is interactive at any N */
 for (const id of ['fieldHueSource', 'fieldOmegaMax', 'fieldGamma', 'fieldSat']) {
@@ -730,6 +857,7 @@ for (const id of ['fieldHueSource', 'fieldOmegaMax', 'fieldGamma', 'fieldSat']) 
 }
 initSpiralInteractions();
 syncAlgo();
+syncGridControls();
 syncPalette(); /* legend is meaningful before the first spiral */
 
 firstPrimes(); /* cheap initial render */
