@@ -98,14 +98,14 @@ $('vClose').onclick = closeEmbed;
 /* ------------------------------------------------------------------ */
 const DOCS = [
   { id: 'readme', file: 'README.md', label: 'README' },
-  { id: 'paper', file: 'paper.md', label: 'paper' },
-  { id: 'theory', file: 'theory.md', label: 'theory' },
-  { id: 'fractal', file: 'fractal.md', label: 'fractal' },
-  { id: 'algorithm', file: 'algorithm.md', label: 'algorithm' },
-  { id: 'observation', file: 'observation.md', label: 'observation' },
-  { id: 'generator', file: 'generator.md', label: 'generator' },
-  { id: 'twin_prime', file: 'twin_prime.md', label: 'twin_prime' },
-  { id: 'idea', file: 'idea.md', label: 'idea' },
+  { id: 'paper', file: 'docs/paper.md', label: 'paper' },
+  { id: 'theory', file: 'docs/theory.md', label: 'theory' },
+  { id: 'fractal', file: 'docs/fractal.md', label: 'fractal' },
+  { id: 'algorithm', file: 'docs/algorithm.md', label: 'algorithm' },
+  { id: 'observation', file: 'docs/observation.md', label: 'observation' },
+  { id: 'generator', file: 'docs/generator.md', label: 'generator' },
+  { id: 'twin_prime', file: 'docs/twin_prime.md', label: 'twin_prime' },
+  { id: 'idea', file: 'docs/idea.md', label: 'idea' },
 ];
 
 const MARKED_PATHS = ['/lib/marked.min.js', 'https://cdn.jsdelivr.net/npm/marked/marked.min.js'];
