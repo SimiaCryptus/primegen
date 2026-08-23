@@ -69,7 +69,13 @@
       "to": "theorem.lemma1-smallest-factor-bound",
       "relation": "formalizes",
       "confidence": 0.6,
-      "sources": [{ "file": "generator.md", "heading": "2.1", "quote": "This lemma means that the primes up to N are a complete divisor basis" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.1",
+          "quote": "This lemma means that the primes up to N are a complete divisor basis"
+        }
+      ]
     },
     {
       "id": "conjecture.naive-layered-engine-not-attractive",
@@ -109,7 +115,13 @@
       "to": "definition.ownership-convention",
       "relation": "steers",
       "confidence": 0.7,
-      "sources": [{ "file": "generator.md", "heading": "1. Introduction", "quote": "assign every composite to exactly one prime stream" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "1. Introduction",
+          "quote": "assign every composite to exactly one prime stream"
+        }
+      ]
     },
     {
       "id": "definition.ownership-convention",
@@ -158,7 +170,11 @@
       "formal": "\\Theta_p = p \\cdot A_p,\\quad A_p = \\{a \\ge p : \\gcd(a, P_{<p}) = 1\\}",
       "status": "accepted",
       "confidence": 0.9,
-      "representation": { "layer": "symbolic", "form": "rewrite-rule", "content": "\\Theta_p = p A_p" },
+      "representation": {
+        "layer": "symbolic",
+        "form": "rewrite-rule",
+        "content": "\\Theta_p = p A_p"
+      },
       "sources": [
         {
           "file": "generator.md",
@@ -222,7 +238,13 @@
       "to": "definition.next-owned-composite",
       "state": "performed",
       "confidence": 0.7,
-      "sources": [{ "file": "generator.md", "heading": "3.2", "quote": "So there is no additional formula to find: the generator is a merge of wheel successor functions" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.2",
+          "quote": "So there is no additional formula to find: the generator is a merge of wheel successor functions"
+        }
+      ]
     },
     {
       "id": "theorem.min-theta-p-is-p-squared",
@@ -283,7 +305,14 @@
       "representation": {
         "layer": "fuzzy",
         "form": "prose-sketch",
-        "interfaces": [{ "to": "deductive", "via": "formalize_deductive", "available": false, "note": "stated as conjecture X1 / theory.md T31, unproved" }]
+        "interfaces": [
+          {
+            "to": "deductive",
+            "via": "formalize_deductive",
+            "available": false,
+            "note": "stated as conjecture X1 / theory.md T31, unproved"
+          }
+        ]
       },
       "sources": [
         {
@@ -308,9 +337,7 @@
       "status": "accepted",
       "confidence": 0.85,
       "representation": { "layer": "symbolic", "form": "model" },
-      "attributes": [
-        { "key": "live_stream_growth_exponent", "value": 0.75, "layer": "numeric" }
-      ],
+      "attributes": [{ "key": "live_stream_growth_exponent", "value": 0.75, "layer": "numeric" }],
       "sources": [
         {
           "file": "generator.md",
@@ -329,7 +356,12 @@
       "confidence": 0.85,
       "representation": { "layer": "symbolic", "form": "model" },
       "attributes": [
-        { "key": "duplicate_claim_factor_empirical", "value": 2.25, "unit": "touches/composite", "layer": "numeric" }
+        {
+          "key": "duplicate_claim_factor_empirical",
+          "value": 2.25,
+          "unit": "touches/composite",
+          "layer": "numeric"
+        }
       ],
       "sources": [
         {
@@ -345,7 +377,13 @@
       "to": "model.algorithm-a-exact-streams",
       "relation": "implies",
       "confidence": 0.6,
-      "sources": [{ "file": "generator.md", "heading": "3.5", "quote": "Past a fixed table boundary, one of two things must happen" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "Past a fixed table boundary, one of two things must happen"
+        }
+      ]
     },
     {
       "id": "e.conjecture.next-rough-no-o1-algorithm.implies.model.algorithm-b-shared-wheel",
@@ -426,7 +464,13 @@
       "to": "model.algorithm-a-exact-streams",
       "relation": "instantiates",
       "confidence": 0.6,
-      "sources": [{ "file": "generator.md", "heading": "4.2", "quote": "Exact streams (Algorithm A). next_candidate(n) = n + 1" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.2",
+          "quote": "Exact streams (Algorithm A). next_candidate(n) = n + 1"
+        }
+      ]
     },
     {
       "id": "e.model.consuming-algorithm.instantiates.model.algorithm-b-shared-wheel",
@@ -434,7 +478,13 @@
       "to": "model.algorithm-b-shared-wheel",
       "relation": "instantiates",
       "confidence": 0.6,
-      "sources": [{ "file": "generator.md", "heading": "4.2", "quote": "Shared wheel (Algorithm B). next_candidate(n) steps over W-coprime integers only" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.2",
+          "quote": "Shared wheel (Algorithm B). next_candidate(n) steps over W-coprime integers only"
+        }
+      ]
     },
     {
       "id": "theorem.deferred-activation-bounds-heap",
@@ -548,7 +598,9 @@
       "to": "bound.event-count-shared-wheel",
       "state": "performed",
       "confidence": 0.7,
-      "sources": [{ "file": "generator.md", "heading": "4.5", "quote": "Shared wheel: ops(N) ≈ ..." }]
+      "sources": [
+        { "file": "generator.md", "heading": "4.5", "quote": "Shared wheel: ops(N) ≈ ..." }
+      ]
     },
     {
       "id": "bound.time-complexity-consuming-algorithm",
@@ -653,7 +705,13 @@
       "to": "reference.oneill-genuine-sieve",
       "relation": "generalizes",
       "confidence": 0.55,
-      "sources": [{ "file": "generator.md", "heading": "5.1", "quote": "at most one heap entry equals any given value — the distinguishing property" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "5.1",
+          "quote": "at most one heap entry equals any given value — the distinguishing property"
+        }
+      ]
     },
     {
       "id": "reference.eratosthenes-sieve",
@@ -908,7 +966,13 @@
       "to": "definition.band-recursion",
       "relation": "implies",
       "confidence": 0.7,
-      "sources": [{ "file": "generator.md", "heading": "2.3", "quote": "By Lemma 1, the primes \\(\\le N\\) certify every integer up to \\(N^2\\)" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.3",
+          "quote": "By Lemma 1, the primes \\(\\le N\\) certify every integer up to \\(N^2\\)"
+        }
+      ]
     },
     {
       "id": "e.definition.ownership-convention.depends_on.theorem.lemma1-smallest-factor-bound",
@@ -998,7 +1062,13 @@
       "to": "definition.orthogonal-stream-formula",
       "state": "performed",
       "confidence": 0.65,
-      "sources": [{ "file": "generator.md", "heading": "2.4", "quote": "Explicitly ... \\Theta_p = p \\cdot A_p" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "2.4",
+          "quote": "Explicitly ... \\Theta_p = p \\cdot A_p"
+        }
+      ]
     },
     {
       "id": "m.definition.next-owned-composite.embed.theorem.next-owned-composite-is-wheel-successor",
@@ -1007,7 +1077,13 @@
       "to": "theorem.next-owned-composite-is-wheel-successor",
       "state": "performed",
       "confidence": 0.6,
-      "sources": [{ "file": "generator.md", "heading": "3.2", "quote": "Let \\(\\text{NextRough} (p, y)\\) be the least \\(p\\)-rough integer \\(> y\\)." }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.2",
+          "quote": "Let \\(\\text{NextRough} (p, y)\\) be the least \\(p\\)-rough integer \\(> y\\)."
+        }
+      ]
     },
     {
       "id": "m.theorem.consuming-algorithm-correctness.bound.bound.time-complexity-consuming-algorithm",
@@ -1017,7 +1093,13 @@
       "state": "performed",
       "loss": "drops the exactness/uniqueness detail, keeps only asymptotic cost",
       "confidence": 0.6,
-      "sources": [{ "file": "generator.md", "heading": "4.5 Complexity", "quote": "This is a substantial structural improvement in memory and control flow." }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.5 Complexity",
+          "quote": "This is a substantial structural improvement in memory and control flow."
+        }
+      ]
     },
     {
       "id": "m.observation.worked-example-beginning.certify.theorem.consuming-algorithm-correctness",
@@ -1027,7 +1109,13 @@
       "state": "intended",
       "loss": "a single small trace does not constitute a proof",
       "confidence": 0.5,
-      "sources": [{ "file": "generator.md", "heading": "4.3 Worked Beginning", "quote": "There is no divisibility testing, no array marking, and no branching over candidate factors." }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "4.3 Worked Beginning",
+          "quote": "There is no divisibility testing, no array marking, and no branching over candidate factors."
+        }
+      ]
     },
     {
       "id": "m.model.algorithm-a-exact-streams.abstract.conjecture.next-rough-no-o1-algorithm",
@@ -1036,14 +1124,24 @@
       "to": "conjecture.next-rough-no-o1-algorithm",
       "state": "performed",
       "confidence": 0.5,
-      "sources": [{ "file": "generator.md", "heading": "3.5", "quote": "We therefore state as a conjecture ... that no algorithm computes NextRough" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "3.5",
+          "quote": "We therefore state as a conjecture ... that no algorithm computes NextRough"
+        }
+      ]
     }
   ],
   "coherence": [
     {
       "id": "c.analytic.correctness-vs-complexity-bounds",
       "kind": "analytic",
-      "refs": ["theorem.consuming-algorithm-correctness", "bound.time-complexity-consuming-algorithm", "bound.memory-complexity"],
+      "refs": [
+        "theorem.consuming-algorithm-correctness",
+        "bound.time-complexity-consuming-algorithm",
+        "bound.memory-complexity"
+      ],
       "requirement": "The correctness proof must guarantee the O(N log log N) time and O(pi(sqrt N)) memory bounds actually claimed for the consuming algorithm.",
       "status": "discharged",
       "confidence": 0.6,
@@ -1061,7 +1159,10 @@
       "refs": ["model.algorithm-b-shared-wheel", "bound.event-count-shared-wheel"],
       "requirement": "The empirical duplicate-claim rate (~2-2.5x) measured for the shared wheel must match the symbolic over-claim set tilde A_p implied by gcd(a,W)=1.",
       "status": "pending",
-      "cost": { "measure": "developer-effort", "note": "described as 'empirically ≈ 2–2.5' with no formal reconciliation given in this document" },
+      "cost": {
+        "measure": "developer-effort",
+        "note": "described as 'empirically ≈ 2–2.5' with no formal reconciliation given in this document"
+      },
       "confidence": 0.6,
       "sources": [
         {
@@ -1074,7 +1175,10 @@
     {
       "id": "c.logical.next-owned-composite-vs-wheel-successor",
       "kind": "logical",
-      "refs": ["definition.next-owned-composite", "theorem.next-owned-composite-is-wheel-successor"],
+      "refs": [
+        "definition.next-owned-composite",
+        "theorem.next-owned-composite-is-wheel-successor"
+      ],
       "requirement": "The symbolic definition of NextOwnedComposite must remain provably equal to the derived wheel-successor formula under all rewrites of the primitive.",
       "status": "discharged",
       "confidence": 0.75,
@@ -1151,7 +1255,13 @@
       "kind": "dangling_reference",
       "description": "References to 'paper.md', 'algorithm.md', 'observation.md', 'idea.md', 'fractal.md' and 'theory.md' point outside this single document and cannot be resolved as nodes here.",
       "refs": [],
-      "sources": [{ "file": "generator.md", "heading": "Document map", "quote": "paper.md is the primary specification; algorithm.md is the full normative construction with proofs" }]
+      "sources": [
+        {
+          "file": "generator.md",
+          "heading": "Document map",
+          "quote": "paper.md is the primary specification; algorithm.md is the full normative construction with proofs"
+        }
+      ]
     }
   ],
   "stats": {

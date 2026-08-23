@@ -1,0 +1,2173 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2025-01-01T00:00:00Z",
+  "generator": { "op": "analysis/knowledge/parse.op.md" },
+  "corpus": {
+    "documents": [
+      {
+        "id": "generator",
+        "path": "generator.md",
+        "title": "Generational Rings of Primes: An Orthogonal Composite Stream Sieve",
+        "order": 1
+      }
+    ]
+  },
+  "companion": { "theory_graph": "generator.theory_graph.json" },
+  "entries": [
+    {
+      "id": "concept.generational-ring",
+      "kind": "concept",
+      "label": "Generational Ring",
+      "aliases": ["generational ring structure", "generational rings of primes"],
+      "definition_status": "gestured",
+      "role": "central",
+      "layers": ["fuzzy"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2 Generational Rings of Primes", "quote": "Once it appears, it emits its own periodic field, and the ring expands." },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.3 Generational Ring Clarity", "quote": "The algorithm does not merely generate primes; it exhibits the generational ring structure." },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.8
+    },
+    {
+      "id": "concept.orthogonal-composite-stream",
+      "kind": "concept",
+      "label": "Orthogonal Composite Stream",
+      "aliases": ["orthogonal stream", "stream of p", "composite stream"],
+      "gloss": {
+        "text": "the stream of p contains exactly the composites owned by p, so the streams are disjoint and together cover all composite numbers",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Abstract", "quote": "prime generation then reduces to a single sorted merge of pairwise disjoint composite streams" },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams", "quote": "A stream is _a prime times a wheel_." },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "each prime is a pure generator of its orthogonal composite stream" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 3,
+      "first_seen": "generator",
+      "confidence": 0.92
+    },
+    {
+      "id": "notation.theta-p",
+      "kind": "notation",
+      "label": "Theta Sub P",
+      "symbols": ["\\Theta_p"],
+      "gloss": {
+        "text": "\\Theta_p = p \\cdot A_p, with A_p the p-rough numbers from p up",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams" }
+      },
+      "definition_status": "defined_here",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams", "quote": "\\Theta_p = p \\cdot A_p, \\qquad A_p = \\{ a \\ge p : \\gcd (a, P_{<p}) = 1 \\}" },
+          "role": "introduces"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "concept.ownership",
+      "kind": "concept",
+      "label": "Ownership",
+      "aliases": ["owned", "owner", "claimed by"],
+      "gloss": {
+        "text": "A composite number m is owned by the prime p if p is the smallest prime factor of m.",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams", "quote": "We adopt the following ownership convention" },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.4 Correctness", "quote": "every composite is removed exactly once, by its smallest prime factor" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.95
+    },
+    {
+      "id": "quantity.smallest-prime-factor",
+      "kind": "quantity",
+      "label": "Smallest Prime Factor",
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.1 The Basic Structural Fact", "quote": "The smallest prime factor of m is at most a, hence at most N." },
+          "role": "uses"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.4 Correctness", "quote": "let p^\\ast = \\operatorname{spf} (n)" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "notation.spf",
+      "kind": "notation",
+      "label": "Spf Operator",
+      "symbols": ["\\operatorname{spf}"],
+      "definition_status": "assumed_known",
+      "role": "incidental",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "4.4 Correctness", "quote": "let p^\\ast = \\operatorname{spf} (n). Then p^\\ast \\le \\sqrt n" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "property.rough-number",
+      "kind": "property",
+      "label": "Rough",
+      "aliases": ["p-rough", "rough numbers", "rough multipliers"],
+      "gloss": {
+        "text": "the p-rough numbers from p up: a \\ge p with \\gcd (a, P_{<p}) = 1",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams", "quote": "the p- **rough** numbers from p up" },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.3 Phase separation", "quote": "a composite p-rough number has at least two prime factors \\ge p" },
+          "role": "uses"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "Deciding a \\in A_p is deciding \\gcd (a, P_{<p}) = 1" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 3,
+      "first_seen": "generator",
+      "confidence": 0.92
+    },
+    {
+      "id": "operation.next-rough",
+      "kind": "operation",
+      "label": "NextRough",
+      "gloss": {
+        "text": "Let NextRough (p, y) be the least p-rough integer > y.",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "3.2 It is exactly a wheel successor" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.2 It is exactly a wheel successor", "quote": "Let \\text{NextRough} (p, y) be the least p-rough integer > y." },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "no algorithm computes \\text{NextRough} (p,y) in O (1) time and \\mathrm{poly} (\\log p, \\log y) space" },
+          "role": "uses"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "6 Conclusion", "quote": "it is exactly p \\cdot \\text{NextRough} (p,\\cdot), a wheel successor" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 3,
+      "first_seen": "generator",
+      "confidence": 0.95
+    },
+    {
+      "id": "operation.next-owned-composite",
+      "kind": "operation",
+      "label": "NextOwnedComposite",
+      "aliases": ["pointer primitive", "advance primitive"],
+      "gloss": {
+        "text": "the next composite in the orthogonal stream of p strictly after x",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "3.1 Definition" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Abstract", "quote": "\\text{NextOwnedComposite} (p, x) = p \\cdot \\text{NextRough} (p, \\max (p-1, \\lfloor x/p \\rfloor))" },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.1 Definition", "quote": "\\text{NextOwnedComposite} (p, x) = \\min\\{ m \\in \\Theta_p : m > x \\}" },
+          "role": "defines"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.95
+    },
+    {
+      "id": "term.wheel",
+      "kind": "term",
+      "label": "Wheel",
+      "aliases": ["wheel successor"],
+      "definition_status": "ambiguous",
+      "senses": [
+        {
+          "id": "term.wheel#residue-class-set",
+          "layer": "symbolic",
+          "discriminator": "used as the multiplier set A_p with gcd and residues",
+          "definition_status": "gestured"
+        },
+        {
+          "id": "term.wheel#shared-table",
+          "layer": "ecological",
+          "discriminator": "used as a \\Theta (W) step table indexed by a % W",
+          "definition_status": "gestured"
+        }
+      ],
+      "role": "central",
+      "layers": ["symbolic", "ecological"],
+      "layer_drift": "a set of rough multipliers when reasoning about exactness, a fixed step table of \\Theta (W) bytes when costing the implementation",
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams", "quote": "A stream is _a prime times a wheel_." },
+          "role": "introduces",
+          "sense": "term.wheel#residue-class-set"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "the exact wheel of p has period P_{<p} = e^{ (1+o (1))p}", "lines": [1, 1] },
+          "role": "uses",
+          "sense": "term.wheel#residue-class-set"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.4 Limitations", "quote": "The wheeled realisation costs a \\ln\\ln factor of duplicate touches and a \\Theta (W) table." },
+          "role": "uses",
+          "sense": "term.wheel#shared-table"
+        }
+      ],
+      "mention_count": 3,
+      "first_seen": "generator",
+      "confidence": 0.88
+    },
+    {
+      "id": "object.shared-wheel",
+      "kind": "object",
+      "label": "Shared Wheel",
+      "aliases": ["fixed wheel"],
+      "gloss": {
+        "text": "a single fixed wheel W = p_1\\cdots p_w shared by every prime p > p_w",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "relaxes the multiplier set to a single fixed wheel W = p_1\\cdots p_w shared by every prime p > p_w" },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.2 Algorithm Description", "quote": "next_candidate(n) steps over W-coprime integers only" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "concept.phase-separation",
+      "kind": "concept",
+      "label": "Phase Separation",
+      "aliases": ["prime phase", "rough phase"],
+      "gloss": {
+        "text": "the multipliers of p split into a prime phase [p, p^2) and a rough phase [p^2, \\infty)",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "3.3 Phase separation" }
+      },
+      "definition_status": "defined_here",
+      "role": "supporting",
+      "layers": ["deductive"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.3 Phase separation", "quote": "a **prime phase** [p, p^2), where advancing the stream is a single index increment into the already-known prime array" },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.1 Data Structures", "quote": "A prime contributes nothing below p^2 (\u00a73.2)" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "method.algorithm-a",
+      "kind": "method",
+      "label": "Algorithm A",
+      "aliases": ["exact streams", "exact realisation"],
+      "gloss": {
+        "text": "Algorithm A derives the rough multipliers from other streams; every composite is touched exactly once.",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Abstract", "quote": "an exact one that derives its rough multipliers from other streams (Algorithm A of `paper.md` \u00a73)" },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "Exact: every composite is touched exactly once \u2014 the information-theoretic optimum" },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.2 Algorithm Description", "quote": "**Exact streams (Algorithm A).** `next_candidate(n) = n + 1`, and `drain` pops a **single** record with key n" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 3,
+      "first_seen": "generator",
+      "confidence": 0.93
+    },
+    {
+      "id": "method.algorithm-b",
+      "kind": "method",
+      "label": "Algorithm B",
+      "aliases": ["wheeled realisation", "shared-wheel realisation"],
+      "gloss": {
+        "text": "Algorithm B relaxes the multiplier set to a single fixed wheel shared by every prime, giving O (1) time with O (1) state.",
+        "provisional": true,
+        "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Abstract", "quote": "a wheeled one that shares a single small wheel across all primes and pays a bounded, measured amount of duplicate work (Algorithm B" },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "The advance becomes `a += step[a % W]; v = p*a` \u2014 one gather, one multiply" },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "Algorithm B is the recommended realisation." },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 3,
+      "first_seen": "generator",
+      "confidence": 0.93
+    },
+    {
+      "id": "method.deferred-activation",
+      "kind": "method",
+      "label": "Deferred Activation",
+      "gloss": {
+        "text": "inserting its stream at n = p^2 \u2014 never earlier \u2014 keeps the queue at \\pi (\\sqrt n) records forever",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "4.1 Data Structures" }
+      },
+      "definition_status": "defined_here",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "4.1 Data Structures", "quote": "**Deferred activation** is what bounds the state." },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.3 Worked Beginning", "quote": "With exact streams and deferred activation" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "structure.min-priority-queue",
+      "kind": "structure",
+      "label": "Min-Priority Queue",
+      "aliases": ["min-heap", "binary heap", "heap"],
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "4.1 Data Structures", "quote": "H: a min-priority queue of records (c_p, p, \\cdot) keyed by c_p" },
+          "role": "uses"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.5 Complexity", "quote": "O (N \\log\\log N) with a binary heap" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "method.bucket-priority-queue",
+      "kind": "method",
+      "label": "Bucket Priority Queue",
+      "aliases": ["bucketed form"],
+      "definition_status": "defined_elsewhere",
+      "definition_ref": {
+        "where": "external",
+        "citation": { "text": "paper.md \u00a75.1", "kind": "note" },
+        "source": { "file": "generator.md", "heading": "4.5 Complexity" }
+      },
+      "role": "supporting",
+      "layers": ["ecological"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "4.5 Complexity", "quote": "O (\\text{events}) amortised with a bucket priority queue (`paper.md` \u00a75.1)" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "method.segmented-sieve",
+      "kind": "method",
+      "label": "Segmented Sieve",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "4.5 Complexity", "quote": "a good segmented sieve is also O (N \\log\\log N)" },
+          "role": "contrasts"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.4 Limitations", "quote": "Neither beats a highly optimized segmented sieve on raw single-core throughput." },
+          "role": "contrasts"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "method.sieve-of-eratosthenes",
+      "kind": "method",
+      "label": "Eratosthenes",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "**Eratosthenes:** requires a marking array proportional to the search range" },
+          "role": "contrasts"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "method.sieve-of-atkin",
+      "kind": "method",
+      "label": "Atkin",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "**Atkin:** uses quadratic forms and heavy branching; conceptually opaque." },
+          "role": "contrasts"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "method.wheel-sieve",
+      "kind": "method",
+      "label": "Wheel Sieve",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "**Wheel sieves:** precompute residue tables; orthogonalization is global rather than per-prime." },
+          "role": "contrasts"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "method.trial-division",
+      "kind": "method",
+      "label": "Trial Division",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Abstract", "quote": "no marking array over the range, no trial division, no deep conditional branching" },
+          "role": "contrasts"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "testing roughness is trial division by the \\pi (p)-1 primes below p" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "method.genuine-sieve",
+      "kind": "method",
+      "label": "Genuine Sieve",
+      "aliases": ["priority-queue multiple tracking"],
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "**Priority-queue multiple tracking** (O'Neill's \"genuine sieve\"): tracks multiples per prime, but the streams are not pre-orthogonalized" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "person.oneill",
+      "kind": "person",
+      "label": "O'Neill",
+      "definition_status": "assumed_known",
+      "role": "incidental",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "O'Neill's \"genuine sieve\"" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "named_result.bertrands-postulate",
+      "kind": "named_result",
+      "label": "Bertrand",
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["deductive"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.4 Causality", "quote": "hence a' < 2a \\le n by Bertrand" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85,
+      "notes": "The corpus names the result only as \"Bertrand\"; the full name is not given."
+    },
+    {
+      "id": "named_result.jacobsthal-bound",
+      "kind": "named_result",
+      "label": "Jacobsthal-Type Bounds",
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["deductive"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "by Jacobsthal-type bounds the gap to the next rough number can be \\gg p \\log p \\log\\log\\log p / (\\log\\log p)^2" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "named_result.conjecture-x1",
+      "kind": "named_result",
+      "label": "Conjecture X1",
+      "definition_status": "defined_elsewhere",
+      "definition_ref": {
+        "where": "external",
+        "citation": { "text": "paper.md Conjecture X1; theory.md T31", "kind": "note" },
+        "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive" }
+      },
+      "role": "supporting",
+      "layers": ["fuzzy"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "We therefore state as a conjecture (`paper.md` Conjecture X1, `theory.md` T31)" },
+          "role": "cites"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "6 Conclusion", "quote": "there is no third option unless Conjecture X1 fails" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "quantity.primorial",
+      "kind": "quantity",
+      "label": "Primorial",
+      "gloss": {
+        "text": "P_k = \\prod_{i=1}^{k} p_i, the lcm of the first k primes",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "2.2 Periodic Fields" }
+      },
+      "definition_status": "defined_here",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.2 Periodic Fields", "quote": "\\mathrm{lcm} (p_1, p_2, \\dots, p_k) = P_k = \\prod_{i=1}^{k} p_i" },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "**Lattice recursion (primorial stages).** Alternatively, work modulo the primorials." },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.92
+    },
+    {
+      "id": "notation.p-primorial",
+      "kind": "notation",
+      "label": "P Sub K",
+      "symbols": ["P_k", "P_{<p}"],
+      "gloss": {
+        "text": "P_k = \\prod_{i=1}^{k} p_i; P_{<p} is the product of the primes below p",
+        "provisional": true,
+        "source": { "file": "generator.md", "heading": "2.2 Periodic Fields" }
+      },
+      "definition_status": "defined_here",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.4 Orthogonal Streams", "quote": "A_p = \\{ a \\ge p : \\gcd (a, P_{<p}) = 1 \\}" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.7,
+      "notes": "The corpus defines P_k explicitly but only uses P_{<p} without restating the convention; the gloss is inferred."
+    },
+    {
+      "id": "quantity.totient",
+      "kind": "quantity",
+      "label": "Totient",
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "|S_{k+1}| = \\varphi (P_{k+1})" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "notation.varphi",
+      "kind": "notation",
+      "label": "Varphi",
+      "symbols": ["\\varphi"],
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "4.5 Complexity", "quote": "\\kappa_W = \\varphi (W) /W" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "quantity.prime-counting-function",
+      "kind": "quantity",
+      "label": "Prime Counting Function",
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "4.1 Data Structures", "quote": "keeps the queue at \\pi (\\sqrt n) records forever" },
+          "role": "uses"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.5 Complexity", "quote": "**Heap size.** \\pi (\\sqrt n) by deferred activation" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "notation.pi-function",
+      "kind": "notation",
+      "label": "Pi Function Symbol",
+      "symbols": ["\\pi"],
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "4.5 Complexity", "quote": "Exact streams: exactly N - \\pi (N) - 1 pops, one per composite" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "quantity.claim-multiplicity",
+      "kind": "quantity",
+      "label": "Claim Multiplicity",
+      "aliases": ["duplicate touches", "over-claim"],
+      "definition_status": "gestured",
+      "role": "supporting",
+      "layers": ["numeric"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "each surviving composite is claimed \\omega_{>p_w} (m) times (empirically \u2248 2\u20132.5) rather than once" },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.4 Correctness", "quote": "\"exactly once\" replaced by \"at least once, and \\omega_{>p_w} (n) times in total\"" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.8
+    },
+    {
+      "id": "notation.omega",
+      "kind": "notation",
+      "label": "Omega Sub Greater Than P W",
+      "symbols": ["\\omega_{>p_w}"],
+      "definition_status": "undefined",
+      "role": "incidental",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "each surviving composite is claimed \\omega_{>p_w} (m) times" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.7,
+      "notes": "The glyph is used twice with no key; \\omega is never introduced in this document."
+    },
+    {
+      "id": "concept.causality",
+      "kind": "concept",
+      "label": "Causality",
+      "aliases": ["self-hosting"],
+      "gloss": {
+        "text": "no step ever requires knowledge of an integer \\ge n: the generator is self-hosting",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "3.4 Causality" }
+      },
+      "definition_status": "defined_here",
+      "role": "supporting",
+      "layers": ["deductive"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.4 Causality", "quote": "its own output supplies every multiplier it will ever need, strictly in advance" },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.4 Correctness", "quote": "Activation is timely: the head of p's stream is p^2" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.88
+    },
+    {
+      "id": "structure.periodic-field",
+      "kind": "structure",
+      "label": "Periodic Field",
+      "gloss": {
+        "text": "Each prime p can be thought of as emitting a periodic field of nonprimes: the multiples of p, with period p.",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "2.2 Periodic Fields" }
+      },
+      "definition_status": "defined_here",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.2 Periodic Fields", "quote": "Smaller primes define earlier periodic fields." },
+          "role": "defines"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.3 Generational Ring Clarity", "quote": "immediately begins emitting a new orthogonal field" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "structure.expanding-periodic-lattice",
+      "kind": "structure",
+      "label": "Expanding Periodic Lattice",
+      "aliases": ["periodic lattice", "lattice"],
+      "definition_status": "gestured",
+      "role": "central",
+      "layers": ["fuzzy"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Abstract", "quote": "Primes are the exception points of an expanding periodic lattice." },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.3 Generational Ring Clarity", "quote": "Each new prime appears as an unclaimed gap in the expanding periodic lattice" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "term.hole",
+      "kind": "term",
+      "label": "Hole",
+      "aliases": ["unclaimed gap", "exception point"],
+      "definition_status": "gestured",
+      "role": "supporting",
+      "layers": ["fuzzy"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "the smallest hole >1 of stage k is p_{k+1}" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.8
+    },
+    {
+      "id": "term.candidate",
+      "kind": "term",
+      "label": "Candidate",
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "are merely candidates above it" },
+          "role": "uses"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.2 Control Flow and Vectorisation", "quote": "if the candidate is below the next claimed composite it is prime" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "concept.band-recursion",
+      "kind": "concept",
+      "label": "Band Recursion",
+      "aliases": ["square-root bands"],
+      "gloss": {
+        "text": "seeded with 2 and 3, stage p closes the window [p^2, p'^2) where p' is the next prime",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "2.3 Generational Structure" }
+      },
+      "definition_status": "defined_here",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "**Band recursion (square-root bands).** By Lemma 1, the primes \\le N certify every integer up to N^2." },
+          "role": "defines"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "concept.lattice-recursion",
+      "kind": "concept",
+      "label": "Lattice Recursion",
+      "aliases": ["primorial stages"],
+      "gloss": {
+        "text": "tile the previous lattice p times and delete one dilated copy of it",
+        "verbatim": true,
+        "source": { "file": "generator.md", "heading": "2.3 Generational Structure" }
+      },
+      "definition_status": "defined_here",
+      "role": "supporting",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "**Lattice recursion (primorial stages).** Alternatively, work modulo the primorials." },
+          "role": "defines"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.9
+    },
+    {
+      "id": "quantity.live-stream-count",
+      "kind": "quantity",
+      "label": "Live Stream Count",
+      "definition_status": "gestured",
+      "role": "supporting",
+      "layers": ["numeric"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "the number of simultaneously live streams grows like N^{\\theta}, \\theta \\approx 0.75" },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.5 Complexity", "quote": "the live-stream count is larger, S (N) \\approx N^{0.75}; that is the price of exactness" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "tool.simd",
+      "kind": "tool",
+      "label": "SIMD",
+      "definition_status": "assumed_known",
+      "role": "incidental",
+      "layers": ["ecological"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "5.2 Control Flow and Vectorisation", "quote": "the branchless/SIMD story applies to the _bucketed_ form" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.8
+    },
+    {
+      "id": "term.segment",
+      "kind": "term",
+      "label": "Segment",
+      "aliases": ["segment bitmap", "segment-parallel"],
+      "definition_status": "gestured",
+      "role": "supporting",
+      "layers": ["ecological"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "segments cannot be started in isolation" },
+          "role": "uses"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.2 Control Flow and Vectorisation", "quote": "bucket drains are independent scatter-writes into a segment bitmap" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.82
+    },
+    {
+      "id": "operation.sorted-merge",
+      "kind": "operation",
+      "label": "Sorted Merge",
+      "aliases": ["merge"],
+      "definition_status": "gestured",
+      "role": "central",
+      "layers": ["symbolic"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Abstract", "quote": "prime generation then reduces to a single sorted merge of pairwise disjoint composite streams" },
+          "role": "introduces"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "5.2 Control Flow and Vectorisation", "quote": "The merge _decision_ is a single comparison" },
+          "role": "uses"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.85
+    },
+    {
+      "id": "work.paper",
+      "kind": "work",
+      "label": "paper.md",
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Document map", "quote": "`paper.md` is the primary specification" },
+          "role": "cites"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "the specification is `paper.md` \u00a73\u2013\u00a74" },
+          "role": "cites"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "4.4 Correctness", "quote": "are catalogued in `paper.md` \u00a79" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 3,
+      "first_seen": "generator",
+      "confidence": 0.95
+    },
+    {
+      "id": "work.algorithm",
+      "kind": "work",
+      "label": "algorithm.md",
+      "definition_status": "assumed_known",
+      "role": "supporting",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Document map", "quote": "`algorithm.md` is the full normative construction with proofs and a reference implementation" },
+          "role": "cites"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "Full statements, proofs and a reference implementation are in `algorithm.md`" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.95
+    },
+    {
+      "id": "work.observation",
+      "kind": "work",
+      "label": "observation.md",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Document map", "quote": "`observation.md` works the per-prime multiplier sets" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.95
+    },
+    {
+      "id": "work.idea",
+      "kind": "work",
+      "label": "idea.md",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Document map", "quote": "`idea.md` is the spectral/entropy reading" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.95
+    },
+    {
+      "id": "work.fractal",
+      "kind": "work",
+      "label": "fractal.md",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Document map", "quote": "`fractal.md` is the lattice reading" },
+          "role": "cites"
+        },
+        {
+          "source": { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "See `fractal.md` for the worked stages." },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 2,
+      "first_seen": "generator",
+      "confidence": 0.95
+    },
+    {
+      "id": "work.theory",
+      "kind": "work",
+      "label": "theory.md",
+      "definition_status": "assumed_known",
+      "role": "background",
+      "layers": ["social"],
+      "mentions": [
+        {
+          "source": { "file": "generator.md", "heading": "Document map", "quote": "`theory.md` inventories every statement with its status" },
+          "role": "cites"
+        }
+      ],
+      "mention_count": 1,
+      "first_seen": "generator",
+      "confidence": 0.95
+    }
+  ],
+  "edges": [
+    {
+      "id": "k.notation.theta-p.notation_for.concept.orthogonal-composite-stream",
+      "from": "notation.theta-p",
+      "to": "concept.orthogonal-composite-stream",
+      "relation": "notation_for",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "\\Theta_p = p \\cdot A_p" }]
+    },
+    {
+      "id": "k.notation.spf.notation_for.quantity.smallest-prime-factor",
+      "from": "notation.spf",
+      "to": "quantity.smallest-prime-factor",
+      "relation": "notation_for",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "let p^\\ast = \\operatorname{spf} (n)" }]
+    },
+    {
+      "id": "k.notation.p-primorial.notation_for.quantity.primorial",
+      "from": "notation.p-primorial",
+      "to": "quantity.primorial",
+      "relation": "notation_for",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "P_k = \\prod_{i=1}^{k} p_i" }]
+    },
+    {
+      "id": "k.notation.varphi.notation_for.quantity.totient",
+      "from": "notation.varphi",
+      "to": "quantity.totient",
+      "relation": "notation_for",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "\\kappa_W = \\varphi (W) /W" }]
+    },
+    {
+      "id": "k.notation.pi-function.notation_for.quantity.prime-counting-function",
+      "from": "notation.pi-function",
+      "to": "quantity.prime-counting-function",
+      "relation": "notation_for",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "exactly N - \\pi (N) - 1 pops" }]
+    },
+    {
+      "id": "k.notation.omega.notation_for.quantity.claim-multiplicity",
+      "from": "notation.omega",
+      "to": "quantity.claim-multiplicity",
+      "relation": "notation_for",
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "quote": "each surviving composite is claimed \\omega_{>p_w} (m) times" }],
+      "notes": "Inferred: the glyph is never keyed, but it is used in exactly the place the multiplicity is described."
+    },
+    {
+      "id": "k.concept.orthogonal-composite-stream.defined_in_terms_of.property.rough-number",
+      "from": "concept.orthogonal-composite-stream",
+      "to": "property.rough-number",
+      "relation": "defined_in_terms_of",
+      "confidence": 0.92,
+      "sources": [{ "file": "generator.md", "quote": "\\Theta_p = p \\cdot A_p, ... the p-**rough** numbers from p up" }]
+    },
+    {
+      "id": "k.concept.orthogonal-composite-stream.presupposes.concept.ownership",
+      "from": "concept.orthogonal-composite-stream",
+      "to": "concept.ownership",
+      "relation": "presupposes",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "the stream of p contains exactly the composites owned by p" }]
+    },
+    {
+      "id": "k.concept.ownership.defined_in_terms_of.quantity.smallest-prime-factor",
+      "from": "concept.ownership",
+      "to": "quantity.smallest-prime-factor",
+      "relation": "defined_in_terms_of",
+      "confidence": 0.95,
+      "sources": [{ "file": "generator.md", "quote": "A composite number m is **owned** by the prime p if p is the smallest prime factor of m." }]
+    },
+    {
+      "id": "k.property.rough-number.defined_in_terms_of.quantity.primorial",
+      "from": "property.rough-number",
+      "to": "quantity.primorial",
+      "relation": "defined_in_terms_of",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "A_p = \\{ a \\ge p : \\gcd (a, P_{<p}) = 1 \\}" }]
+    },
+    {
+      "id": "k.operation.next-owned-composite.defined_in_terms_of.operation.next-rough",
+      "from": "operation.next-owned-composite",
+      "to": "operation.next-rough",
+      "relation": "defined_in_terms_of",
+      "confidence": 0.95,
+      "sources": [{ "file": "generator.md", "quote": "\\text{NextOwnedComposite} (p, x) = p \\cdot \\text{NextRough} (p, \\max (p-1, \\lfloor x/p \\rfloor))" }]
+    },
+    {
+      "id": "k.operation.next-rough.produces.property.rough-number",
+      "from": "operation.next-rough",
+      "to": "property.rough-number",
+      "relation": "produces",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "the least p-rough integer > y" }]
+    },
+    {
+      "id": "k.operation.next-owned-composite.operates_on.concept.orthogonal-composite-stream",
+      "from": "operation.next-owned-composite",
+      "to": "concept.orthogonal-composite-stream",
+      "relation": "operates_on",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "the next composite in the orthogonal stream of p strictly after x" }]
+    },
+    {
+      "id": "k.term.wheel.parameterized_by.quantity.primorial",
+      "from": "term.wheel",
+      "to": "quantity.primorial",
+      "relation": "parameterized_by",
+      "confidence": 0.8,
+      "sources": [{ "file": "generator.md", "quote": "the exact wheel of p has period P_{<p}" }]
+    },
+    {
+      "id": "k.object.shared-wheel.instance_of.term.wheel",
+      "from": "object.shared-wheel",
+      "to": "term.wheel",
+      "relation": "instance_of",
+      "confidence": 0.85,
+      "from_sense": null,
+      "to_sense": "term.wheel#shared-table",
+      "sources": [{ "file": "generator.md", "quote": "a single fixed wheel W = p_1\\cdots p_w shared by every prime p > p_w" }]
+    },
+    {
+      "id": "k.method.algorithm-b.implements.object.shared-wheel",
+      "from": "method.algorithm-b",
+      "to": "object.shared-wheel",
+      "relation": "implements",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "**Algorithm B** _relaxes_ the multiplier set to a single fixed wheel" }]
+    },
+    {
+      "id": "k.method.algorithm-a.alternative_to.method.algorithm-b",
+      "from": "method.algorithm-a",
+      "to": "method.algorithm-b",
+      "relation": "alternative_to",
+      "confidence": 0.95,
+      "sources": [{ "file": "generator.md", "quote": "The architecture therefore has two realisations" }]
+    },
+    {
+      "id": "k.method.algorithm-a.implements.concept.orthogonal-composite-stream",
+      "from": "method.algorithm-a",
+      "to": "concept.orthogonal-composite-stream",
+      "relation": "implements",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "its one-touch property is a machine-checkable certificate of the underlying partition" }]
+    },
+    {
+      "id": "k.method.algorithm-b.produces.quantity.claim-multiplicity",
+      "from": "method.algorithm-b",
+      "to": "quantity.claim-multiplicity",
+      "relation": "produces",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "streams now over-claim slightly, so each surviving composite is claimed \\omega_{>p_w} (m) times" }]
+    },
+    {
+      "id": "k.method.deferred-activation.applies_to.structure.min-priority-queue",
+      "from": "method.deferred-activation",
+      "to": "structure.min-priority-queue",
+      "relation": "applies_to",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "inserting its stream at n = p^2 \u2014 never earlier \u2014 keeps the queue at \\pi (\\sqrt n) records forever" }]
+    },
+    {
+      "id": "k.method.deferred-activation.measured_by.quantity.prime-counting-function",
+      "from": "method.deferred-activation",
+      "to": "quantity.prime-counting-function",
+      "relation": "measured_by",
+      "confidence": 0.8,
+      "sources": [{ "file": "generator.md", "quote": "**Heap size.** \\pi (\\sqrt n) by deferred activation" }]
+    },
+    {
+      "id": "k.method.bucket-priority-queue.alternative_to.structure.min-priority-queue",
+      "from": "method.bucket-priority-queue",
+      "to": "structure.min-priority-queue",
+      "relation": "alternative_to",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "O (N \\log\\log N) with a binary heap; O (\\text{events}) amortised with a bucket priority queue" }]
+    },
+    {
+      "id": "k.method.bucket-priority-queue.documented_in.work.paper",
+      "from": "method.bucket-priority-queue",
+      "to": "work.paper",
+      "relation": "documented_in",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "a bucket priority queue (`paper.md` \u00a75.1)" }]
+    },
+    {
+      "id": "k.method.genuine-sieve.attributed_to.person.oneill",
+      "from": "method.genuine-sieve",
+      "to": "person.oneill",
+      "relation": "attributed_to",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "O'Neill's \"genuine sieve\"" }]
+    },
+    {
+      "id": "k.method.genuine-sieve.contrasts_with.concept.orthogonal-composite-stream",
+      "from": "method.genuine-sieve",
+      "to": "concept.orthogonal-composite-stream",
+      "relation": "contrasts_with",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "tracks multiples per prime, but the streams are not pre-orthogonalized" }]
+    },
+    {
+      "id": "k.method.sieve-of-eratosthenes.contrasts_with.method.algorithm-a",
+      "from": "method.sieve-of-eratosthenes",
+      "to": "method.algorithm-a",
+      "relation": "contrasts_with",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "**Eratosthenes:** requires a marking array proportional to the search range" }]
+    },
+    {
+      "id": "k.method.sieve-of-atkin.contrasts_with.method.algorithm-a",
+      "from": "method.sieve-of-atkin",
+      "to": "method.algorithm-a",
+      "relation": "contrasts_with",
+      "confidence": 0.8,
+      "sources": [{ "file": "generator.md", "quote": "**Atkin:** uses quadratic forms and heavy branching" }]
+    },
+    {
+      "id": "k.method.wheel-sieve.contrasts_with.method.algorithm-b",
+      "from": "method.wheel-sieve",
+      "to": "method.algorithm-b",
+      "relation": "contrasts_with",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "orthogonalization is global rather than per-prime" }]
+    },
+    {
+      "id": "k.method.segmented-sieve.alternative_to.method.algorithm-b",
+      "from": "method.segmented-sieve",
+      "to": "method.algorithm-b",
+      "relation": "alternative_to",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "Neither beats a highly optimized segmented sieve on raw single-core throughput." }]
+    },
+    {
+      "id": "k.method.trial-division.contrasts_with.operation.next-rough",
+      "from": "method.trial-division",
+      "to": "operation.next-rough",
+      "relation": "contrasts_with",
+      "confidence": 0.8,
+      "sources": [{ "file": "generator.md", "quote": "testing roughness is trial division by the \\pi (p)-1 primes below p, which is \\Theta (\\pi (p)), not O (1)" }]
+    },
+    {
+      "id": "k.concept.causality.presupposes.named_result.bertrands-postulate",
+      "from": "concept.causality",
+      "to": "named_result.bertrands-postulate",
+      "relation": "presupposes",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "hence a' < 2a \\le n by Bertrand" }]
+    },
+    {
+      "id": "k.concept.phase-separation.applies_to.property.rough-number",
+      "from": "concept.phase-separation",
+      "to": "property.rough-number",
+      "relation": "applies_to",
+      "confidence": 0.88,
+      "sources": [{ "file": "generator.md", "quote": "the multipliers of p split into a **prime phase** ... and a **rough phase**" }]
+    },
+    {
+      "id": "k.named_result.conjecture-x1.documented_in.work.paper",
+      "from": "named_result.conjecture-x1",
+      "to": "work.paper",
+      "relation": "documented_in",
+      "confidence": 0.95,
+      "sources": [{ "file": "generator.md", "quote": "(`paper.md` Conjecture X1, `theory.md` T31)" }]
+    },
+    {
+      "id": "k.named_result.jacobsthal-bound.motivates.named_result.conjecture-x1",
+      "from": "named_result.jacobsthal-bound",
+      "to": "named_result.conjecture-x1",
+      "relation": "motivates",
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "quote": "by Jacobsthal-type bounds ... We therefore state as a conjecture" }]
+    },
+    {
+      "id": "k.structure.expanding-periodic-lattice.has_part.structure.periodic-field",
+      "from": "structure.expanding-periodic-lattice",
+      "to": "structure.periodic-field",
+      "relation": "has_part",
+      "confidence": 0.75,
+      "sources": [{ "file": "generator.md", "quote": "The combined periodic structure of primes p_1, p_2, \\dots, p_k has period" }]
+    },
+    {
+      "id": "k.term.hole.co_occurs_with.structure.expanding-periodic-lattice",
+      "from": "term.hole",
+      "to": "structure.expanding-periodic-lattice",
+      "relation": "co_occurs_with",
+      "relation_note": null,
+      "strength": 0.5,
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "quote": "the smallest hole >1 of stage k is p_{k+1}" }]
+    },
+    {
+      "id": "k.concept.lattice-recursion.documented_in.work.fractal",
+      "from": "concept.lattice-recursion",
+      "to": "work.fractal",
+      "relation": "documented_in",
+      "confidence": 0.95,
+      "sources": [{ "file": "generator.md", "quote": "See `fractal.md` for the worked stages." }]
+    },
+    {
+      "id": "k.concept.band-recursion.alternative_to.concept.lattice-recursion",
+      "from": "concept.band-recursion",
+      "to": "concept.lattice-recursion",
+      "relation": "alternative_to",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "Two distinct recursions are available here ... They agree on content and differ in bookkeeping." }]
+    },
+    {
+      "id": "k.method.algorithm-a.documented_in.work.algorithm",
+      "from": "method.algorithm-a",
+      "to": "work.algorithm",
+      "relation": "documented_in",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "Full statements, proofs and a reference implementation are in `algorithm.md`" }]
+    },
+    {
+      "id": "k.method.algorithm-b.documented_in.work.algorithm",
+      "from": "method.algorithm-b",
+      "to": "work.algorithm",
+      "relation": "documented_in",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "see `algorithm.md` for the construction, proofs and reference implementation" }]
+    },
+    {
+      "id": "k.concept.orthogonal-composite-stream.documented_in.work.observation",
+      "from": "concept.orthogonal-composite-stream",
+      "to": "work.observation",
+      "relation": "documented_in",
+      "confidence": 0.85,
+      "sources": [{ "file": "generator.md", "quote": "Explicitly (see `observation.md`, `algorithm.md` Theorem 2.1)" }]
+    },
+    {
+      "id": "k.term.candidate.co_occurs_with.term.wheel",
+      "from": "term.candidate",
+      "to": "term.wheel",
+      "relation": "co_occurs_with",
+      "strength": 0.4,
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "quote": "next_candidate(n) steps over W-coprime integers only" }]
+    },
+    {
+      "id": "k.operation.sorted-merge.operates_on.concept.orthogonal-composite-stream",
+      "from": "operation.sorted-merge",
+      "to": "concept.orthogonal-composite-stream",
+      "relation": "operates_on",
+      "confidence": 0.9,
+      "sources": [{ "file": "generator.md", "quote": "a single sorted merge of pairwise disjoint composite streams" }]
+    },
+    {
+      "id": "k.tool.simd.applies_to.method.bucket-priority-queue",
+      "from": "tool.simd",
+      "to": "method.bucket-priority-queue",
+      "relation": "applies_to",
+      "confidence": 0.75,
+      "sources": [{ "file": "generator.md", "quote": "the branchless/SIMD story applies to the _bucketed_ form" }]
+    },
+    {
+      "id": "k.term.segment.co_occurs_with.method.algorithm-b",
+      "from": "term.segment",
+      "to": "method.algorithm-b",
+      "relation": "co_occurs_with",
+      "strength": 0.5,
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "quote": "for the wheeled form \u2014 exactly segment-parallel" }]
+    },
+    {
+      "id": "k.quantity.live-stream-count.measured_by.method.algorithm-a",
+      "from": "quantity.live-stream-count",
+      "to": "method.algorithm-a",
+      "relation": "measured_by",
+      "confidence": 0.7,
+      "sources": [{ "file": "generator.md", "quote": "For exact streams the live-stream count is larger, S (N) \\approx N^{0.75}" }]
+    },
+    {
+      "id": "k.quantity.totient.co_occurs_with.quantity.primorial",
+      "from": "quantity.totient",
+      "to": "quantity.primorial",
+      "relation": "co_occurs_with",
+      "strength": 0.6,
+      "confidence": 0.8,
+      "sources": [{ "file": "generator.md", "quote": "|S_{k+1}| = \\varphi (P_{k+1})" }]
+    },
+    {
+      "id": "k.concept.generational-ring.co_occurs_with.structure.expanding-periodic-lattice",
+      "from": "concept.generational-ring",
+      "to": "structure.expanding-periodic-lattice",
+      "relation": "co_occurs_with",
+      "strength": 0.7,
+      "confidence": 0.75,
+      "sources": [{ "file": "generator.md", "quote": "primes are the exception points of an expanding periodic lattice; each exception becomes a generator of the next periodic structure" }]
+    }
+  ],
+  "requests": [
+    {
+      "id": "q.wheel",
+      "entry": "term.wheel",
+      "reason": "\"Wheel\" is ambiguous after 3 mention(s) and grounds 0 theory node(s)",
+      "wants": "disambiguation",
+      "priority": "high",
+      "score": 0.72,
+      "blocked_by": ["quantity.primorial"],
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "2.4 Orthogonal Streams", "quote": "A stream is _a prime times a wheel_." }
+      ]
+    },
+    {
+      "id": "q.smallest-prime-factor",
+      "entry": "quantity.smallest-prime-factor",
+      "reason": "\"Smallest Prime Factor\" is assumed known after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "medium",
+      "score": 0.58,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "2.4 Orthogonal Streams", "quote": "p is the smallest prime factor of m" }
+      ]
+    },
+    {
+      "id": "q.paper",
+      "entry": "work.paper",
+      "reason": "\"paper.md\" is assumed known after 3 mention(s) and grounds 0 theory node(s)",
+      "wants": "citation",
+      "priority": "medium",
+      "score": 0.55,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "Document map", "quote": "`paper.md` is the primary specification" }
+      ]
+    },
+    {
+      "id": "q.generational-ring",
+      "entry": "concept.generational-ring",
+      "reason": "\"Generational Ring\" is gestured after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "formal_definition",
+      "priority": "medium",
+      "score": 0.5,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "2 Generational Rings of Primes", "quote": "Once it appears, it emits its own periodic field, and the ring expands." }
+      ]
+    },
+    {
+      "id": "q.claim-multiplicity",
+      "entry": "quantity.claim-multiplicity",
+      "reason": "\"Claim Multiplicity\" is gestured after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "formal_definition",
+      "priority": "medium",
+      "score": 0.48,
+      "blocked_by": ["notation.omega"],
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "each surviving composite is claimed \\omega_{>p_w} (m) times (empirically \u2248 2\u20132.5)" }
+      ]
+    },
+    {
+      "id": "q.expanding-periodic-lattice",
+      "entry": "structure.expanding-periodic-lattice",
+      "reason": "\"Expanding Periodic Lattice\" is gestured after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "formal_definition",
+      "priority": "medium",
+      "score": 0.47,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "Abstract", "quote": "Primes are the exception points of an expanding periodic lattice." }
+      ]
+    },
+    {
+      "id": "q.min-priority-queue",
+      "entry": "structure.min-priority-queue",
+      "reason": "\"Min-Priority Queue\" is assumed known after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "medium",
+      "score": 0.45,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "4.1 Data Structures", "quote": "H: a min-priority queue of records (c_p, p, \\cdot) keyed by c_p" }
+      ]
+    },
+    {
+      "id": "q.sorted-merge",
+      "entry": "operation.sorted-merge",
+      "reason": "\"Sorted Merge\" is gestured after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "formal_definition",
+      "priority": "medium",
+      "score": 0.44,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "Abstract", "quote": "a single sorted merge of pairwise disjoint composite streams" }
+      ]
+    },
+    {
+      "id": "q.prime-counting-function",
+      "entry": "quantity.prime-counting-function",
+      "reason": "\"Prime Counting Function\" is assumed known after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "medium",
+      "score": 0.43,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "4.5 Complexity", "quote": "**Heap size.** \\pi (\\sqrt n) by deferred activation" }
+      ]
+    },
+    {
+      "id": "q.trial-division",
+      "entry": "method.trial-division",
+      "reason": "\"Trial Division\" is assumed known after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "medium",
+      "score": 0.42,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "testing roughness is trial division by the \\pi (p)-1 primes below p" }
+      ]
+    },
+    {
+      "id": "q.segmented-sieve",
+      "entry": "method.segmented-sieve",
+      "reason": "\"Segmented Sieve\" is assumed known after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "medium",
+      "score": 0.41,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "4.5 Complexity", "quote": "a good segmented sieve is also O (N \\log\\log N)" }
+      ]
+    },
+    {
+      "id": "q.segment",
+      "entry": "term.segment",
+      "reason": "\"Segment\" is gestured after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "formal_definition",
+      "priority": "medium",
+      "score": 0.4,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "5.2 Control Flow and Vectorisation", "quote": "bucket drains are independent scatter-writes into a segment bitmap" }
+      ]
+    },
+    {
+      "id": "q.live-stream-count",
+      "entry": "quantity.live-stream-count",
+      "reason": "\"Live Stream Count\" is gestured after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "formal_definition",
+      "priority": "medium",
+      "score": 0.39,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "the number of simultaneously live streams grows like N^{\\theta}, \\theta \\approx 0.75" }
+      ]
+    },
+    {
+      "id": "q.candidate",
+      "entry": "term.candidate",
+      "reason": "\"Candidate\" is assumed known after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "medium",
+      "score": 0.38,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "5.2 Control Flow and Vectorisation", "quote": "if the candidate is below the next claimed composite it is prime" }
+      ]
+    },
+    {
+      "id": "q.algorithm",
+      "entry": "work.algorithm",
+      "reason": "\"algorithm.md\" is assumed known after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "citation",
+      "priority": "medium",
+      "score": 0.37,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "Document map", "quote": "`algorithm.md` is the full normative construction with proofs and a reference implementation" }
+      ]
+    },
+    {
+      "id": "q.fractal",
+      "entry": "work.fractal",
+      "reason": "\"fractal.md\" is assumed known after 2 mention(s) and grounds 0 theory node(s)",
+      "wants": "citation",
+      "priority": "medium",
+      "score": 0.35,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "Document map", "quote": "`fractal.md` is the lattice reading" }
+      ]
+    },
+    {
+      "id": "q.totient",
+      "entry": "quantity.totient",
+      "reason": "\"Totient\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "low",
+      "score": 0.3,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "|S_{k+1}| = \\varphi (P_{k+1})" }
+      ]
+    },
+    {
+      "id": "q.varphi",
+      "entry": "notation.varphi",
+      "reason": "\"Varphi\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "notation_key",
+      "priority": "low",
+      "score": 0.28,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "4.5 Complexity", "quote": "\\kappa_W = \\varphi (W) /W" }
+      ]
+    },
+    {
+      "id": "q.pi-function",
+      "entry": "notation.pi-function",
+      "reason": "\"Pi Function Symbol\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "notation_key",
+      "priority": "low",
+      "score": 0.27,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "4.5 Complexity", "quote": "exactly N - \\pi (N) - 1 pops, one per composite" }
+      ]
+    },
+    {
+      "id": "q.omega",
+      "entry": "notation.omega",
+      "reason": "\"Omega Sub Greater Than P W\" is undefined after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "notation_key",
+      "priority": "low",
+      "score": 0.26,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "each surviving composite is claimed \\omega_{>p_w} (m) times" }
+      ]
+    },
+    {
+      "id": "q.spf",
+      "entry": "notation.spf",
+      "reason": "\"Spf Operator\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "notation_key",
+      "priority": "low",
+      "score": 0.25,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "4.4 Correctness", "quote": "let p^\\ast = \\operatorname{spf} (n)" }
+      ]
+    },
+    {
+      "id": "q.hole",
+      "entry": "term.hole",
+      "reason": "\"Hole\" is gestured after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "formal_definition",
+      "priority": "low",
+      "score": 0.24,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "2.3 Generational Structure", "quote": "the smallest hole >1 of stage k is p_{k+1}" }
+      ]
+    },
+    {
+      "id": "q.genuine-sieve",
+      "entry": "method.genuine-sieve",
+      "reason": "\"Genuine Sieve\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "low",
+      "score": 0.23,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "O'Neill's \"genuine sieve\": tracks multiples per prime" }
+      ]
+    },
+    {
+      "id": "q.oneill",
+      "entry": "person.oneill",
+      "reason": "\"O'Neill\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "citation",
+      "priority": "low",
+      "score": 0.22,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "O'Neill's \"genuine sieve\"" }
+      ]
+    },
+    {
+      "id": "q.bertrands-postulate",
+      "entry": "named_result.bertrands-postulate",
+      "reason": "\"Bertrand\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "low",
+      "score": 0.21,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "3.4 Causality", "quote": "hence a' < 2a \\le n by Bertrand" }
+      ]
+    },
+    {
+      "id": "q.jacobsthal-bound",
+      "entry": "named_result.jacobsthal-bound",
+      "reason": "\"Jacobsthal-Type Bounds\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "low",
+      "score": 0.2,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "by Jacobsthal-type bounds the gap to the next rough number can be \\gg p \\log p" }
+      ]
+    },
+    {
+      "id": "q.sieve-of-eratosthenes",
+      "entry": "method.sieve-of-eratosthenes",
+      "reason": "\"Eratosthenes\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "low",
+      "score": 0.19,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "**Eratosthenes:** requires a marking array proportional to the search range" }
+      ]
+    },
+    {
+      "id": "q.sieve-of-atkin",
+      "entry": "method.sieve-of-atkin",
+      "reason": "\"Atkin\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "low",
+      "score": 0.18,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "**Atkin:** uses quadratic forms and heavy branching" }
+      ]
+    },
+    {
+      "id": "q.wheel-sieve",
+      "entry": "method.wheel-sieve",
+      "reason": "\"Wheel Sieve\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "gloss",
+      "priority": "low",
+      "score": 0.18,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "5.1 Comparison with Classical Sieves", "quote": "**Wheel sieves:** precompute residue tables" }
+      ]
+    },
+    {
+      "id": "q.simd",
+      "entry": "tool.simd",
+      "reason": "\"SIMD\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "citation",
+      "priority": "low",
+      "score": 0.17,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "5.2 Control Flow and Vectorisation", "quote": "the branchless/SIMD story applies to the _bucketed_ form" }
+      ]
+    },
+    {
+      "id": "q.observation",
+      "entry": "work.observation",
+      "reason": "\"observation.md\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "citation",
+      "priority": "low",
+      "score": 0.16,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "Document map", "quote": "`observation.md` works the per-prime multiplier sets" }
+      ]
+    },
+    {
+      "id": "q.idea",
+      "entry": "work.idea",
+      "reason": "\"idea.md\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "citation",
+      "priority": "low",
+      "score": 0.15,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "Document map", "quote": "`idea.md` is the spectral/entropy reading" }
+      ]
+    },
+    {
+      "id": "q.theory",
+      "entry": "work.theory",
+      "reason": "\"theory.md\" is assumed known after 1 mention(s) and grounds 0 theory node(s)",
+      "wants": "citation",
+      "priority": "low",
+      "score": 0.15,
+      "status": "open",
+      "sources": [
+        { "file": "generator.md", "heading": "Document map", "quote": "`theory.md` inventories every statement with its status" }
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "id": "topic.stream-vocabulary",
+      "name": "Orthogonal Stream Vocabulary",
+      "kind": "prerequisite_chain",
+      "root": "concept.orthogonal-composite-stream",
+      "members": [
+        "concept.orthogonal-composite-stream",
+        "notation.theta-p",
+        "concept.ownership",
+        "quantity.smallest-prime-factor",
+        "notation.spf",
+        "property.rough-number",
+        "operation.next-rough",
+        "operation.next-owned-composite",
+        "operation.sorted-merge"
+      ],
+      "layers": ["symbolic"],
+      "summary": "The chain a reader must already understand before \u00a72\u2013\u00a73 parse: ownership, roughness, and the two successor operations."
+    },
+    {
+      "id": "topic.realisations",
+      "name": "The Two Realisations",
+      "kind": "thread",
+      "root": "method.algorithm-b",
+      "members": [
+        "method.algorithm-a",
+        "method.algorithm-b",
+        "object.shared-wheel",
+        "term.wheel",
+        "quantity.claim-multiplicity",
+        "quantity.live-stream-count",
+        "named_result.conjecture-x1",
+        "term.segment"
+      ],
+      "layers": ["symbolic", "numeric", "ecological"],
+      "summary": "The exactness-versus-O(1)-state fork of \u00a73.5 and the vocabulary in which its price is stated."
+    },
+    {
+      "id": "topic.prior-art",
+      "name": "Prior Art Compared In \u00a75.1",
+      "kind": "thread",
+      "members": [
+        "method.sieve-of-eratosthenes",
+        "method.sieve-of-atkin",
+        "method.wheel-sieve",
+        "method.genuine-sieve",
+        "method.segmented-sieve",
+        "person.oneill"
+      ],
+      "layers": ["social"],
+      "summary": "Named sieves invoked only for contrast; none is defined or cited to a source."
+    },
+    {
+      "id": "topic.notation-family",
+      "name": "Unkeyed Notation",
+      "kind": "notation_family",
+      "members": [
+        "notation.theta-p",
+        "notation.spf",
+        "notation.p-primorial",
+        "notation.varphi",
+        "notation.pi-function",
+        "notation.omega"
+      ],
+      "layers": ["symbolic"],
+      "summary": "Every glyph the document uses; only \\Theta_p and P_k are introduced where they first appear."
+    },
+    {
+      "id": "topic.document-map",
+      "name": "Companion Documents",
+      "kind": "glossary_section",
+      "members": ["work.paper", "work.algorithm", "work.observation", "work.idea", "work.fractal", "work.theory"],
+      "layers": ["social"],
+      "summary": "The sibling files named in the document map; all are referenced by filename with no external citation."
+    }
+  ],
+  "unresolved": [
+    {
+      "kind": "layer_drift",
+      "description": "\"wheel\" is the exact multiplier set A_p when reasoning about correctness and a fixed \\Theta (W) step table when costing the implementation; the document uses both readings without naming the shift.",
+      "refs": ["term.wheel"],
+      "layers": ["symbolic", "ecological"]
+    },
+    {
+      "kind": "undefined_term",
+      "description": "The glyph \\omega_{>p_w} is used twice as the number of claimants of a composite but is never keyed anywhere in this document.",
+      "refs": ["notation.omega", "quantity.claim-multiplicity"],
+      "layers": ["symbolic"],
+      "sources": [
+        { "file": "generator.md", "heading": "3.5 The cost of the primitive", "quote": "each surviving composite is claimed \\omega_{>p_w} (m) times" }
+      ]
+    },
+    {
+      "kind": "unbridged_entry",
+      "description": "No theory graph was supplied for `generator.md`, so no entry carries `grounds`; the bridge must be filled once `generator.theory_graph.json` exists.",
+      "refs": [
+        "concept.orthogonal-composite-stream",
+        "concept.ownership",
+        "operation.next-owned-composite",
+        "method.algorithm-a",
+        "method.algorithm-b"
+      ]
+    },
+    {
+      "kind": "dangling_reference",
+      "description": "\"Lemma 1\", \"Theorem 1\", \"Theorem 2.1\", \"Conjecture X1\" and \"T31\" are referred to by label; only Conjecture X1 is given a locating pointer, and no bibliographic citation is offered for any of them.",
+      "refs": ["named_result.conjecture-x1", "work.algorithm", "work.theory"],
+      "layers": ["deductive", "social"]
+    },
+    {
+      "kind": "missing_source",
+      "description": "The empirical claim that the duplicate-claim factor is \"\u2248 2\u20132.5\" is attributed to measurement, but no experiment, machine or dataset is named anywhere in this document.",
+      "refs": ["quantity.claim-multiplicity"],
+      "layers": ["numeric", "ecological"]
+    }
+  ],
+  "stats": {
+    "documents": 1,
+    "entries": 52,
+    "edges": 48,
+    "requests": 33,
+    "by_kind": {
+      "term": 4,
+      "notation": 6,
+      "concept": 7,
+      "object": 1,
+      "structure": 3,
+      "property": 1,
+      "operation": 3,
+      "quantity": 6,
+      "named_result": 3,
+      "method": 10,
+      "person": 1,
+      "tool": 1,
+      "work": 6
+    },
+    "by_group": { "language": 10, "content": 34, "context": 8 },
+    "by_relation": {
+      "notation_for": 6,
+      "defined_in_terms_of": 4,
+      "presupposes": 2,
+      "produces": 2,
+      "operates_on": 2,
+      "parameterized_by": 1,
+      "instance_of": 1,
+      "implements": 2,
+      "alternative_to": 4,
+      "applies_to": 3,
+      "measured_by": 2,
+      "documented_in": 6,
+      "attributed_to": 1,
+      "contrasts_with": 5,
+      "motivates": 1,
+      "has_part": 1,
+      "co_occurs_with": 5
+    },
+    "by_relation_group": {
+      "lexical": 6,
+      "taxonomic": 2,
+      "definitional": 6,
+      "functional": 12,
+      "discourse": 15,
+      "provenance": 7
+    },
+    "by_definition_status": {
+      "defined_here": 17,
+      "defined_elsewhere": 2,
+      "assumed_known": 24,
+      "gestured": 7,
+      "ambiguous": 1,
+      "undefined": 1
+    },
+    "by_layer": {
+      "fuzzy": 4,
+      "symbolic": 28,
+      "deductive": 4,
+      "numeric": 2,
+      "social": 11,
+      "ecological": 4
+    },
+    "undefined_entries": 33,
+    "bridged_entries": 0,
+    "mentions": 89
+  }
+}
