@@ -317,7 +317,7 @@ The general statement needs no lucky example:
 > lies in `S_k^{(2)}`, and such pairs exist below `P_k` as soon as `p_{k+1}² < P_k`, i.e. for `k ≥ 4`.
 >
 > _Status: `[T]` given `p_{k+1}² < P*k`for`k ≥ 4`(Cor. 2.4 of`algorithm.md`); the existence count is
-`Φ`-counting, `theory.md` T8.*
+> `Φ`-counting, `theory.md` T8.*
 
 So `S_k^{(2)}` counts _candidate_ pairs, exactly as `S_k` counts _candidate_ primes, and `T_k` is properly named
 "number of twin-candidate residue classes mod `P_k`".

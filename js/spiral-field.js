@@ -88,7 +88,7 @@ export function computeFactorFields(N, primes = null, opts = {}) {
         Om[j]++;
         sop[j] += p;
       }
-      for (let pk = p; pk <= (hi - 1) / p; ) {
+      for (let pk = p; pk <= (hi - 1) / p;) {
         pk *= p; // p^2, p^3, …  (never leaves the block range)
         let q = Math.max(pk, Math.ceil(lo / pk) * pk);
         for (; q < hi; q += pk) {
